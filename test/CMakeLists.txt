@@ -1,33 +1,35 @@
-add_executable(oatpp-mysql-tests
-        oatpp-mysql/ql_template/ParserTest.hpp
-        oatpp-mysql/ql_template/ParserTest.cpp
-        oatpp-mysql/types/NumericTest.hpp
-        oatpp-mysql/types/NumericTest.cpp
-        oatpp-mysql/tests.cpp
+add_executable(oatpp-mariadb-tests
+        oatpp-mariadb/ql_template/ParserTest.hpp
+        oatpp-mariadb/ql_template/ParserTest.cpp
+        oatpp-mariadb/types/NumericTest.hpp
+        oatpp-mariadb/types/NumericTest.cpp
+        oatpp-mariadb/tests.cpp
 )
 
-set_target_properties(oatpp-mysql-tests PROPERTIES
+set_target_properties(oatpp-mariadb-tests PROPERTIES
         CXX_STANDARD 11
         CXX_EXTENSIONS OFF
         CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(oatpp-mysql-tests
+target_include_directories(oatpp-mariadb-tests
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+        PUBLIC /usr/local/include/oatpp-1.3.0
+        PUBLIC /usr/local/include/oatpp-1.3.0/oatpp
 )
 
 if(OATPP_MODULES_LOCATION STREQUAL OATPP_MODULES_LOCATION_EXTERNAL)
-    add_dependencies(oatpp-mysql-tests ${LIB_OATPP_EXTERNAL})
+    add_dependencies(oatpp-mariadb-tests ${LIB_OATPP_EXTERNAL})
 endif()
 
-add_dependencies(oatpp-mysql-tests ${OATPP_THIS_MODULE_NAME})
+add_dependencies(oatpp-mariadb-tests ${OATPP_THIS_MODULE_NAME})
 
-target_link_oatpp(oatpp-mysql-tests)
+target_link_oatpp(oatpp-mariadb-tests)
 
-target_link_libraries(oatpp-mysql-tests
+target_link_libraries(oatpp-mariadb-tests
         PRIVATE ${OATPP_THIS_MODULE_NAME}
 )
 
 ## TODO link dependencies here (if some)
 
-add_test(oatpp-mysql-tests oatpp-mysql-tests)
+add_test(oatpp-mariadb-tests oatpp-mariadb-tests)

@@ -40,3 +40,6 @@ cmake-build-debug/
 
 # custom build
 build/
+
+# Environment files
+.env

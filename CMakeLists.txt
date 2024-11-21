@@ -4,25 +4,25 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 ## These variables are passed to oatpp-module-install.cmake script
 ## use these variables to configure module installation
 
-set(OATPP_THIS_MODULE_NAME oatpp-mysql) ## name of the module (also name of folders in installation dirs)
+set(OATPP_THIS_MODULE_NAME oatpp-mariadb) ## name of the module (also name of folders in installation dirs)
 set(OATPP_THIS_MODULE_VERSION "1.3.0") ## version of the module (also sufix of folders in installation dirs)
-set(OATPP_THIS_MODULE_LIBRARIES oatpp-mysql) ## list of libraries to find when find_package is called
-set(OATPP_THIS_MODULE_TARGETS oatpp-mysql) ## list of targets to install
-set(OATPP_THIS_MODULE_DIRECTORIES oatpp-mysql) ## list of directories to install
+set(OATPP_THIS_MODULE_LIBRARIES oatpp-mariadb) ## list of libraries to find when find_package is called
+set(OATPP_THIS_MODULE_TARGETS oatpp-mariadb) ## list of targets to install
+set(OATPP_THIS_MODULE_DIRECTORIES oatpp-mariadb) ## list of directories to install
 
 ###################################################################################################
 
 project(${OATPP_THIS_MODULE_NAME}
         VERSION ${OATPP_THIS_MODULE_VERSION}
         LANGUAGES CXX
-        ## HOMEPAGE_URL "https://github.com/oatpp/oatpp-mysql"
+        ## HOMEPAGE_URL "https://github.com/oatpp/oatpp-mariadb"
         ## DESCRIPTION "Something about my-module"
 )
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(OATPP_DIR_SRC "Path to oatpp module directory (sources)")
 option(OATPP_DIR_LIB "Path to directory with liboatpp (directory containing ex: liboatpp.so or liboatpp.dynlib)")
-option(OATPP_MYSQL_BUILD_TESTS "Build tests for this module" ON)
+option(OATPP_MARIADB_BUILD_TESTS "Build tests for this module" ON)
 option(OATPP_INSTALL "Install module binaries" ON)
 
 set(OATPP_MODULES_LOCATION "CUSTOM" CACHE STRING "Location where to find oatpp modules. can be [INSTALLED|EXTERNAL|CUSTOM]")
@@ -105,7 +105,7 @@ include(cmake/module-utils.cmake)
 
 add_subdirectory("src")
 
-if(OATPP_MYSQL_BUILD_TESTS)
+if(OATPP_MARIADB_BUILD_TESTS)
     enable_testing()
     add_subdirectory("test")
 endif()

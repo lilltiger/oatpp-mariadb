@@ -1,0 +1,22 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.hpp": "cpp",
+            "*.cpp": "cpp"
+        },
+        "C_Cpp.default.includePath": [
+            "${workspaceFolder}/**"
+        ],
+        "cmake.configureOnOpen": true,
+        "cmake.buildDirectory": "${workspaceFolder}/build",
+        "cmake.sourceDirectory": "${workspaceFolder}",
+        "cmake.configureArgs": [
+            "-DOATPP_MODULES_LOCATION=EXTERNAL"
+        ]
+    }
+}

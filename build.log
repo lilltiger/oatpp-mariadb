@@ -1,0 +1,49 @@
+=== Build Started at fre 22 nov 2024 17:58:02 CET ===
+Build Configuration:
+- Build Type: Release
+- Clean Build: 0
+Using build directory: tmp/build-release
+Configuring Release build...
+Running cmake...
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+Finding oatpp in location=INSTALLED
+OATPP_INCLUDE=/usr/local/include
+OATPP_TEST_INCLUDE=/usr/local/include
+
+############################################################################
+## oatpp-mariadb module. Resolving dependencies...
+
+
+############################################################################
+
+target_link_oatpp(oatpp-mariadb) to installed oatpp lib
+
+############################################################################
+## oatpp-module-install.cmake
+
+OATPP_THIS_MODULE_NAME=oatpp-mariadb
+OATPP_THIS_MODULE_VERSION=1.3.0
+OATPP_THIS_MODULE_LIBRARIES=oatpp-mariadb
+OATPP_THIS_MODULE_TARGETS=oatpp-mariadb
+OATPP_THIS_MODULE_DIRECTORIES=oatpp-mariadb
+
+############################################################################
+
+target_link_oatpp(oatpp-mariadb-tests) to installed oatpp lib
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release
+Building project...
+[  5%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/Serializer.cpp.o
+[ 11%] Linking CXX shared library liboatpp-mariadb.so
+[ 58%] Built target oatpp-mariadb
+[ 64%] Linking CXX executable oatpp-mariadb-tests
+[100%] Built target oatpp-mariadb-tests
+Release build completed successfully!

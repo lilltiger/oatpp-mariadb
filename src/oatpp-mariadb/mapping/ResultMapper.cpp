@@ -10,20 +10,34 @@ ResultMapper::ResultData::ResultData(MYSQL_STMT* pStmt, const std::shared_ptr<co
 }
 
 ResultMapper::ResultData::~ResultData() {
-  // free bind results
+  // Free bind results
   for (auto& bind : bindResults) {
     if (bind.buffer) {
       free(bind.buffer);
       bind.buffer = nullptr;
     }
-    if (bind.is_null) {
+    if (bind.is_null && bind.is_null != &bind.is_null_value) {
       free(bind.is_null);
       bind.is_null = nullptr;
     }
+    if (bind.length && bind.length != &bind.length_value) {
+      free(bind.length);
+      bind.length = nullptr;
+    }
+    if (bind.error && bind.error != &bind.error_value) {
+      free(bind.error);
+      bind.error = nullptr;
+    }
   }
+
+  // Clear the vectors to ensure no dangling pointers
+  bindResults.clear();
+  colNames.clear();
+  colIndices.clear();
 
   if (metaResults) {
     mysql_free_result(metaResults);
+    metaResults = nullptr;
   }
 }
 
@@ -63,80 +77,107 @@ void ResultMapper::ResultData::next() {
 
 void ResultMapper::ResultData::bindResultsForCache() {
   metaResults = mysql_stmt_result_metadata(stmt);
-  // if null, no result set
-  if (metaResults) {
-    colCount = mysql_num_fields(metaResults);
-    MYSQL_FIELD* fields = mysql_fetch_fields(metaResults);
-
-    for (v_int32 i = 0; i < colCount; i++) {
-      oatpp::String colName = fields[i].name;
-      colNames.push_back(colName);
-      colIndices.insert({colName, i});
-
-      // OATPP_LOGD("oatpp::mariadb::mapping::ResultMapper::ResultData::bindResultsForCache()", "Column %d: %s - %d", 
-      //   i, colName->c_str(), fields[i].type);
-
-      // bind result cache
-      MYSQL_BIND bind;
-      std::memset(&bind, 0, sizeof(bind));
-
-      bind.buffer_type = fields[i].type;
-
-      // indicate through is_null pointer if the value is null
-      my_bool* is_null = static_cast<my_bool*>(malloc(sizeof(my_bool)));
-      bind.is_null = is_null;
-
-      if (fields[i].type == MYSQL_TYPE_TINY) {
-        auto p_int8 = static_cast<int8_t*>(malloc(sizeof(int8_t)));
-        bind.buffer = p_int8;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_SHORT) {
-        auto p_int16 = static_cast<int16_t*>(malloc(sizeof(int16_t)));
-        bind.buffer = p_int16;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_LONG) {
-        auto p_int32 = static_cast<int32_t*>(malloc(sizeof(int32_t)));
-        bind.buffer = p_int32;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_LONGLONG || fields[i].type == MYSQL_TYPE_TIMESTAMP2) {
-        auto p_int64 = static_cast<int64_t*>(malloc(sizeof(int64_t)));
-        bind.buffer_type = MYSQL_TYPE_LONGLONG;
-        bind.buffer = p_int64;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_FLOAT) {
-        auto p_float = static_cast<float*>(malloc(sizeof(float)));
-        bind.buffer = p_float;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_DOUBLE) {
-        auto p_double = static_cast<double*>(malloc(sizeof(double)));
-        bind.buffer = p_double;
-        bind.buffer_length = 0;
-      }
-      else if (fields[i].type == MYSQL_TYPE_STRING || fields[i].type == MYSQL_TYPE_VAR_STRING || 
-               fields[i].type == MYSQL_TYPE_VARCHAR || fields[i].type == MYSQL_TYPE_DATETIME ||
-               fields[i].type == MYSQL_TYPE_DATE) {
-        auto p_string = static_cast<char*>(malloc(fields[i].length + 1));
-        bind.buffer_type = MYSQL_TYPE_STRING;
-        bind.buffer = p_string;
-        bind.buffer_length = fields[i].length + 1;
-      }
-      else {
-        throw std::runtime_error("[oatpp::mariadb::mapping::ResultMapper::ResultData::ResultData()]: Unknown field type: " 
-          + std::string(fields[i].name) + " - " + std::to_string(fields[i].type));
-      }
-
-      bindResults.push_back(bind);
-    }
-
-    if (mysql_stmt_bind_result(stmt, bindResults.data())) {
-      throw std::runtime_error("[oatpp::mariadb::mapping::ResultMapper::ResultData::ResultData()]: mysql_stmt_bind_result() failed");
-    }
+  if (!metaResults) {
+    isSuccess = true;
+    hasMore = false;
+    return;
   }
+
+  colCount = mysql_num_fields(metaResults);
+  if (colCount <= 0) {
+    isSuccess = true;
+    hasMore = false;
+    return;
+  }
+
+  // Resize bindResults vector to match column count
+  bindResults.resize(colCount);
+  
+  // Initialize all bind structures to zero
+  for (auto& bind : bindResults) {
+    std::memset(&bind, 0, sizeof(MYSQL_BIND));
+    bind.is_null_value = 0;
+    bind.error_value = 0;
+    bind.length_value = 0;
+  }
+
+  // Get field information and set up bindings
+  MYSQL_FIELD* fields = mysql_fetch_fields(metaResults);
+  for (unsigned int i = 0; i < colCount; i++) {
+    auto& bind = bindResults[i];
+    
+    // Use the stack-allocated values by default
+    bind.is_null = &bind.is_null_value;
+    bind.error = &bind.error_value;
+    bind.length = &bind.length_value;
+
+    // Set up the binding based on field type
+    switch (fields[i].type) {
+      case MYSQL_TYPE_TINY:
+        bind.buffer_type = MYSQL_TYPE_TINY;
+        bind.buffer = malloc(sizeof(char));
+        bind.buffer_length = sizeof(char);
+        break;
+        
+      case MYSQL_TYPE_SHORT:
+        bind.buffer_type = MYSQL_TYPE_SHORT;
+        bind.buffer = malloc(sizeof(short));
+        bind.buffer_length = sizeof(short);
+        break;
+        
+      case MYSQL_TYPE_LONG:
+      case MYSQL_TYPE_INT24:
+        bind.buffer_type = MYSQL_TYPE_LONG;
+        bind.buffer = malloc(sizeof(int));
+        bind.buffer_length = sizeof(int);
+        break;
+        
+      case MYSQL_TYPE_LONGLONG:
+        bind.buffer_type = MYSQL_TYPE_LONGLONG;
+        bind.buffer = malloc(sizeof(long long));
+        bind.buffer_length = sizeof(long long);
+        break;
+        
+      case MYSQL_TYPE_FLOAT:
+        bind.buffer_type = MYSQL_TYPE_FLOAT;
+        bind.buffer = malloc(sizeof(float));
+        bind.buffer_length = sizeof(float);
+        break;
+        
+      case MYSQL_TYPE_DOUBLE:
+        bind.buffer_type = MYSQL_TYPE_DOUBLE;
+        bind.buffer = malloc(sizeof(double));
+        bind.buffer_length = sizeof(double);
+        break;
+        
+      case MYSQL_TYPE_STRING:
+      case MYSQL_TYPE_VAR_STRING:
+      case MYSQL_TYPE_BLOB:
+      default:
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        // Add extra byte for null terminator and ensure minimum size
+        bind.buffer_length = std::max(fields[i].length + 1, (unsigned long)256);
+        bind.buffer = malloc(bind.buffer_length);
+        break;
+    }
+    
+    if (!bind.buffer) {
+      throw std::runtime_error("Failed to allocate buffer memory");
+    }
+
+    // Store column name
+    oatpp::String colName = fields[i].name;
+    colNames.push_back(colName);
+    colIndices[data::share::StringKeyLabel(colName)] = i;
+  }
+
+  // Bind the result buffers
+  if (mysql_stmt_bind_result(stmt, bindResults.data())) {
+    throw std::runtime_error(mysql_stmt_error(stmt));
+  }
+
+  isSuccess = true;
+  hasMore = true;
 }
 
 ResultMapper::ResultMapper() {

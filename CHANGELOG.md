@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved error handling in statement execution
 - Fixed string concatenation in TransactionGuard error messages
 - Fixed transaction state tracking in nested transactions
+- Fixed Int64 and UInt64 serialization to properly handle buffer types and null values
+- Improved memory management in Int64/UInt64 serialization methods
+- Added proper handling of maximum and minimum values for 64-bit integers
 
 ## [1.1.0] - 2024-XX-XX
 ### Fixed

@@ -17,6 +17,7 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/Executor.hpp
         oatpp-mariadb/QueryResult.cpp
         oatpp-mariadb/QueryResult.hpp
+        oatpp-mariadb/TransactionGuard.hpp
         oatpp-mariadb/orm.hpp
 )
 

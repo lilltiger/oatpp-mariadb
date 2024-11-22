@@ -3,8 +3,12 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/ql_template/ParserTest.cpp
         oatpp-mariadb/types/NumericTest.hpp
         oatpp-mariadb/types/NumericTest.cpp
+        oatpp-mariadb/types/Int64Test.hpp
+        oatpp-mariadb/types/Int64Test.cpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
+        oatpp-mariadb/crud/CrudTest.hpp
+        oatpp-mariadb/crud/CrudTest.cpp
         oatpp-mariadb/tests.cpp
 )
 

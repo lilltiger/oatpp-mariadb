@@ -41,7 +41,7 @@ public:
 
   QUERY(createTable,
         "CREATE TABLE IF NOT EXISTS `test_numerics` ("
-        "`f_number` INTEGER,"
+        "`f_number` BIGINT,"
         "`f_decimal` DOUBLE PRECISION,"
         "`f_number_unchar` INTEGER,"
         "`f_date` DATE,"

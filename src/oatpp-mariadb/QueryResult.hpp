@@ -24,6 +24,7 @@ private:
   mapping::ResultMapper::ResultData m_resultData;
   oatpp::String m_errorMessage;
   bool m_inTransaction;
+  v_int64 m_lastInsertId;
 
   /**
    * Clean up statement resources safely
@@ -53,6 +54,26 @@ public:
   bool hasMoreToFetch() const override;
 
   oatpp::Void fetch(const oatpp::Type* const type, v_int64 count) override;
+
+  /**
+   * Get the ID generated for an AUTO_INCREMENT column by the previous INSERT query.
+   * This will first try to get the ID from RETURNING clause if available,
+   * otherwise fall back to mysql_insert_id().
+   * @return The last insert ID
+   */
+  v_int64 getLastInsertId() const;
+
+  /**
+   * Get the number of rows affected by the last INSERT, UPDATE, REPLACE or DELETE query
+   * @return Number of affected rows
+   */
+  v_int64 getAffectedRows() const;
+
+  /**
+   * Set the last insert ID from RETURNING clause
+   * @param id The insert ID from RETURNING
+   */
+  void setLastInsertId(v_int64 id);
 
 };
 

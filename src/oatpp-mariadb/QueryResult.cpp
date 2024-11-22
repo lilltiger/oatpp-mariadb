@@ -11,6 +11,7 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
   , m_resultMapper(resultMapper)
   , m_resultData(stmt, typeResolver)
   , m_inTransaction(false)
+  , m_lastInsertId(-1)
 {
   OATPP_LOGD("QueryResult", "Executing statement...");
   
@@ -60,20 +61,30 @@ bool QueryResult::cleanupStatement() {
   }
 
   bool success = true;
-  const char* error = nullptr;
 
-  // Free the result set if any
-  if (mysql_stmt_free_result(m_stmt)) {
-    error = mysql_stmt_error(m_stmt);
-    OATPP_LOGD("QueryResult", "Error freeing result set: %s", error);
-    success = false;
-  }
+  // Get the MySQL connection handle
+  MYSQL* mysql = m_connection ? std::static_pointer_cast<mariadb::Connection>(m_connection.object)->getHandle() : nullptr;
+  
+  // Only try to free the result set if we have a valid connection and metadata
+  if (mysql && !mysql_ping(mysql)) {  // Check if connection is alive
+    MYSQL_RES* metadata = mysql_stmt_result_metadata(m_stmt);
+    if (metadata) {
+      mysql_free_result(metadata);
+      if (mysql_stmt_free_result(m_stmt)) {
+        OATPP_LOGD("QueryResult", "Error freeing result set: %s", mysql_stmt_error(m_stmt));
+        success = false;
+      }
+    }
 
-  // Close the statement
-  if (mysql_stmt_close(m_stmt)) {
-    error = mysql_stmt_error(m_stmt);
-    OATPP_LOGD("QueryResult", "Error closing statement: %s", error);
-    success = false;
+    // Close the statement
+    if (mysql_stmt_close(m_stmt)) {
+      OATPP_LOGD("QueryResult", "Error closing statement: %s", mysql_stmt_error(m_stmt));
+      success = false;
+    }
+  } else {
+    // Connection is lost, just mark the statement as cleaned up
+    OATPP_LOGD("QueryResult", "Connection lost, skipping result set cleanup");
+    success = true;  // Consider it successful since we can't do anything about it
   }
 
   m_stmt = nullptr;
@@ -113,8 +124,34 @@ bool QueryResult::hasMoreToFetch() const {
 }
 
 oatpp::Void QueryResult::fetch(const oatpp::Type* const type, v_int64 count) {
-  // OATPP_LOGD("QueryResult::fetch", "Fetching %d rows, type_id=%d, type_name=%s", count, type->classId.id, type->classId.name);
   return m_resultMapper->readRows(&m_resultData, type, count);
+}
+
+v_int64 QueryResult::getLastInsertId() const {
+  if (m_lastInsertId >= 0) {
+    // Return ID from RETURNING clause if available
+    return m_lastInsertId;
+  }
+  
+  if (!m_stmt) {
+    return 0;
+  }
+  MYSQL* mysql = std::static_pointer_cast<mariadb::Connection>(m_connection.object)->getHandle();
+  if (!mysql) {
+    return 0;
+  }
+  return mysql_insert_id(mysql);
+}
+
+void QueryResult::setLastInsertId(v_int64 id) {
+  m_lastInsertId = id;
+}
+
+v_int64 QueryResult::getAffectedRows() const {
+  if (!m_stmt) {
+    return 0;
+  }
+  return mysql_stmt_affected_rows(m_stmt);
 }
 
 }}

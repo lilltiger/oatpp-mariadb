@@ -185,6 +185,30 @@ oatpp-mariadb-tests/fast:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/build
 .PHONY : oatpp-mariadb-tests/fast
 
+oatpp-mariadb/crud/CrudTest.o: oatpp-mariadb/crud/CrudTest.cpp.o
+.PHONY : oatpp-mariadb/crud/CrudTest.o
+
+# target to build an object file
+oatpp-mariadb/crud/CrudTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o
+.PHONY : oatpp-mariadb/crud/CrudTest.cpp.o
+
+oatpp-mariadb/crud/CrudTest.i: oatpp-mariadb/crud/CrudTest.cpp.i
+.PHONY : oatpp-mariadb/crud/CrudTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/crud/CrudTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.i
+.PHONY : oatpp-mariadb/crud/CrudTest.cpp.i
+
+oatpp-mariadb/crud/CrudTest.s: oatpp-mariadb/crud/CrudTest.cpp.s
+.PHONY : oatpp-mariadb/crud/CrudTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/crud/CrudTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s
+.PHONY : oatpp-mariadb/crud/CrudTest.cpp.s
+
 oatpp-mariadb/ql_template/ParserTest.o: oatpp-mariadb/ql_template/ParserTest.cpp.o
 .PHONY : oatpp-mariadb/ql_template/ParserTest.o
 
@@ -257,6 +281,30 @@ oatpp-mariadb/transaction/TransactionTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
 .PHONY : oatpp-mariadb/transaction/TransactionTest.cpp.s
 
+oatpp-mariadb/types/Int64Test.o: oatpp-mariadb/types/Int64Test.cpp.o
+.PHONY : oatpp-mariadb/types/Int64Test.o
+
+# target to build an object file
+oatpp-mariadb/types/Int64Test.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o
+.PHONY : oatpp-mariadb/types/Int64Test.cpp.o
+
+oatpp-mariadb/types/Int64Test.i: oatpp-mariadb/types/Int64Test.cpp.i
+.PHONY : oatpp-mariadb/types/Int64Test.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/Int64Test.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.i
+.PHONY : oatpp-mariadb/types/Int64Test.cpp.i
+
+oatpp-mariadb/types/Int64Test.s: oatpp-mariadb/types/Int64Test.cpp.s
+.PHONY : oatpp-mariadb/types/Int64Test.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/Int64Test.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s
+.PHONY : oatpp-mariadb/types/Int64Test.cpp.s
+
 oatpp-mariadb/types/NumericTest.o: oatpp-mariadb/types/NumericTest.cpp.o
 .PHONY : oatpp-mariadb/types/NumericTest.o
 
@@ -295,6 +343,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... oatpp-mariadb-tests"
+	@echo "... oatpp-mariadb/crud/CrudTest.o"
+	@echo "... oatpp-mariadb/crud/CrudTest.i"
+	@echo "... oatpp-mariadb/crud/CrudTest.s"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.o"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.i"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.s"
@@ -304,6 +355,9 @@ help:
 	@echo "... oatpp-mariadb/transaction/TransactionTest.o"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.i"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.s"
+	@echo "... oatpp-mariadb/types/Int64Test.o"
+	@echo "... oatpp-mariadb/types/Int64Test.i"
+	@echo "... oatpp-mariadb/types/Int64Test.s"
 	@echo "... oatpp-mariadb/types/NumericTest.o"
 	@echo "... oatpp-mariadb/types/NumericTest.i"
 	@echo "... oatpp-mariadb/types/NumericTest.s"

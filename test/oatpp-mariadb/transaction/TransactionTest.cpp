@@ -2,6 +2,7 @@
 #include "../utils/EnvLoader.hpp"
 
 #include "oatpp-mariadb/orm.hpp"
+#include "oatpp-mariadb/TransactionGuard.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 #include "oatpp/core/Types.hpp"
 #include <iostream>
@@ -217,9 +218,52 @@ void TransactionTest::onRun() {
     executor->closeConnection(conn);
   }
 
-  // Test 5: Nested transactions (savepoints)
+  // Test 5: Deadlock protection with TransactionGuard
   {
-    OATPP_LOGD(TAG, "Test 5: Nested transactions");
+    OATPP_LOGD(TAG, "Test 5: Deadlock protection");
+    client.deleteAll();
+
+    // Get max retries from environment
+    auto maxRetries = env.getInt("MAX_RETRIES", 3);
+    OATPP_LOGD(TAG, "Using MAX_RETRIES=%d", maxRetries);
+
+    // Create two transaction guards
+    oatpp::mariadb::TransactionGuard tx1(executor, maxRetries);
+    oatpp::mariadb::TransactionGuard tx2(executor, maxRetries);
+
+    // Set isolation level for both transactions
+    client.setIsolationLevel(tx1.getConnection());
+    client.setIsolationLevel(tx2.getConnection());
+
+    // First transaction inserts a row
+    bool tx1Success = tx1.execute([&](const provider::ResourceHandle<orm::Connection>& conn) {
+      auto result = client.insertRow("tx1_value", conn);
+      return result->isSuccess();
+    });
+    OATPP_ASSERT(tx1Success);
+
+    // Second transaction tries to modify the same row
+    bool tx2Success = tx2.execute([&](const provider::ResourceHandle<orm::Connection>& conn) {
+      auto result = client.insertRow("tx2_value", conn);
+      return result->isSuccess();
+    });
+    OATPP_ASSERT(tx2Success);
+
+    // Verify final state
+    auto conn = executor->getConnection();
+    auto result = client.selectAll(conn);
+    OATPP_ASSERT(result->isSuccess());
+    
+    auto dataset = result->fetch<oatpp::Vector<oatpp::Object<TestRow>>>();
+    OATPP_LOGD(TAG, "Final row count: %d", dataset->size());
+    OATPP_ASSERT(dataset->size() == 2);
+
+    executor->closeConnection(conn);
+  }
+
+  // Test 6: Nested transactions (savepoints)
+  {
+    OATPP_LOGD(TAG, "Test 6: Nested transactions");
     client.deleteAll();
 
     // Start outer transaction

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced logging output for better readability
 - Moved ResultData to ResultMapper and improved query result handling
 - Simplified QueryResult class by removing internal buffer management
+- Updated transaction tests to use standard ORM interface for result fetching
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest

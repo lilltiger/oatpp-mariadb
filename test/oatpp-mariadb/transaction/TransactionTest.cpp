@@ -106,8 +106,9 @@ void TransactionTest::onRun() {
     client.setIsolationLevel(conn1);
     auto isolevel = client.getIsolationLevel(conn1);
     OATPP_ASSERT(isolevel->isSuccess());
-    auto level = isolevel->fetch<oatpp::Vector<oatpp::Object<IsolationLevel>>>();
-    OATPP_LOGD(TAG, "Current isolation level: %s", level->front()->transaction_isolation->c_str());
+    auto levels = isolevel->fetch<oatpp::Vector<oatpp::Object<IsolationLevel>>>(1);
+    OATPP_ASSERT(levels && levels->size() == 1);
+    OATPP_LOGD(TAG, "Current isolation level: %s", levels->front()->transaction_isolation->c_str());
     
     auto beginResult = executor->begin(conn1);
     OATPP_ASSERT(beginResult->isSuccess());
@@ -124,8 +125,9 @@ void TransactionTest::onRun() {
     // Verify isolation level for conn2
     isolevel = client.getIsolationLevel(conn2);
     OATPP_ASSERT(isolevel->isSuccess());
-    level = isolevel->fetch<oatpp::Vector<oatpp::Object<IsolationLevel>>>();
-    OATPP_LOGD(TAG, "Transaction 2 isolation level: %s", level->front()->transaction_isolation->c_str());
+    levels = isolevel->fetch<oatpp::Vector<oatpp::Object<IsolationLevel>>>(1);
+    OATPP_ASSERT(levels && levels->size() == 1);
+    OATPP_LOGD(TAG, "Transaction 2 isolation level: %s", levels->front()->transaction_isolation->c_str());
     
     // Explicitly fetch using conn2 to ensure we're using the right connection
     auto result = client.selectAll(conn2);
@@ -206,7 +208,8 @@ void TransactionTest::onRun() {
     auto txCheckResult = executor->executeRaw("SELECT IF(@@in_transaction, 'true', 'false') as in_transaction;", conn);
     OATPP_ASSERT(txCheckResult->isSuccess());
     OATPP_LOGD(TAG, "Checking transaction state after rollback");
-    auto txState = txCheckResult->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>();
+    auto txState = txCheckResult->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>(1);
+    OATPP_ASSERT(txState && txState->size() == 1);
     OATPP_LOGD(TAG, "Transaction state: %s", txState->front()->in_transaction->c_str());
     OATPP_ASSERT(txState->front()->in_transaction == "false");
     
@@ -258,7 +261,8 @@ void TransactionTest::onRun() {
     OATPP_LOGD(TAG, "Checking transaction state after rollback");
     auto txStateResult = client.getTransactionState(conn);
     OATPP_ASSERT(txStateResult->isSuccess());
-    auto txState = txStateResult->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>();
+    auto txState = txStateResult->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>(1);
+    OATPP_ASSERT(txState && txState->size() == 1);
     OATPP_LOGD(TAG, "Transaction state: %s", txState->front()->in_transaction->c_str());
     OATPP_ASSERT(txState->front()->in_transaction == "true");
       
@@ -268,7 +272,7 @@ void TransactionTest::onRun() {
         // Check connection state before selectAll
         auto connState = executor->executeRaw("SELECT IF(@@in_transaction, 'true', 'false') as in_transaction;", conn);
         {
-            auto result = connState->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>();
+            auto result = connState->fetch<oatpp::Vector<oatpp::Object<TransactionState>>>(1);
             OATPP_LOGD(TAG, "Connection transaction state: %s", result->front()->in_transaction->c_str());
         } // result goes out of scope here
         connState = nullptr; // Release the query result

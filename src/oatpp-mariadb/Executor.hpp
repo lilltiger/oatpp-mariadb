@@ -85,6 +85,24 @@ public:
                                             const provider::ResourceHandle<orm::Connection>& connection = nullptr)  override;
 
   /**
+   * Execute database query using a query template without parameters.
+   * @param queryTemplate - a query template obtained in a prior call to &l:Executor::parseQueryTemplate (); method.
+   * @param connection - database connection.
+   * @return - &id:oatpp::orm::QueryResult;.
+   */
+  std::shared_ptr<orm::QueryResult> execute(const StringTemplate& queryTemplate,
+                                          const provider::ResourceHandle<orm::Connection>& connection = nullptr);
+
+  /**
+   * Execute raw SQL query.
+   * @param query - SQL query string.
+   * @param connection - database connection.
+   * @return - &id:oatpp::orm::QueryResult;.
+   */
+  std::shared_ptr<orm::QueryResult> executeRaw(const oatpp::String& query,
+                                             const provider::ResourceHandle<orm::Connection>& connection = nullptr);
+
+  /**
    * Begin database transaction. Should NOT be used directly. Use &id:oatpp::orm::Transaction; instead.
    * @param connection - database connection.
    * @return - &id:oatpp::orm::QueryResult;.
@@ -125,6 +143,17 @@ public:
                      v_int64 newVersion,
                      const oatpp::String& suffix = nullptr,
                      const provider::ResourceHandle<orm::Connection>& connection = nullptr) override;
+
+  /**
+   * Close a specific database connection.
+   * @param connection - database connection to close
+   */
+  void closeConnection(const provider::ResourceHandle<orm::Connection>& connection);
+
+  /**
+   * Clear and close all connections in the pool.
+   */
+  void clearAllConnections();
 
 };
 

@@ -132,8 +132,8 @@ void Executor::bindParams(MYSQL_STMT* stmt,
 std::shared_ptr<orm::QueryResult> Executor::execute(const StringTemplate& queryTemplate,
                                                     const std::unordered_map<oatpp::String, oatpp::Void>& params,
                                                     const std::shared_ptr<const data::mapping::TypeResolver>& typeResolver,
-                                                    const provider::ResourceHandle<orm::Connection>& connection)
-{
+                                                    const provider::ResourceHandle<orm::Connection>& connection) {
+
   auto connectionHandle = connection;
   if (!connectionHandle) {
     connectionHandle = getConnection();
@@ -146,37 +146,81 @@ std::shared_ptr<orm::QueryResult> Executor::execute(const StringTemplate& queryT
 
   auto mysqlConnection = std::static_pointer_cast<mariadb::Connection>(connectionHandle.object);
 
-  MYSQL_STMT* stmt = mysql_stmt_init(mysqlConnection->getHandle());
+  auto extra = std::static_pointer_cast<ql_template::Parser::TemplateExtra>(queryTemplate.getExtraData());
+  auto conn = std::static_pointer_cast<mariadb::Connection>(connectionHandle.object)->getHandle();
+
+  OATPP_LOGD("Executor", "Preparing to execute query. Connection thread id: %lu", mysql_thread_id(conn));
+  OATPP_LOGD("Executor", "Query template: %s", extra->preparedTemplate->c_str());
+
+  MYSQL_STMT* stmt = mysql_stmt_init(conn);
   if (!stmt) {
-    throw std::runtime_error("[oatpp::mariadb::Executor::execute()]: "
-      "ErrorError. Can't create MYSQL_STMT. Error: " + std::string(mysql_error(mysqlConnection->getHandle())));
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute()]: Error. Unable to initialize statement.");
   }
 
-  auto extra = std::static_pointer_cast<ql_template::Parser::TemplateExtra>(queryTemplate.getExtraData());
+  OATPP_LOGD("Executor", "Statement initialized. Address: %p", (void*)stmt);
+
   if (mysql_stmt_prepare(stmt, extra->preparedTemplate->c_str(), extra->preparedTemplate->size())) {
-    throw std::runtime_error("[oatpp::mariadb::Executor::execute()]: "
-      "Error. Can't prepare MYSQL_STMT. preparedTemplate: " + extra->preparedTemplate +
+    std::string error = mysql_stmt_error(stmt);
+    mysql_stmt_close(stmt);
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute()]: Error. Unable to prepare statement: " + error);
+  }
+
+  OATPP_LOGD("Executor", "Statement prepared successfully");
+
+  if (!params.empty()) {
+    OATPP_LOGD("Executor", "Binding parameters...");
+    bindParams(stmt, queryTemplate, params, typeResolver);
+    OATPP_LOGD("Executor", "Parameters bound successfully");
+  }
+
+  return std::make_shared<QueryResult>(stmt, connectionHandle, m_resultMapper, tr);
+}
+
+std::shared_ptr<orm::QueryResult> Executor::execute(const StringTemplate& queryTemplate,
+                                                  const provider::ResourceHandle<orm::Connection>& connection) {
+  return execute(queryTemplate, {}, nullptr, connection);
+}
+
+std::shared_ptr<orm::QueryResult> Executor::executeRaw(const oatpp::String& query,
+                                                     const provider::ResourceHandle<orm::Connection>& connection) {
+  auto connectionHandle = connection;
+  if (!connectionHandle) {
+    connectionHandle = getConnection();
+  }
+
+  auto mysqlConnection = std::static_pointer_cast<mariadb::Connection>(connectionHandle.object);
+  
+  MYSQL_STMT* stmt = mysql_stmt_init(mysqlConnection->getHandle());
+  if (!stmt) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::executeRaw()]: "
+      "Error. Can't create MYSQL_STMT. Error: " + std::string(mysql_error(mysqlConnection->getHandle())));
+  }
+
+  if (mysql_stmt_prepare(stmt, query->c_str(), query->size())) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::executeRaw()]: "
+      "Error. Can't prepare MYSQL_STMT. Query: " + query +
       " Error: " + std::string(mysql_stmt_error(stmt)));
   }
 
-  bindParams(stmt, queryTemplate, params, typeResolver);
+  if (mysql_stmt_execute(stmt)) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::executeRaw()]: "
+      "Error. Can't execute MYSQL_STMT. Query: " + query +
+      " Error: " + std::string(mysql_stmt_error(stmt)));
+  }
 
-  return std::make_shared<mariadb::QueryResult>(stmt, connectionHandle, m_resultMapper, tr);
+  return std::make_shared<mariadb::QueryResult>(stmt, connectionHandle, m_resultMapper, nullptr);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::begin(const provider::ResourceHandle<orm::Connection>& connection) {
-  throw std::runtime_error("[oatpp::mariadb::Executor::begin()]: "
-                           "Error. Not implemented.");
+  return executeRaw("START TRANSACTION", connection);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::commit(const provider::ResourceHandle<orm::Connection>& connection) {
-  throw std::runtime_error("[oatpp::mariadb::Executor::commit()]: "
-                           "Error. Not implemented.");
+  return executeRaw("COMMIT", connection);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::rollback(const provider::ResourceHandle<orm::Connection>& connection) {
-  throw std::runtime_error("[oatpp::mariadb::Executor::rollback()]: "
-                           "Error. Not implemented.");
+  return executeRaw("ROLLBACK", connection);
 }
 
 v_int64 Executor::getSchemaVersion(const oatpp::String& suffix,
@@ -193,6 +237,43 @@ void Executor::migrateSchema(const oatpp::String& script,
 {
   throw std::runtime_error("[oatpp::mariadb::Executor::migrateSchema()]: "
                            "Error. Not implemented.");
+}
+
+void Executor::closeConnection(const provider::ResourceHandle<orm::Connection>& connection) {
+  if (connection) {
+    auto mariadbConnection = std::static_pointer_cast<Connection>(connection.object);
+    if (mariadbConnection) {
+      auto handle = mariadbConnection->getHandle();
+      if (handle) {
+        // Set shorter timeout for cleanup operations
+        unsigned int timeout = 1;
+        mysql_options(handle, MYSQL_OPT_READ_TIMEOUT, &timeout);
+        mysql_options(handle, MYSQL_OPT_WRITE_TIMEOUT, &timeout);
+        
+        // Cancel any pending operations
+        mysql_kill(handle, mysql_thread_id(handle));
+        
+        // Give a very brief moment for the kill to take effect
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        
+        // Close the connection
+        mysql_close(handle);
+        
+        // Set the connection handle to nullptr to prevent double-close
+        mariadbConnection->setHandle(nullptr);
+      }
+    }
+  }
+}
+
+void Executor::clearAllConnections() {
+  if (m_connectionProvider) {
+    auto provider = std::dynamic_pointer_cast<ConnectionProvider>(m_connectionProvider);
+    if (provider) {
+      provider->stop();
+      provider->clear();
+    }
+  }
 }
 
 }}

@@ -1,5 +1,6 @@
 #include "oatpp-mariadb/ql_template/ParserTest.hpp"
 #include "oatpp-mariadb/types/NumericTest.hpp"
+#include "oatpp-mariadb/transaction/TransactionTest.hpp"
 
 #include "oatpp/core/base/Environment.hpp"
 
@@ -10,6 +11,7 @@ namespace {
 void runTests() {
   OATPP_RUN_TEST(oatpp::test::mariadb::ql_template::ParserTest);
   OATPP_RUN_TEST(oatpp::test::mariadb::types::NumericTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
 }
 
 }

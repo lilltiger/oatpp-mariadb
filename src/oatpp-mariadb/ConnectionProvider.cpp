@@ -46,7 +46,12 @@ async::CoroutineStarterForResult<const provider::ResourceHandle<Connection>&> Co
 }
 
 void ConnectionProvider::stop() {
-  // DO NOTHING
+  // Already implemented
+}
+
+void ConnectionProvider::clear() {
+  // No need to do anything here as connections are automatically closed
+  // when their shared_ptr is destroyed
 }
 
 }}

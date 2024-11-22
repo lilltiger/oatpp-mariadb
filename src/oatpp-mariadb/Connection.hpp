@@ -19,6 +19,7 @@ public:
    * @return - MYSQL native connection handle.
    */
   virtual MYSQL* getHandle() = 0;
+  virtual void setHandle(MYSQL* handle) = 0;
 
   void setInvalidator(const std::shared_ptr<provider::Invalidator<Connection>>& invalidator);
   std::shared_ptr<provider::Invalidator<Connection>> getInvalidator();
@@ -35,6 +36,10 @@ public:
   ~ConnectionImpl();
 
   MYSQL* getHandle() override;
+  
+  void setHandle(MYSQL* handle) override {
+    m_connection = handle;
+  }
 
 };
 

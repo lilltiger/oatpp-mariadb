@@ -53,6 +53,11 @@ public:
    */
   void stop() override;
 
+  /**
+   * Clear all connections.
+   */
+  void clear();
+
 };
 
 /**

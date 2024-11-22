@@ -15,7 +15,10 @@ ConnectionImpl::ConnectionImpl(MYSQL* mysql)
 {}
 
 ConnectionImpl::~ConnectionImpl() {
-  if (m_connection) mysql_close(m_connection);
+  if (m_connection) {
+    mysql_close(m_connection);
+    m_connection = nullptr;
+  }
 }
 
 MYSQL* ConnectionImpl::getHandle() {

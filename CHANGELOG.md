@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed environment variable loading from .env file
 - Fixed memory management in QueryResult by using proper RAII patterns
 - Improved error handling in statement execution
+- Fixed savepoint handling in nested transactions to align with MySQL/MariaDB behavior
+- Fixed transaction state management in nested transactions
 
 ### Technical Details
 - Modified `test/oatpp-mariadb/types/NumericTest.cpp`:

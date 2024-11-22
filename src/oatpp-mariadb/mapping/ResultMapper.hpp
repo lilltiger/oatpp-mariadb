@@ -114,6 +114,7 @@ private:
 
   // Read rows methods
   static oatpp::Void readRowsAsCollection(ResultMapper* _this, ResultData* dbData, const Type* type, v_int64 count);
+  static oatpp::Void readRowsAsObject(ResultMapper* _this, ResultData* dbData, const Type* type, v_int64 count);
 
 private:
   Deserializer m_deserializer;

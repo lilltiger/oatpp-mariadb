@@ -166,6 +166,8 @@ ResultMapper::ResultMapper() {
     setReadRowsMethod(data::mapping::type::__class::AbstractList::CLASS_ID, &ResultMapper::readRowsAsCollection);
     setReadRowsMethod(data::mapping::type::__class::AbstractUnorderedSet::CLASS_ID, &ResultMapper::readRowsAsCollection);
 
+    // object
+    setReadRowsMethod(data::mapping::type::__class::AbstractObject::CLASS_ID, &ResultMapper::readRowsAsObject);
   }
 
 }
@@ -297,6 +299,22 @@ oatpp::Void ResultMapper::readRowsAsCollection(ResultMapper* _this, ResultData* 
 
   return collection;
 
+}
+
+oatpp::Void ResultMapper::readRowsAsObject(ResultMapper* _this, ResultData* dbData, const Type* type, v_int64 count) {
+  if (count > 1) {
+    throw std::runtime_error("[oatpp::mariadb::mapping::ResultMapper::readRowsAsObject()]: "
+                           "Error. Cannot read multiple rows into a single object.");
+  }
+  
+  if (!dbData->hasMore) {
+    return nullptr;
+  }
+  
+  auto result = _this->readOneRow(dbData, type);
+  ++dbData->rowIndex;
+  dbData->next();
+  return result;
 }
 
 oatpp::Void ResultMapper::readOneRow(ResultData* dbData, const Type* type) {

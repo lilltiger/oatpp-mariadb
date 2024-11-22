@@ -11,16 +11,43 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
   , m_resultMapper(resultMapper)
   , m_resultData(stmt, typeResolver)
 {
-  if (mysql_stmt_execute(m_stmt)) {
-    m_errorMessage = "Error executing statement: " + std::string(mysql_stmt_error(m_stmt));
+  OATPP_LOGD("QueryResult", "Executing statement...");
+  
+  if (!m_stmt) {
+    m_errorMessage = "Statement is null";
+    OATPP_LOGD("QueryResult", "Error: Statement is null");
+    return;
   }
 
+  MYSQL* mysql = std::static_pointer_cast<mariadb::Connection>(m_connection.object)->getHandle();
+  if (!mysql) {
+    m_errorMessage = "MySQL connection handle is null";
+    OATPP_LOGD("QueryResult", "Error: MySQL connection handle is null");
+    return;
+  }
+
+  OATPP_LOGD("QueryResult", "MySQL thread id: %lu", mysql_thread_id(mysql));
+  OATPP_LOGD("QueryResult", "Statement address: %p", (void*)m_stmt);
+  
+  if (mysql_stmt_execute(m_stmt)) {
+    m_errorMessage = "Error executing statement: " + std::string(mysql_stmt_error(m_stmt));
+    OATPP_LOGD("QueryResult", "Statement execution error: %s", m_errorMessage->c_str());
+    OATPP_LOGD("QueryResult", "MySQL error: %s", mysql_error(mysql));
+    return;
+  }
+
+  OATPP_LOGD("QueryResult", "Statement executed successfully");
   m_resultData.init();    // initialize the information of all columns
+  OATPP_LOGD("QueryResult", "Result data initialized");
 }
 
 QueryResult::~QueryResult() {
-  mysql_stmt_close(m_stmt);
-  OATPP_LOGD("QueryResult", "QueryResult destroyed");
+  if (m_stmt) {
+    mysql_stmt_close(m_stmt);
+    OATPP_LOGD("QueryResult", "Statement closed and QueryResult destroyed");
+  } else {
+    OATPP_LOGD("QueryResult", "No statement to close, QueryResult destroyed");
+  }
 }
 
 provider::ResourceHandle<orm::Connection> QueryResult::getConnection() const {

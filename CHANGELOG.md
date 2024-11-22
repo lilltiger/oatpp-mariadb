@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added automatic table creation in NumericTest to improve test reliability
 - Added enhanced JSON serialization configuration for better output formatting
 - Added debug logging in EnvLoader for better troubleshooting
+- Added TransactionGuard class for deadlock protection and automatic retries
+- Added configurable MAX_RETRIES in environment settings
+- Added support for nested transactions with savepoints
+- Added improved string handling in TransactionGuard error messages
 
 ### Changed
 - Updated EnvLoader to support multiple .env file locations
@@ -20,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved ResultData to ResultMapper and improved query result handling
 - Simplified QueryResult class by removing internal buffer management
 - Updated transaction tests to use standard ORM interface for result fetching
+- Enhanced TransactionGuard with more robust error handling and retry logic
+- Improved transaction isolation level handling
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest
@@ -27,8 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed environment variable loading from .env file
 - Fixed memory management in QueryResult by using proper RAII patterns
 - Improved error handling in statement execution
-- Fixed savepoint handling in nested transactions to align with MySQL/MariaDB behavior
-- Fixed transaction state management in nested transactions
+- Fixed string concatenation in TransactionGuard error messages
+- Fixed transaction state tracking in nested transactions
 
 ## [1.1.0] - 2024-XX-XX
 ### Fixed

@@ -43,7 +43,7 @@ public:
         "CREATE TABLE IF NOT EXISTS `test_numerics` ("
         "`f_number` BIGINT,"
         "`f_decimal` DOUBLE PRECISION,"
-        "`f_number_unchar` INTEGER,"
+        "`f_number_unchar` TINYINT UNSIGNED,"
         "`f_date` DATE,"
         "`f_datetime` DATETIME,"
         "`f_string` VARCHAR(255)"

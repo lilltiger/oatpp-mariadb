@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved transaction isolation level handling
 - Improved run.sh script with better output handling and error reporting
 - Enhanced test summary with categorized error reporting and improved detection
+- Reverted explicit cleanup code in Int64Test and VarCharTest to resolve build errors
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest

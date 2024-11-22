@@ -1,4 +1,4 @@
-#include "Int64Test.hpp"
+#include "UInt8Test.hpp"
 #include "../utils/EnvLoader.hpp"
 
 #include "oatpp-mariadb/orm.hpp"
@@ -9,16 +9,15 @@ namespace oatpp { namespace test { namespace mariadb { namespace types {
 
 namespace {
 
-const char* const TAG = "TEST[mariadb::types::Int64Test]";
+const char* const TAG = "TEST[mariadb::types::UInt8Test]";
 
 #include OATPP_CODEGEN_BEGIN(DTO)
 
-class Int64Row : public oatpp::DTO {
+class UInt8Row : public oatpp::DTO {
 
-  DTO_INIT(Int64Row, DTO);
+  DTO_INIT(UInt8Row, DTO);
 
-  DTO_FIELD(Int64, signed_value);
-  DTO_FIELD(UInt64, unsigned_value);
+  DTO_FIELD(UInt8, value);
 
 };
 
@@ -35,23 +34,22 @@ public:
   }
 
   QUERY(createTable,
-        "CREATE TABLE IF NOT EXISTS `test_int64` ("
-        "`signed_value` BIGINT,"
-        "`unsigned_value` BIGINT UNSIGNED"
+        "CREATE TABLE IF NOT EXISTS `test_uint8` ("
+        "`value` TINYINT UNSIGNED"
         ") ENGINE=InnoDB;")
 
-  QUERY(insertValues,
-        "INSERT INTO test_int64 "
-        "(signed_value, unsigned_value) "
+  QUERY(insertValue,
+        "INSERT INTO test_uint8 "
+        "(value) "
         "VALUES "
-        "(:row.signed_value, :row.unsigned_value);",
-        PARAM(oatpp::Object<Int64Row>, row))
+        "(:row.value);",
+        PARAM(oatpp::Object<UInt8Row>, row))
 
   QUERY(deleteAll,
-        "DELETE FROM test_int64;")
+        "DELETE FROM test_uint8;")
 
   QUERY(selectAll,
-        "SELECT * FROM test_int64;")
+        "SELECT * FROM test_uint8;")
 
 };
 
@@ -59,7 +57,7 @@ public:
 
 }
 
-void Int64Test::onRun() {
+void UInt8Test::onRun() {
   // Load environment variables from .env file
   auto env = oatpp::test::mariadb::utils::EnvLoader();
   
@@ -88,14 +86,14 @@ void Int64Test::onRun() {
     auto executor = std::make_shared<oatpp::mariadb::Executor>(connectionProvider);
     auto client = MyClient(executor);
 
-    // Create the test_int64 table
+    // Create the test_uint8 table
     {
       auto res = client.createTable();
       if (!res->isSuccess()) {
         OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage()->c_str());
         throw std::runtime_error("Failed to create table");
       }
-      OATPP_LOGD(TAG, "Successfully created test_int64 table");
+      OATPP_LOGD(TAG, "Successfully created test_uint8 table");
     }
 
     // Clear any existing data
@@ -107,44 +105,40 @@ void Int64Test::onRun() {
 
     // Test cases
     {
-      // Test nullptr values
+      // Test nullptr value
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = nullptr;
-        row->unsigned_value = nullptr;
-        auto res = client.insertValues(row);
+        auto row = UInt8Row::createShared();
+        row->value = nullptr;
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted nullptr values");
+        OATPP_LOGD(TAG, "Inserted nullptr value");
       }
 
-      // Test minimum signed value
+      // Test minimum value (0)
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = std::numeric_limits<int64_t>::min();
-        row->unsigned_value = static_cast<uint64_t>(0);
-        auto res = client.insertValues(row);
+        auto row = UInt8Row::createShared();
+        row->value = static_cast<v_uint8>(0);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted minimum signed value");
+        OATPP_LOGD(TAG, "Inserted minimum value (0)");
       }
 
-      // Test maximum signed value
+      // Test maximum value (255)
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = std::numeric_limits<int64_t>::max();
-        row->unsigned_value = static_cast<uint64_t>(0);
-        auto res = client.insertValues(row);
+        auto row = UInt8Row::createShared();
+        row->value = static_cast<v_uint8>(255);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted maximum signed value");
+        OATPP_LOGD(TAG, "Inserted maximum value (255)");
       }
 
-      // Test maximum unsigned value
+      // Test middle value (128)
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = static_cast<int64_t>(0);
-        row->unsigned_value = std::numeric_limits<uint64_t>::max();
-        auto res = client.insertValues(row);
+        auto row = UInt8Row::createShared();
+        row->value = static_cast<v_uint8>(128);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted maximum unsigned value");
+        OATPP_LOGD(TAG, "Inserted middle value (128)");
       }
     }
 
@@ -153,7 +147,7 @@ void Int64Test::onRun() {
       auto res = client.selectAll();
       OATPP_ASSERT(res->isSuccess());
 
-      auto dataset = res->fetch<oatpp::Vector<oatpp::Object<Int64Row>>>();
+      auto dataset = res->template fetch<oatpp::Vector<oatpp::Object<UInt8Row>>>();
       OATPP_ASSERT(dataset->size() == 4);
 
       // Print results
@@ -162,32 +156,28 @@ void Int64Test::onRun() {
       auto str = om.writeToString(dataset);
       OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
 
-      // Verify nullptr values
+      // Verify nullptr value
       {
         auto row = dataset[0];
-        OATPP_ASSERT(row->signed_value == nullptr);
-        OATPP_ASSERT(row->unsigned_value == nullptr);
+        OATPP_ASSERT(row->value == nullptr);
       }
 
-      // Verify minimum signed value
+      // Verify minimum value
       {
         auto row = dataset[1];
-        OATPP_ASSERT(row->signed_value == std::numeric_limits<int64_t>::min());
-        OATPP_ASSERT(row->unsigned_value == static_cast<uint64_t>(0));
+        OATPP_ASSERT(row->value == static_cast<v_uint8>(0));
       }
 
-      // Verify maximum signed value
+      // Verify maximum value
       {
         auto row = dataset[2];
-        OATPP_ASSERT(row->signed_value == std::numeric_limits<int64_t>::max());
-        OATPP_ASSERT(row->unsigned_value == static_cast<uint64_t>(0));
+        OATPP_ASSERT(row->value == static_cast<v_uint8>(255));
       }
 
-      // Verify maximum unsigned value
+      // Verify middle value
       {
         auto row = dataset[3];
-        OATPP_ASSERT(row->signed_value == static_cast<int64_t>(0));
-        OATPP_ASSERT(row->unsigned_value == std::numeric_limits<uint64_t>::max());
+        OATPP_ASSERT(row->value == static_cast<v_uint8>(128));
       }
 
       OATPP_LOGD(TAG, "All assertions passed successfully");

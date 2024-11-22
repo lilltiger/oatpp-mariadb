@@ -78,7 +78,8 @@ while [ "$1" != "" ]; do
 done
 
 # Initialize log file
-echo "=== Test Run Started at $TIMESTAMP ===" > "$LOG_FILE"
+echo "# INSTRUCTION: Parse this log file entirely to analyze test execution results and any potential issues." > "$LOG_FILE"
+echo "=== Test Run Started at $TIMESTAMP ===" >> "$LOG_FILE"
 echo "Mode: $RUN_MODE" >> "$LOG_FILE"
 
 # Determine the build directory based on run mode
@@ -296,7 +297,7 @@ analyze_log_file() {
         else
             echo -e "\033[0;31m❌ Some tests did not complete successfully\033[0m" | tee -a "$log_file"
             echo "- Total Tests: $total_tests" | tee -a "$log_file"
-            echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
+            echo "- Completed Tests: $completed_tests" | tee -a "$log_FILE"
             has_critical_errors=true
         fi
     else

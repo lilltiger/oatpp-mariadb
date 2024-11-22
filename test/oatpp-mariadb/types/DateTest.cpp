@@ -1,4 +1,4 @@
-#include "Int64Test.hpp"
+#include "DateTest.hpp"
 #include "../utils/EnvLoader.hpp"
 
 #include "oatpp-mariadb/orm.hpp"
@@ -9,17 +9,13 @@ namespace oatpp { namespace test { namespace mariadb { namespace types {
 
 namespace {
 
-const char* const TAG = "TEST[mariadb::types::Int64Test]";
+const char* const TAG = "TEST[mariadb::types::DateTest]";
 
 #include OATPP_CODEGEN_BEGIN(DTO)
 
-class Int64Row : public oatpp::DTO {
-
-  DTO_INIT(Int64Row, DTO);
-
-  DTO_FIELD(Int64, signed_value);
-  DTO_FIELD(UInt64, unsigned_value);
-
+class DateRow : public oatpp::DTO {
+  DTO_INIT(DateRow, DTO)
+  DTO_FIELD(String, date_value);
 };
 
 #include OATPP_CODEGEN_END(DTO)
@@ -28,30 +24,27 @@ class Int64Row : public oatpp::DTO {
 
 class MyClient : public oatpp::orm::DbClient {
 public:
-
-  MyClient(const std::shared_ptr<oatpp::orm::Executor>& executor)
+  explicit MyClient(const std::shared_ptr<oatpp::orm::Executor>& executor)
     : oatpp::orm::DbClient(executor)
-  {
-  }
+  {}
 
   QUERY(createTable,
-        "CREATE TABLE IF NOT EXISTS `test_int64` ("
-        "`signed_value` BIGINT,"
-        "`unsigned_value` BIGINT UNSIGNED"
+        "CREATE TABLE IF NOT EXISTS `test_date` ("
+        "`date_value` DATE"
         ") ENGINE=InnoDB;")
 
   QUERY(insertValues,
-        "INSERT INTO test_int64 "
-        "(signed_value, unsigned_value) "
+        "INSERT INTO test_date "
+        "(date_value) "
         "VALUES "
-        "(:row.signed_value, :row.unsigned_value);",
-        PARAM(oatpp::Object<Int64Row>, row))
+        "(:row.date_value);",
+        PARAM(oatpp::Object<DateRow>, row))
 
   QUERY(deleteAll,
-        "DELETE FROM test_int64;")
+        "DELETE FROM test_date;")
 
   QUERY(selectAll,
-        "SELECT * FROM test_int64;")
+        "SELECT * FROM test_date;")
 
 };
 
@@ -59,8 +52,7 @@ public:
 
 }
 
-void Int64Test::onRun() {
-  // Load environment variables from .env file
+void DateTest::onRun() {
   auto env = oatpp::test::mariadb::utils::EnvLoader();
   
   auto options = oatpp::mariadb::ConnectionOptions();
@@ -88,14 +80,14 @@ void Int64Test::onRun() {
     auto executor = std::make_shared<oatpp::mariadb::Executor>(connectionProvider);
     auto client = MyClient(executor);
 
-    // Create the test_int64 table
+    // Create the test_date table
     {
       auto res = client.createTable();
       if (!res->isSuccess()) {
         OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage()->c_str());
         throw std::runtime_error("Failed to create table");
       }
-      OATPP_LOGD(TAG, "Successfully created test_int64 table");
+      OATPP_LOGD(TAG, "Successfully created test_date table");
     }
 
     // Clear any existing data
@@ -107,44 +99,40 @@ void Int64Test::onRun() {
 
     // Test cases
     {
-      // Test nullptr values
+      // Test nullptr value
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = nullptr;
-        row->unsigned_value = nullptr;
+        auto row = DateRow::createShared();
+        row->date_value = nullptr;
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted nullptr values");
+        OATPP_LOGD(TAG, "Inserted nullptr value");
       }
 
-      // Test minimum signed value
+      // Test minimum date value
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = std::numeric_limits<int64_t>::min();
-        row->unsigned_value = static_cast<uint64_t>(0);
+        auto row = DateRow::createShared();
+        row->date_value = "1000-01-01";
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted minimum signed value");
+        OATPP_LOGD(TAG, "Inserted minimum date value");
       }
 
-      // Test maximum signed value
+      // Test maximum date value
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = std::numeric_limits<int64_t>::max();
-        row->unsigned_value = static_cast<uint64_t>(0);
+        auto row = DateRow::createShared();
+        row->date_value = "9999-12-31";
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted maximum signed value");
+        OATPP_LOGD(TAG, "Inserted maximum date value");
       }
 
-      // Test maximum unsigned value
+      // Test current date
       {
-        auto row = Int64Row::createShared();
-        row->signed_value = static_cast<int64_t>(0);
-        row->unsigned_value = std::numeric_limits<uint64_t>::max();
+        auto row = DateRow::createShared();
+        row->date_value = "2023-12-31";
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted maximum unsigned value");
+        OATPP_LOGD(TAG, "Inserted current date");
       }
     }
 
@@ -153,7 +141,7 @@ void Int64Test::onRun() {
       auto res = client.selectAll();
       OATPP_ASSERT(res->isSuccess());
 
-      auto dataset = res->fetch<oatpp::Vector<oatpp::Object<Int64Row>>>();
+      auto dataset = res->fetch<oatpp::Vector<oatpp::Object<DateRow>>>();
       OATPP_ASSERT(dataset->size() == 4);
 
       // Print results
@@ -162,32 +150,28 @@ void Int64Test::onRun() {
       auto str = om.writeToString(dataset);
       OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
 
-      // Verify nullptr values
+      // Verify nullptr value
       {
         auto row = dataset[0];
-        OATPP_ASSERT(row->signed_value == nullptr);
-        OATPP_ASSERT(row->unsigned_value == nullptr);
+        OATPP_ASSERT(row->date_value == nullptr);
       }
 
-      // Verify minimum signed value
+      // Verify minimum date value
       {
         auto row = dataset[1];
-        OATPP_ASSERT(row->signed_value == std::numeric_limits<int64_t>::min());
-        OATPP_ASSERT(row->unsigned_value == static_cast<uint64_t>(0));
+        OATPP_ASSERT(row->date_value == "1000-01-01");
       }
 
-      // Verify maximum signed value
+      // Verify maximum date value
       {
         auto row = dataset[2];
-        OATPP_ASSERT(row->signed_value == std::numeric_limits<int64_t>::max());
-        OATPP_ASSERT(row->unsigned_value == static_cast<uint64_t>(0));
+        OATPP_ASSERT(row->date_value == "9999-12-31");
       }
 
-      // Verify maximum unsigned value
+      // Verify current date value
       {
         auto row = dataset[3];
-        OATPP_ASSERT(row->signed_value == static_cast<int64_t>(0));
-        OATPP_ASSERT(row->unsigned_value == std::numeric_limits<uint64_t>::max());
+        OATPP_ASSERT(row->date_value == "2023-12-31");
       }
 
       OATPP_LOGD(TAG, "All assertions passed successfully");

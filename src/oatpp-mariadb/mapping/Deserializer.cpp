@@ -153,7 +153,6 @@ oatpp::Void Deserializer::deserializeFloat32(const Deserializer* _this, const In
 }
 
 oatpp::Void Deserializer::deserializeFloat64(const Deserializer* _this, const InData& data, const Type* type) {
-
   (void) _this;
   (void) type;
 
@@ -161,19 +160,44 @@ oatpp::Void Deserializer::deserializeFloat64(const Deserializer* _this, const In
     return oatpp::Float64();
   }
 
-  double value;
+  double value = 0;
 
   switch(data.oid) {
-    case MYSQL_TYPE_LONGLONG:
-    case MYSQL_TYPE_DOUBLE: {
-      value = *(double*) data.bind->buffer;
-      std::memset(data.bind->buffer, 0, sizeof(double));
-      return oatpp::Float64(value);
+    case MYSQL_TYPE_TINY: {
+      value = static_cast<double>(*(int8_t*)data.bind->buffer);
+      std::memset(data.bind->buffer, 0, sizeof(int8_t));
+      break;
     }
+    case MYSQL_TYPE_SHORT: {
+      value = static_cast<double>(*(int16_t*)data.bind->buffer);
+      std::memset(data.bind->buffer, 0, sizeof(int16_t));
+      break;
+    }
+    case MYSQL_TYPE_LONG: {
+      value = static_cast<double>(*(int32_t*)data.bind->buffer);
+      std::memset(data.bind->buffer, 0, sizeof(int32_t));
+      break;
+    }
+    case MYSQL_TYPE_LONGLONG: {
+      value = static_cast<double>(*(int64_t*)data.bind->buffer);
+      std::memset(data.bind->buffer, 0, sizeof(int64_t));
+      break;
+    }
+    case MYSQL_TYPE_FLOAT: {
+      value = static_cast<double>(*(float*)data.bind->buffer);
+      std::memset(data.bind->buffer, 0, sizeof(float));
+      break;
+    }
+    case MYSQL_TYPE_DOUBLE: {
+      value = *(double*)data.bind->buffer;
+      std::memset(data.bind->buffer, 0, sizeof(double));
+      break;
+    }
+    default:
+      throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeFloat64()]: Error. Unsupported buffer type: " + std::to_string(data.oid));
   }
 
-  throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeFloat64()]: Error. Unknown OID.");
-
+  return oatpp::Float64(value);
 }
 
 oatpp::Void Deserializer::deserializeAny(const Deserializer* _this, const InData& data, const Type* type) {

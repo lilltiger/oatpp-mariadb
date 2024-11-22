@@ -5,6 +5,16 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/NumericTest.cpp
         oatpp-mariadb/types/Int64Test.hpp
         oatpp-mariadb/types/Int64Test.cpp
+        oatpp-mariadb/types/Float64Test.hpp
+        oatpp-mariadb/types/Float64Test.cpp
+        oatpp-mariadb/types/UInt8Test.hpp
+        oatpp-mariadb/types/UInt8Test.cpp
+        oatpp-mariadb/types/DateTest.hpp
+        oatpp-mariadb/types/DateTest.cpp
+        oatpp-mariadb/types/DateTimeTest.hpp
+        oatpp-mariadb/types/DateTimeTest.cpp
+        oatpp-mariadb/types/VarCharTest.hpp
+        oatpp-mariadb/types/VarCharTest.cpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp

@@ -305,6 +305,78 @@ oatpp-mariadb/transaction/TransactionTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
 .PHONY : oatpp-mariadb/transaction/TransactionTest.cpp.s
 
+oatpp-mariadb/types/DateTest.o: oatpp-mariadb/types/DateTest.cpp.o
+.PHONY : oatpp-mariadb/types/DateTest.o
+
+# target to build an object file
+oatpp-mariadb/types/DateTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o
+.PHONY : oatpp-mariadb/types/DateTest.cpp.o
+
+oatpp-mariadb/types/DateTest.i: oatpp-mariadb/types/DateTest.cpp.i
+.PHONY : oatpp-mariadb/types/DateTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/DateTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.i
+.PHONY : oatpp-mariadb/types/DateTest.cpp.i
+
+oatpp-mariadb/types/DateTest.s: oatpp-mariadb/types/DateTest.cpp.s
+.PHONY : oatpp-mariadb/types/DateTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/DateTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.s
+.PHONY : oatpp-mariadb/types/DateTest.cpp.s
+
+oatpp-mariadb/types/DateTimeTest.o: oatpp-mariadb/types/DateTimeTest.cpp.o
+.PHONY : oatpp-mariadb/types/DateTimeTest.o
+
+# target to build an object file
+oatpp-mariadb/types/DateTimeTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o
+.PHONY : oatpp-mariadb/types/DateTimeTest.cpp.o
+
+oatpp-mariadb/types/DateTimeTest.i: oatpp-mariadb/types/DateTimeTest.cpp.i
+.PHONY : oatpp-mariadb/types/DateTimeTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/DateTimeTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.i
+.PHONY : oatpp-mariadb/types/DateTimeTest.cpp.i
+
+oatpp-mariadb/types/DateTimeTest.s: oatpp-mariadb/types/DateTimeTest.cpp.s
+.PHONY : oatpp-mariadb/types/DateTimeTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/DateTimeTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.s
+.PHONY : oatpp-mariadb/types/DateTimeTest.cpp.s
+
+oatpp-mariadb/types/Float64Test.o: oatpp-mariadb/types/Float64Test.cpp.o
+.PHONY : oatpp-mariadb/types/Float64Test.o
+
+# target to build an object file
+oatpp-mariadb/types/Float64Test.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o
+.PHONY : oatpp-mariadb/types/Float64Test.cpp.o
+
+oatpp-mariadb/types/Float64Test.i: oatpp-mariadb/types/Float64Test.cpp.i
+.PHONY : oatpp-mariadb/types/Float64Test.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/Float64Test.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.i
+.PHONY : oatpp-mariadb/types/Float64Test.cpp.i
+
+oatpp-mariadb/types/Float64Test.s: oatpp-mariadb/types/Float64Test.cpp.s
+.PHONY : oatpp-mariadb/types/Float64Test.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/Float64Test.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.s
+.PHONY : oatpp-mariadb/types/Float64Test.cpp.s
+
 oatpp-mariadb/types/Int64Test.o: oatpp-mariadb/types/Int64Test.cpp.o
 .PHONY : oatpp-mariadb/types/Int64Test.o
 
@@ -353,6 +425,54 @@ oatpp-mariadb/types/NumericTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.s
 .PHONY : oatpp-mariadb/types/NumericTest.cpp.s
 
+oatpp-mariadb/types/UInt8Test.o: oatpp-mariadb/types/UInt8Test.cpp.o
+.PHONY : oatpp-mariadb/types/UInt8Test.o
+
+# target to build an object file
+oatpp-mariadb/types/UInt8Test.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o
+.PHONY : oatpp-mariadb/types/UInt8Test.cpp.o
+
+oatpp-mariadb/types/UInt8Test.i: oatpp-mariadb/types/UInt8Test.cpp.i
+.PHONY : oatpp-mariadb/types/UInt8Test.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/UInt8Test.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.i
+.PHONY : oatpp-mariadb/types/UInt8Test.cpp.i
+
+oatpp-mariadb/types/UInt8Test.s: oatpp-mariadb/types/UInt8Test.cpp.s
+.PHONY : oatpp-mariadb/types/UInt8Test.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/UInt8Test.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.s
+.PHONY : oatpp-mariadb/types/UInt8Test.cpp.s
+
+oatpp-mariadb/types/VarCharTest.o: oatpp-mariadb/types/VarCharTest.cpp.o
+.PHONY : oatpp-mariadb/types/VarCharTest.o
+
+# target to build an object file
+oatpp-mariadb/types/VarCharTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o
+.PHONY : oatpp-mariadb/types/VarCharTest.cpp.o
+
+oatpp-mariadb/types/VarCharTest.i: oatpp-mariadb/types/VarCharTest.cpp.i
+.PHONY : oatpp-mariadb/types/VarCharTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/VarCharTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.i
+.PHONY : oatpp-mariadb/types/VarCharTest.cpp.i
+
+oatpp-mariadb/types/VarCharTest.s: oatpp-mariadb/types/VarCharTest.cpp.s
+.PHONY : oatpp-mariadb/types/VarCharTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/VarCharTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.s
+.PHONY : oatpp-mariadb/types/VarCharTest.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -382,12 +502,27 @@ help:
 	@echo "... oatpp-mariadb/transaction/TransactionTest.o"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.i"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.s"
+	@echo "... oatpp-mariadb/types/DateTest.o"
+	@echo "... oatpp-mariadb/types/DateTest.i"
+	@echo "... oatpp-mariadb/types/DateTest.s"
+	@echo "... oatpp-mariadb/types/DateTimeTest.o"
+	@echo "... oatpp-mariadb/types/DateTimeTest.i"
+	@echo "... oatpp-mariadb/types/DateTimeTest.s"
+	@echo "... oatpp-mariadb/types/Float64Test.o"
+	@echo "... oatpp-mariadb/types/Float64Test.i"
+	@echo "... oatpp-mariadb/types/Float64Test.s"
 	@echo "... oatpp-mariadb/types/Int64Test.o"
 	@echo "... oatpp-mariadb/types/Int64Test.i"
 	@echo "... oatpp-mariadb/types/Int64Test.s"
 	@echo "... oatpp-mariadb/types/NumericTest.o"
 	@echo "... oatpp-mariadb/types/NumericTest.i"
 	@echo "... oatpp-mariadb/types/NumericTest.s"
+	@echo "... oatpp-mariadb/types/UInt8Test.o"
+	@echo "... oatpp-mariadb/types/UInt8Test.i"
+	@echo "... oatpp-mariadb/types/UInt8Test.s"
+	@echo "... oatpp-mariadb/types/VarCharTest.o"
+	@echo "... oatpp-mariadb/types/VarCharTest.i"
+	@echo "... oatpp-mariadb/types/VarCharTest.s"
 .PHONY : help
 
 

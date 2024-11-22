@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for nested transactions with savepoints
 - Added improved string handling in TransactionGuard error messages
 - Added comprehensive test summary generation in run.sh with detailed statistics
+- Added detailed error categorization in test summary (runtime, test, and buffer errors)
 
 ### Changed
 - Updated EnvLoader to support multiple .env file locations
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced TransactionGuard with more robust error handling and retry logic
 - Improved transaction isolation level handling
 - Improved run.sh script with better output handling and error reporting
+- Enhanced test summary with categorized error reporting and improved detection
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest

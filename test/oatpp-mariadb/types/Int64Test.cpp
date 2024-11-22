@@ -92,7 +92,7 @@ void Int64Test::onRun() {
     {
       auto res = client.createTable();
       if (!res->isSuccess()) {
-        OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage());
+        OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage()->c_str());
         throw std::runtime_error("Failed to create table");
       }
       OATPP_LOGD(TAG, "Successfully created test_int64 table");

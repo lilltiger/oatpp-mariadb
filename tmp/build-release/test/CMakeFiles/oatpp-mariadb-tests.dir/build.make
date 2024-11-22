@@ -76,85 +76,99 @@ test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/ql_template/ParserTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.s
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.s
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/transaction/TransactionTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s
+
+test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
+test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/ProductCrudTest.cpp
+test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o"
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/ProductCrudTest.cpp
+
+test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.i"
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/ProductCrudTest.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.i
+
+test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.s"
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/ProductCrudTest.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.s
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/flags.make
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o: /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o"
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o -MF CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o.d -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o -c /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.i"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.i
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp > CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.i
 
 test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.s"
-	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.s
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/tests.cpp -o CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.s
 
 # Object files for target oatpp-mariadb-tests
 oatpp__mariadb__tests_OBJECTS = \
@@ -163,6 +177,7 @@ oatpp__mariadb__tests_OBJECTS = \
 "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o" \
 "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o" \
 "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o" \
+"CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o" \
 "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o"
 
 # External object files for target oatpp-mariadb-tests
@@ -173,6 +188,7 @@ test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o
+test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/build.make
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/compiler_depend.ts
@@ -180,7 +196,7 @@ test/oatpp-mariadb-tests: src/liboatpp-mariadb.so
 test/oatpp-mariadb-tests: /usr/local/lib/liboatpp-test.so
 test/oatpp-mariadb-tests: /usr/local/lib/liboatpp.so
 test/oatpp-mariadb-tests: test/CMakeFiles/oatpp-mariadb-tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable oatpp-mariadb-tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable oatpp-mariadb-tests"
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/oatpp-mariadb-tests.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -546,7 +546,10 @@ void Serializer::serializeFloat64(const Serializer* _this, MYSQL_STMT* stmt, v_u
   
   auto& bind = _this->m_bindParams[paramIndex];
   std::memset(&bind, 0, sizeof(MYSQL_BIND));
+  
   bind.buffer_type = MYSQL_TYPE_DOUBLE;
+  bind.is_unsigned = 0;
+  bind.buffer_length = sizeof(double);
   
   if(polymorph) {
     auto value = polymorph.cast<oatpp::Float64>();
@@ -555,9 +558,10 @@ void Serializer::serializeFloat64(const Serializer* _this, MYSQL_STMT* stmt, v_u
       if(!bind.buffer) {
         throw std::runtime_error("Failed to allocate memory for Float64 value");
       }
-      *static_cast<double*>(bind.buffer) = value;
-      bind.buffer_length = sizeof(double);
+      *static_cast<double*>(bind.buffer) = *value;
       bind.is_null_value = 0;
+      bind.length_value = sizeof(double);
+      bind.length = &bind.length_value;
     } else {
       bind.is_null_value = 1;
     }

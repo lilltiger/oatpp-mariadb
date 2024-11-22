@@ -100,7 +100,7 @@ void NumericTest::onRun() {
     {
       auto res = client.createTable();
       if (!res->isSuccess()) {
-        OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage());
+        OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage()->c_str());
         throw std::runtime_error("Failed to create table");
       }
       OATPP_LOGD(TAG, "Successfully created test_numerics table");
@@ -112,7 +112,7 @@ void NumericTest::onRun() {
       OATPP_LOGD(TAG, "OK, knownCount=%d, hasMore=%d", res->getKnownCount(), res->hasMoreToFetch());
     } else {
       auto message = res->getErrorMessage();
-      OATPP_LOGD(TAG, "Error, message=%s", message);
+      OATPP_LOGD(TAG, "Error, message=%s", message->c_str());
     }
 
     OATPP_ASSERT(res->isSuccess());
@@ -151,7 +151,7 @@ void NumericTest::onRun() {
       OATPP_LOGD(TAG, "OK, knownCount=%d, hasMore=%d", res->getKnownCount(), res->hasMoreToFetch());
     } else {
       auto message = res->getErrorMessage();
-      OATPP_LOGD(TAG, "Error, message=%s", message);
+      OATPP_LOGD(TAG, "Error, message=%s", message->c_str());
     }
 
     auto dataset = res->template fetch< oatpp::Vector< oatpp::Object<NumsRow> > >();
@@ -190,6 +190,7 @@ void NumericTest::onRun() {
 
   } catch (const std::exception& e) {
     OATPP_LOGE(TAG, "An error occurred: %s", e.what());
+    throw; // Re-throw the exception to fail the test
   }
 
 }

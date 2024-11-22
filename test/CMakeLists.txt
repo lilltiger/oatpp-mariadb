@@ -9,6 +9,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp
         oatpp-mariadb/crud/CrudTest.cpp
+        oatpp-mariadb/crud/ProductCrudTest.hpp
+        oatpp-mariadb/crud/ProductCrudTest.cpp
         oatpp-mariadb/tests.cpp
 )
 

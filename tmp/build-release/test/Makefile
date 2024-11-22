@@ -209,6 +209,30 @@ oatpp-mariadb/crud/CrudTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.s
 .PHONY : oatpp-mariadb/crud/CrudTest.cpp.s
 
+oatpp-mariadb/crud/ProductCrudTest.o: oatpp-mariadb/crud/ProductCrudTest.cpp.o
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.o
+
+# target to build an object file
+oatpp-mariadb/crud/ProductCrudTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.cpp.o
+
+oatpp-mariadb/crud/ProductCrudTest.i: oatpp-mariadb/crud/ProductCrudTest.cpp.i
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/crud/ProductCrudTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.i
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.cpp.i
+
+oatpp-mariadb/crud/ProductCrudTest.s: oatpp-mariadb/crud/ProductCrudTest.cpp.s
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/crud/ProductCrudTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.s
+.PHONY : oatpp-mariadb/crud/ProductCrudTest.cpp.s
+
 oatpp-mariadb/ql_template/ParserTest.o: oatpp-mariadb/ql_template/ParserTest.cpp.o
 .PHONY : oatpp-mariadb/ql_template/ParserTest.o
 
@@ -346,6 +370,9 @@ help:
 	@echo "... oatpp-mariadb/crud/CrudTest.o"
 	@echo "... oatpp-mariadb/crud/CrudTest.i"
 	@echo "... oatpp-mariadb/crud/CrudTest.s"
+	@echo "... oatpp-mariadb/crud/ProductCrudTest.o"
+	@echo "... oatpp-mariadb/crud/ProductCrudTest.i"
+	@echo "... oatpp-mariadb/crud/ProductCrudTest.s"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.o"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.i"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.s"

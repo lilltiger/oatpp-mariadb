@@ -145,6 +145,7 @@ run_regular() {
     
     # Wait for process to finish
     wait $PID 2>/dev/null || true
+    EXIT_CODE=$?
     kill $TAIL_PID 2>/dev/null || true
     
     # Ensure all output is captured
@@ -159,22 +160,36 @@ run_regular() {
     TOTAL_TESTS=$(grep -c "TEST.*START" "$LOG_FILE" | tr -d '\n' || echo 0)
     COMPLETED_TESTS=$(grep -c "TEST.*OK" "$LOG_FILE" | tr -d '\n' || echo 0)
     FAILED_TESTS=$(grep -c "TEST.*FAILED" "$LOG_FILE" | tr -d '\n' || echo 0)
-    ERROR_COUNT=$(grep -c "\[E \]" "$LOG_FILE" | tr -d '\n' || echo 0)
+    
+    # Count different types of errors
+    RUNTIME_ERRORS=$(grep -c "terminate called after throwing" "$LOG_FILE" | tr -d '\n' || echo 0)
+    TEST_ERRORS=$(grep -c "E |.*TEST" "$LOG_FILE" | tr -d '\n' || echo 0)
+    BUFFER_ERRORS=$(grep -c "Buffer type is not supported" "$LOG_FILE" | tr -d '\n' || echo 0)
+    ERROR_COUNT=$((RUNTIME_ERRORS + TEST_ERRORS + BUFFER_ERRORS))
     
     echo "Test Results:" | tee -a "$LOG_FILE"
     echo "- Total Tests: $TOTAL_TESTS" | tee -a "$LOG_FILE"
     echo "- Completed Tests: $COMPLETED_TESTS" | tee -a "$LOG_FILE"
     echo "- Failed Tests: $FAILED_TESTS" | tee -a "$LOG_FILE"
-    echo "- Errors: $ERROR_COUNT" | tee -a "$LOG_FILE"
+    echo "- Runtime Errors: $RUNTIME_ERRORS" | tee -a "$LOG_FILE"
+    echo "- Test Errors: $TEST_ERRORS" | tee -a "$LOG_FILE"
+    echo "- Buffer Type Errors: $BUFFER_ERRORS" | tee -a "$LOG_FILE"
+    echo "- Total Errors: $ERROR_COUNT" | tee -a "$LOG_FILE"
     echo | tee -a "$LOG_FILE"
     
     # Show error messages if any
-    if [ "$ERROR_COUNT" -gt 0 ] || [ "$FAILED_TESTS" -gt 0 ]; then
+    if [ "$ERROR_COUNT" -gt 0 ] || [ "$FAILED_TESTS" -gt 0 ] || [ "$EXIT_CODE" -ne 0 ]; then
         echo "Error Messages:" | tee -a "$LOG_FILE"
-        grep "\[E \]" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
-        grep "TEST.*FAILED" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        echo "----------------------------------------" | tee -a "$LOG_FILE"
+        # Show runtime errors
+        grep "terminate called after throwing" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        # Show test errors
+        grep "E |.*TEST" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        # Show buffer errors
+        grep "Buffer type is not supported" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        echo "----------------------------------------" | tee -a "$LOG_FILE"
         echo | tee -a "$LOG_FILE"
-        echo -e "\033[0;31m❌ Some tests failed or had errors\033[0m" | tee -a "$LOG_FILE"
+        echo -e "\033[0;31m❌ Tests failed with errors\033[0m" | tee -a "$LOG_FILE"
         return 1
     else
         if [ "$TOTAL_TESTS" -eq "$COMPLETED_TESTS" ]; then
@@ -188,7 +203,7 @@ run_regular() {
     # Clean up temp files
     rm -f "$TEMP_FILE" "$OUTPUT_FILE"
     
-    return 0
+    return $EXIT_CODE
 }
 
 # Function to analyze log file using structured JSON output

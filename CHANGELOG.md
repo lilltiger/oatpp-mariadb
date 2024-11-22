@@ -17,11 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified NumericTest to use root credentials by default
 - Improved error handling in database connection code
 - Enhanced logging output for better readability
+- Moved ResultData to ResultMapper and improved query result handling
+- Simplified QueryResult class by removing internal buffer management
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest
 - Fixed table creation timing in tests
 - Fixed environment variable loading from .env file
+- Fixed memory management in QueryResult by using proper RAII patterns
+- Improved error handling in statement execution
 
 ### Technical Details
 - Modified `test/oatpp-mariadb/types/NumericTest.cpp`:

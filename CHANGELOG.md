@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added configurable MAX_RETRIES in environment settings
 - Added support for nested transactions with savepoints
 - Added improved string handling in TransactionGuard error messages
+- Added comprehensive test summary generation in run.sh with detailed statistics
 
 ### Changed
 - Updated EnvLoader to support multiple .env file locations
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated transaction tests to use standard ORM interface for result fetching
 - Enhanced TransactionGuard with more robust error handling and retry logic
 - Improved transaction isolation level handling
+- Improved run.sh script with better output handling and error reporting
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest
@@ -38,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Int64 and UInt64 serialization to properly handle buffer types and null values
 - Improved memory management in Int64/UInt64 serialization methods
 - Added proper handling of maximum and minimum values for 64-bit integers
+- Fixed test summary generation in run.sh to handle broken pipes and newlines correctly
 
 ## [1.1.0] - 2024-XX-XX
 ### Fixed

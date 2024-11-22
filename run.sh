@@ -25,6 +25,28 @@ print_usage() {
 # Function to cleanup on exit
 cleanup() {
     local EXIT_CODE=$?
+    
+    # Run analysis before exiting if log file exists
+    if [ -f "$LOG_FILE" ]; then
+        echo "[INFO] Test execution completed" >> "$LOG_FILE"
+        echo "=== Test Run Completed at $(date '+%Y-%m-%d %H:%M:%S') ===" >> "$LOG_FILE"
+        
+        # Check if jq is available
+        if ! command -v jq >/dev/null 2>&1; then
+            echo "[WARNING] jq not found - installing for log analysis..." >> "$LOG_FILE"
+            if command -v apt-get >/dev/null 2>&1; then
+                sudo apt-get update && sudo apt-get install -y jq
+            elif command -v yum >/dev/null 2>&1; then
+                sudo yum install -y jq
+            else
+                echo "[ERROR] Could not install jq - log analysis will be skipped" >> "$LOG_FILE"
+            fi
+        fi
+        
+        # Run analysis
+        analyze_log_file "$LOG_FILE" || true
+    fi
+    
     if [ $EXIT_CODE -ne 0 ]; then
         echo "[FAILED] Process failed with exit code $EXIT_CODE" >> "$LOG_FILE"
     fi
@@ -91,14 +113,19 @@ run_regular() {
     
     # Create a temporary file for tracking output
     TEMP_FILE=$(mktemp)
-    trap 'rm -f "$TEMP_FILE"' EXIT
+    OUTPUT_FILE=$(mktemp)
+    trap 'rm -f "$TEMP_FILE" "$OUTPUT_FILE"' EXIT
     
-    # Start the process and redirect output through tee
-    "$TEST_EXECUTABLE" 2>&1 | while IFS= read -r line; do
+    # Start the process and capture all output
+    "$TEST_EXECUTABLE" > "$OUTPUT_FILE" 2>&1 &
+    PID=$!
+    
+    # Monitor output file and copy to both terminal and log
+    tail -f "$OUTPUT_FILE" 2>/dev/null | while IFS= read -r line; do
         echo "$line" | tee -a "$LOG_FILE"
         echo 1 > "$TEMP_FILE"
     done &
-    PID=$!
+    TAIL_PID=$!
     
     # Monitor for output
     while kill -0 $PID 2>/dev/null; do
@@ -109,65 +136,168 @@ run_regular() {
             sleep $NO_OUTPUT_TIMEOUT
         else
             # No output for NO_OUTPUT_TIMEOUT seconds
-            echo "[ERROR] Process killed due to no output for ${NO_OUTPUT_TIMEOUT} seconds" >> "$LOG_FILE"
+            echo "[ERROR] Process killed due to no output for ${NO_OUTPUT_TIMEOUT} seconds" | tee -a "$LOG_FILE"
             kill -9 $PID 2>/dev/null || true
-            exit 1
+            kill $TAIL_PID 2>/dev/null || true
+            break
         fi
     done
     
-    # Clean up temp file
-    rm -f "$TEMP_FILE"
+    # Wait for process to finish
+    wait $PID 2>/dev/null || true
+    kill $TAIL_PID 2>/dev/null || true
     
-    # Check if process exited successfully
-    wait $PID
+    # Ensure all output is captured
+    cat "$OUTPUT_FILE" >> "$LOG_FILE"
+    
+    # Generate summary
+    echo | tee -a "$LOG_FILE"
+    echo "=== Test Summary ===" | tee -a "$LOG_FILE"
+    echo | tee -a "$LOG_FILE"
+    
+    # Count test results (using tr to remove newlines)
+    TOTAL_TESTS=$(grep -c "TEST.*START" "$LOG_FILE" | tr -d '\n' || echo 0)
+    COMPLETED_TESTS=$(grep -c "TEST.*OK" "$LOG_FILE" | tr -d '\n' || echo 0)
+    FAILED_TESTS=$(grep -c "TEST.*FAILED" "$LOG_FILE" | tr -d '\n' || echo 0)
+    ERROR_COUNT=$(grep -c "\[E \]" "$LOG_FILE" | tr -d '\n' || echo 0)
+    
+    echo "Test Results:" | tee -a "$LOG_FILE"
+    echo "- Total Tests: $TOTAL_TESTS" | tee -a "$LOG_FILE"
+    echo "- Completed Tests: $COMPLETED_TESTS" | tee -a "$LOG_FILE"
+    echo "- Failed Tests: $FAILED_TESTS" | tee -a "$LOG_FILE"
+    echo "- Errors: $ERROR_COUNT" | tee -a "$LOG_FILE"
+    echo | tee -a "$LOG_FILE"
+    
+    # Show error messages if any
+    if [ "$ERROR_COUNT" -gt 0 ] || [ "$FAILED_TESTS" -gt 0 ]; then
+        echo "Error Messages:" | tee -a "$LOG_FILE"
+        grep "\[E \]" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        grep "TEST.*FAILED" "$LOG_FILE" 2>/dev/null | tee -a "$LOG_FILE" || true
+        echo | tee -a "$LOG_FILE"
+        echo -e "\033[0;31m❌ Some tests failed or had errors\033[0m" | tee -a "$LOG_FILE"
+        return 1
+    else
+        if [ "$TOTAL_TESTS" -eq "$COMPLETED_TESTS" ]; then
+            echo -e "\033[0;32m✓ All tests completed successfully\033[0m" | tee -a "$LOG_FILE"
+        else
+            echo -e "\033[0;31m❌ Some tests did not complete\033[0m" | tee -a "$LOG_FILE"
+            return 1
+        fi
+    fi
+    
+    # Clean up temp files
+    rm -f "$TEMP_FILE" "$OUTPUT_FILE"
+    
+    return 0
 }
 
 # Function to analyze log file using structured JSON output
 analyze_log_file() {
     local log_file="$1"
-    echo "Analyzing log file for critical errors..."
+    local has_critical_errors=false
+    local json_file
+    json_file=$(mktemp)
     
-    # Strip ANSI color codes and count tests
-    local total_tests=$(sed 's/\x1b\[[0-9;]*[mGKH]//g' "$log_file" | grep -c "TEST\[.*\]:[[:space:]]*START")
-    local completed_tests=$(sed 's/\x1b\[[0-9;]*[mGKH]//g' "$log_file" | grep -c "TEST\[.*\]:[[:space:]]*FINISHED.*success")
+    echo "Analyzing log file for critical errors..." | tee -a "$log_file"
+    echo | tee -a "$log_file"
     
-    # Look for error messages
-    echo -e "\nChecking for critical errors..."
-    echo "Error messages:"
-    grep -i "error\|exception\|failed\|failure" "$log_file" | grep -v "error_log\|error_reporting" || true
+    # Convert log lines to JSON format for reliable parsing
+    # Format: {"timestamp":"2024-11-22 22:07:18","thread":"1732309638090591","level":"ERROR","context":"TEST","test":"mariadb::types::NumericTest","message":"Buffer type is not supported"}
+    {
+        while IFS= read -r line; do
+            # Skip empty lines
+            [ -z "$line" ] && continue
+            
+            # Extract components using more reliable parsing
+            if [[ $line =~ \[(.*?)\]\ \|(.*?)\ ([0-9]+)\|\ (.*?) ]]; then
+                local level="${BASH_REMATCH[1]}"
+                local timestamp="${BASH_REMATCH[2]}"
+                local thread="${BASH_REMATCH[3]}"
+                local message="${BASH_REMATCH[4]}"
+                
+                # Normalize log level
+                case "$level" in
+                    *E*) level="ERROR" ;;
+                    *W*) level="WARN" ;;
+                    *I*) level="INFO" ;;
+                    *D*) level="DEBUG" ;;
+                    *) level="UNKNOWN" ;;
+                esac
+                
+                # Extract test context if present
+                local test_context=""
+                local test_name=""
+                if [[ $message =~ ^TEST\[(.*?)\]: ]]; then
+                    test_context="TEST"
+                    test_name="${BASH_REMATCH[1]}"
+                    message="${message#*]: }"
+                fi
+                
+                # Create JSON object
+                printf '{"timestamp":"%s","thread":"%s","level":"%s","context":"%s","test":"%s","message":"%s"}\n' \
+                    "$timestamp" "$thread" "$level" "$test_context" "$test_name" "$message"
+            fi
+        done < "$log_file"
+    } > "$json_file"
     
-    # Count different types of errors
-    local error_count=$(grep -ci "error" "$log_file")
-    local test_failures=$(grep -ci "test.*failed" "$log_file")
-    local buffer_errors=$(grep -ci "buffer.*error" "$log_file")
+    echo "=== Test Summary ===" | tee -a "$log_file"
+    echo | tee -a "$log_file"
     
-    echo -e "\nError summary:"
-    echo "- Total Errors: $error_count"
-    echo "- Test Failures: $test_failures"
-    echo "- Buffer Type Errors: $buffer_errors"
-    echo "----------------------------------------"
-    
-    # Check if all tests completed successfully
-    if [ $total_tests -eq $completed_tests ] && [ $total_tests -gt 0 ]; then
-        echo -e "\033[0;32m✅ All tests completed successfully\033[0m"
+    # Use jq to analyze the JSON structured logs
+    if command -v jq >/dev/null 2>&1; then
+        # Find ERROR level messages
+        echo "Error messages:" | tee -a "$log_file"
+        jq -r 'select(.level == "ERROR") | "  [\(.level)] \(.timestamp) [\(.test)] \(.message)"' "$json_file" | tee -a "$log_file" || true
+        
+        # Count errors by type
+        echo -e "\nError summary:" | tee -a "$log_file"
+        jq -r 'select(.level == "ERROR") | .message' "$json_file" | sort | uniq -c | tee -a "$log_file" || true
+        
+        # Check for specific error conditions
+        local error_count=$(jq -r 'select(.level == "ERROR") | .message' "$json_file" | wc -l)
+        local test_failures=$(jq -r 'select(.message | contains("FAILED")) | .test' "$json_file" | wc -l)
+        local buffer_errors=$(jq -r 'select(.message | contains("Buffer type is not supported")) | .test' "$json_file" | wc -l)
+        local total_tests=$(jq -r 'select(.context == "TEST" and .message == "START") | .test' "$json_file" | wc -l)
+        local completed_tests=$(jq -r 'select(.context == "TEST" and .message == "OK") | .test' "$json_file" | wc -l)
+        
+        echo -e "\nTest Results:" | tee -a "$log_file"
+        echo "- Total Tests: $total_tests" | tee -a "$log_file"
+        echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
+        echo "- Total Errors: $error_count" | tee -a "$log_file"
+        echo "- Test Failures: $test_failures" | tee -a "$log_FILE"
+        echo "- Buffer Type Errors: $buffer_errors" | tee -a "$log_FILE"
+        
+        # Set error flag if any critical conditions are met
+        if [ $error_count -gt 0 ] || [ $test_failures -gt 0 ]; then
+            has_critical_errors=true
+        fi
+        
+        # Print overall status
+        echo | tee -a "$log_file"
+        if [ $total_tests -eq $completed_tests ] && [ $has_critical_errors = false ]; then
+            echo -e "\033[0;32m✓ All tests completed successfully\033[0m" | tee -a "$log_file"
+            echo "- Total Tests: $total_tests" | tee -a "$log_file"
+            echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
+        else
+            echo -e "\033[0;31m❌ Some tests did not complete successfully\033[0m" | tee -a "$log_file"
+            echo "- Total Tests: $total_tests" | tee -a "$log_file"
+            echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
+            has_critical_errors=true
+        fi
     else
-        echo -e "\033[0;31m❌ Some tests did not complete successfully\033[0m"
+        echo "[ERROR] jq command not found - cannot analyze log file" | tee -a "$log_file"
+        has_critical_errors=true
     fi
     
-    echo "- Total Tests: $total_tests"
-    echo "- Completed Tests: $completed_tests"
+    # Clean up temp file
+    rm -f "$json_file"
     
-    # Check for critical errors
-    if [ $error_count -gt 0 ] || [ $test_failures -gt 0 ] || [ $buffer_errors -gt 0 ]; then
-        echo -e "\033[0;31m⚠️  Critical errors were found in the test execution!\033[0m"
+    if [ "$has_critical_errors" = true ]; then
+        echo -e "\033[0;31m⚠️  Critical errors were found in the test execution!\033[0m" | tee -a "$log_file"
         return 1
     fi
     
-    if [ $total_tests -eq $completed_tests ] && [ $total_tests -gt 0 ]; then
-        return 0
-    else
-        return 1
-    fi
+    return 0
 }
 
 # Main execution
@@ -180,8 +310,6 @@ else
     run_regular
 fi
 
-# Run error analysis after tests complete
-analyze_log_file "$LOG_FILE"
-
+# No need to run analysis here as it will be handled by cleanup
 echo "[INFO] Test execution completed" >> "$LOG_FILE"
 echo "=== Test Run Completed at $(date '+%Y-%m-%d %H:%M:%S') ===" >> "$LOG_FILE"

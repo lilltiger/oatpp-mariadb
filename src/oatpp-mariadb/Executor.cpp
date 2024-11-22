@@ -181,6 +181,35 @@ std::shared_ptr<orm::QueryResult> Executor::execute(const StringTemplate& queryT
   return execute(queryTemplate, {}, nullptr, connection);
 }
 
+std::shared_ptr<orm::QueryResult> Executor::execute(const oatpp::String& query,
+                                             const std::shared_ptr<const data::mapping::TypeResolver>& typeResolver,
+                                             const provider::ResourceHandle<orm::Connection>& connection) {
+  
+  auto mysqlConnection = std::static_pointer_cast<mariadb::Connection>(connection.object);
+  if (!mysqlConnection) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute]: Invalid connection");
+  }
+
+  MYSQL* mysql = mysqlConnection->getHandle();
+  if (!mysql) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute]: MySQL connection handle is null");
+  }
+
+  MYSQL_STMT* stmt = mysql_stmt_init(mysql);
+  if (!stmt) {
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute]: Failed to initialize statement");
+  }
+
+  if (mysql_stmt_prepare(stmt, query->c_str(), query->size())) {
+    auto error = std::string(mysql_stmt_error(stmt));
+    mysql_stmt_close(stmt);
+    throw std::runtime_error("[oatpp::mariadb::Executor::execute]: Statement prepare error: " + error);
+  }
+
+  auto resultMapper = std::make_shared<mapping::ResultMapper>();
+  return std::make_shared<QueryResult>(stmt, connection, resultMapper, typeResolver);
+}
+
 std::shared_ptr<orm::QueryResult> Executor::executeRaw(const oatpp::String& query,
                                                      const provider::ResourceHandle<orm::Connection>& connection) {
   auto connectionHandle = connection;
@@ -212,15 +241,30 @@ std::shared_ptr<orm::QueryResult> Executor::executeRaw(const oatpp::String& quer
 }
 
 std::shared_ptr<orm::QueryResult> Executor::begin(const provider::ResourceHandle<orm::Connection>& connection) {
-  return executeRaw("START TRANSACTION", connection);
+  return execute("START TRANSACTION", nullptr, connection);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::commit(const provider::ResourceHandle<orm::Connection>& connection) {
-  return executeRaw("COMMIT", connection);
+  return execute("COMMIT", nullptr, connection);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::rollback(const provider::ResourceHandle<orm::Connection>& connection) {
-  return executeRaw("ROLLBACK", connection);
+  return execute("ROLLBACK", nullptr, connection);
+}
+
+void Executor::rollbackToSavepoint(const provider::ResourceHandle<orm::Connection>& connection, const String& savepointName) {
+  auto query = String("ROLLBACK TO SAVEPOINT ") + savepointName;
+  execute(query, nullptr, connection);
+}
+
+void Executor::setSavepoint(const provider::ResourceHandle<orm::Connection>& connection, const String& savepointName) {
+  auto query = String("SAVEPOINT ") + savepointName;
+  execute(query, nullptr, connection);
+}
+
+void Executor::releaseSavepoint(const provider::ResourceHandle<orm::Connection>& connection, const String& savepointName) {
+  auto query = String("RELEASE SAVEPOINT ") + savepointName;
+  execute(query, nullptr, connection);
 }
 
 v_int64 Executor::getSchemaVersion(const oatpp::String& suffix,

@@ -23,6 +23,14 @@ private:
   std::shared_ptr<mapping::ResultMapper> m_resultMapper;
   mapping::ResultMapper::ResultData m_resultData;
   oatpp::String m_errorMessage;
+  bool m_inTransaction;
+
+  /**
+   * Clean up statement resources safely
+   * @return true if cleanup was successful
+   */
+  bool cleanupStatement();
+
 public:
 
   QueryResult(MYSQL_STMT* stmt,

@@ -10,6 +10,7 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
   , m_connection(connection)
   , m_resultMapper(resultMapper)
   , m_resultData(stmt, typeResolver)
+  , m_inTransaction(false)
 {
   OATPP_LOGD("QueryResult", "Executing statement...");
   
@@ -24,6 +25,18 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
     m_errorMessage = "MySQL connection handle is null";
     OATPP_LOGD("QueryResult", "Error: MySQL connection handle is null");
     return;
+  }
+
+  // Check if we're in a transaction
+  if (mysql_query(mysql, "SELECT IF(@@in_transaction, 'true', 'false') as in_transaction") == 0) {
+    MYSQL_RES* res = mysql_store_result(mysql);
+    if (res) {
+      MYSQL_ROW row = mysql_fetch_row(res);
+      if (row && row[0]) {
+        m_inTransaction = (strcmp(row[0], "true") == 0);
+      }
+      mysql_free_result(res);
+    }
   }
 
   OATPP_LOGD("QueryResult", "MySQL thread id: %lu", mysql_thread_id(mysql));
@@ -41,12 +54,37 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
   OATPP_LOGD("QueryResult", "Result data initialized");
 }
 
+bool QueryResult::cleanupStatement() {
+  if (!m_stmt) {
+    return true;
+  }
+
+  bool success = true;
+  const char* error = nullptr;
+
+  // Free the result set if any
+  if (mysql_stmt_free_result(m_stmt)) {
+    error = mysql_stmt_error(m_stmt);
+    OATPP_LOGD("QueryResult", "Error freeing result set: %s", error);
+    success = false;
+  }
+
+  // Close the statement
+  if (mysql_stmt_close(m_stmt)) {
+    error = mysql_stmt_error(m_stmt);
+    OATPP_LOGD("QueryResult", "Error closing statement: %s", error);
+    success = false;
+  }
+
+  m_stmt = nullptr;
+  return success;
+}
+
 QueryResult::~QueryResult() {
-  if (m_stmt) {
-    mysql_stmt_close(m_stmt);
-    OATPP_LOGD("QueryResult", "Statement closed and QueryResult destroyed");
+  if (cleanupStatement()) {
+    OATPP_LOGD("QueryResult", "Statement cleaned up successfully");
   } else {
-    OATPP_LOGD("QueryResult", "No statement to close, QueryResult destroyed");
+    OATPP_LOGD("QueryResult", "Statement cleanup failed");
   }
 }
 

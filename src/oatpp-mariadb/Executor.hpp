@@ -42,6 +42,20 @@ private:
                   const std::unordered_map<oatpp::String, oatpp::Void>& params,
                   const std::shared_ptr<const data::mapping::TypeResolver>& typeResolver);
 
+protected:
+  std::shared_ptr<orm::QueryResult> execute(const oatpp::String& query,
+                                          const std::shared_ptr<const data::mapping::TypeResolver>& typeResolver,
+                                          const provider::ResourceHandle<orm::Connection>& connection);
+
+  void rollbackToSavepoint(const provider::ResourceHandle<orm::Connection>& connection,
+                          const String& savepointName);
+
+  void setSavepoint(const provider::ResourceHandle<orm::Connection>& connection,
+                   const String& savepointName);
+
+  void releaseSavepoint(const provider::ResourceHandle<orm::Connection>& connection,
+                       const String& savepointName);
+
 public:
 
   Executor(const std::shared_ptr<provider::Provider<Connection>>& connectionProvider);
@@ -107,7 +121,7 @@ public:
    * @param connection - database connection.
    * @return - &id:oatpp::orm::QueryResult;.
    */
-  std::shared_ptr<orm::QueryResult> begin(const provider::ResourceHandle<orm::Connection>& connection = nullptr) override;
+  std::shared_ptr<orm::QueryResult> begin(const provider::ResourceHandle<orm::Connection>& connection) override;
 
   /**
    * Commit database transaction. Should NOT be used directly. Use &id:oatpp::orm::Transaction; instead.

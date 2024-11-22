@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed savepoint handling in nested transactions to align with MySQL/MariaDB behavior
 - Fixed transaction state management in nested transactions
 
+## [1.1.0] - 2024-XX-XX
+### Fixed
+- Fixed transaction state tracking in QueryResult
+- Improved statement cleanup with proper error handling
+- Fixed transaction method implementations in Executor to properly inherit from base class
+- Enhanced error handling for transaction operations
+
 ### Technical Details
 - Modified `test/oatpp-mariadb/types/NumericTest.cpp`:
   - Added `createTable` query to create test tables automatically

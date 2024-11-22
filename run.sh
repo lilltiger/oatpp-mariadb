@@ -122,80 +122,52 @@ run_regular() {
     wait $PID
 }
 
-# Function to analyze log file for critical errors
+# Function to analyze log file using structured JSON output
 analyze_log_file() {
     local log_file="$1"
-    local has_critical_errors=false
-    
     echo "Analyzing log file for critical errors..."
-    echo
-    echo "Checking for critical errors..."
     
-    # Define critical error patterns
-    local error_pattern='^[^DI].*\| E \|.*$'  # Error level logs (must have E between pipes, exclude Debug and Info)
-    local segfault_pattern='Segmentation fault'
-    local sigsegv_pattern='SIGSEGV received'
-    local sigabrt_pattern='SIGABRT received'
-    local test_failed_pattern='TEST.*:.*FAILED$'  # Test failure messages
-    local connection_error_pattern='ERROR: Connection refused'
-    local assert_pattern='OATPP_ASSERT.*failed'
-    local exception_pattern='std::.*:.*Exception'
-    local mysql_error_pattern='mysql_error:.*'
+    # Strip ANSI color codes and count tests
+    local total_tests=$(sed 's/\x1b\[[0-9;]*[mGKH]//g' "$log_file" | grep -c "TEST\[.*\]:[[:space:]]*START")
+    local completed_tests=$(sed 's/\x1b\[[0-9;]*[mGKH]//g' "$log_file" | grep -c "TEST\[.*\]:[[:space:]]*FINISHED.*success")
     
-    # Check for critical error patterns
-    local found_errors=false
-    local all_patterns=(
-        "$error_pattern"
-        "$segfault_pattern"
-        "$sigsegv_pattern"
-        "$sigabrt_pattern"
-        "$test_failed_pattern"
-        "$connection_error_pattern"
-        "$assert_pattern"
-        "$exception_pattern"
-        "$mysql_error_pattern"
-    )
+    # Look for error messages
+    echo -e "\nChecking for critical errors..."
+    echo "Error messages:"
+    grep -i "error\|exception\|failed\|failure" "$log_file" | grep -v "error_log\|error_reporting" || true
     
-    for pattern in "${all_patterns[@]}"; do
-        # Use grep -a to treat file as text and -E for extended regex
-        if grep -aE "$pattern" "$log_file" | grep -avE "TEST.*:(START|FINISHED|success|FINISH)" | grep -q .; then
-            echo -e "\033[0;31mFound critical error pattern: '$pattern'\033[0m"
-            echo "Related log entries:"
-            # Filter out test start/end messages and highlight the matches
-            grep -aE "$pattern" "$log_file" | \
-                grep -avE "TEST.*:(START|FINISHED|success|FINISH)" | \
-                grep --color=always -E "$pattern|$" | sed 's/^/  /'
-            found_errors=true
-            has_critical_errors=true
-        fi
-    done
+    # Count different types of errors
+    local error_count=$(grep -ci "error" "$log_file")
+    local test_failures=$(grep -ci "test.*failed" "$log_file")
+    local buffer_errors=$(grep -ci "buffer.*error" "$log_file")
     
-    if [ "$found_errors" = false ]; then
-        echo -e "\033[0;32mNo critical errors found\033[0m"
-    fi
-    
+    echo -e "\nError summary:"
+    echo "- Total Errors: $error_count"
+    echo "- Test Failures: $test_failures"
+    echo "- Buffer Type Errors: $buffer_errors"
     echo "----------------------------------------"
     
     # Check if all tests completed successfully
-    if grep -q "TEST.*:.*FAILED" "$log_file"; then
-        echo -e "\033[0;31m❌ Some tests failed\033[0m"
-        has_critical_errors=true
-    else
+    if [ $total_tests -eq $completed_tests ] && [ $total_tests -gt 0 ]; then
         echo -e "\033[0;32m✅ All tests completed successfully\033[0m"
+    else
+        echo -e "\033[0;31m❌ Some tests did not complete successfully\033[0m"
     fi
     
-    # Check for warnings
-    if grep -q "^.*\| W \|" "$log_file"; then
-        echo -e "\033[1;33m⚠️  Warning: Review logs for potential issues\033[0m"
-    fi
+    echo "- Total Tests: $total_tests"
+    echo "- Completed Tests: $completed_tests"
     
-    # Final status
-    if [ "$has_critical_errors" = true ]; then
+    # Check for critical errors
+    if [ $error_count -gt 0 ] || [ $test_failures -gt 0 ] || [ $buffer_errors -gt 0 ]; then
         echo -e "\033[0;31m⚠️  Critical errors were found in the test execution!\033[0m"
         return 1
     fi
     
-    return 0
+    if [ $total_tests -eq $completed_tests ] && [ $total_tests -gt 0 ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Main execution

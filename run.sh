@@ -124,62 +124,78 @@ run_regular() {
 
 # Function to analyze log file for critical errors
 analyze_log_file() {
-    echo -e "\n=== Error Analysis ===" >> "$LOG_FILE"
-    echo -e "\nAnalyzing log file for critical errors..."
+    local log_file="$1"
+    local has_critical_errors=false
     
-    # Define ANSI color codes
-    RED='\033[0;31m'
-    YELLOW='\033[1;33m'
-    NC='\033[0m' # No Color
+    echo "Analyzing log file for critical errors..."
+    echo
+    echo "Checking for critical errors..."
     
-    # Critical keywords to search for
-    CRITICAL_PATTERNS=(
-        "terminate"
-        "exception"
-        "segmentation fault"
-        "core dump"
-        "abort"
-        "fatal"
-        "\[41m E \|"  # Error messages from oatpp logging
-        "runtime_error"
-        "what\(\)"    # Exception messages
+    # Define critical error patterns
+    local error_pattern='^[^DI].*\| E \|.*$'  # Error level logs (must have E between pipes, exclude Debug and Info)
+    local segfault_pattern='Segmentation fault'
+    local sigsegv_pattern='SIGSEGV received'
+    local sigabrt_pattern='SIGABRT received'
+    local test_failed_pattern='TEST.*:.*FAILED$'  # Test failure messages
+    local connection_error_pattern='ERROR: Connection refused'
+    local assert_pattern='OATPP_ASSERT.*failed'
+    local exception_pattern='std::.*:.*Exception'
+    local mysql_error_pattern='mysql_error:.*'
+    
+    # Check for critical error patterns
+    local found_errors=false
+    local all_patterns=(
+        "$error_pattern"
+        "$segfault_pattern"
+        "$sigsegv_pattern"
+        "$sigabrt_pattern"
+        "$test_failed_pattern"
+        "$connection_error_pattern"
+        "$assert_pattern"
+        "$exception_pattern"
+        "$mysql_error_pattern"
     )
     
-    echo -e "\nChecking for critical errors..."
-    FOUND_CRITICAL=false
-    
-    for pattern in "${CRITICAL_PATTERNS[@]}"; do
-        # Search for the pattern and store matches
-        MATCHES=$(grep -i "$pattern" "$LOG_FILE" || true)
-        if [ ! -z "$MATCHES" ]; then
-            FOUND_CRITICAL=true
-            echo -e "${RED}Found critical error pattern: '$pattern'${NC}"
+    for pattern in "${all_patterns[@]}"; do
+        # Use grep -a to treat file as text and -E for extended regex
+        if grep -aE "$pattern" "$log_file" | grep -avE "TEST.*:(START|FINISHED|success|FINISH)" | grep -q .; then
+            echo -e "\033[0;31mFound critical error pattern: '$pattern'\033[0m"
             echo "Related log entries:"
-            echo "$MATCHES" | while IFS= read -r line; do
-                echo -e "${RED}  $line${NC}"
-            done
-            echo "----------------------------------------"
+            # Filter out test start/end messages and highlight the matches
+            grep -aE "$pattern" "$log_file" | \
+                grep -avE "TEST.*:(START|FINISHED|success|FINISH)" | \
+                grep --color=always -E "$pattern|$" | sed 's/^/  /'
+            found_errors=true
+            has_critical_errors=true
         fi
     done
     
-    # Check for connection-related errors
-    CONNECTION_ERRORS=$(grep -i "connection" "$LOG_FILE" | grep -i "error" || true)
-    if [ ! -z "$CONNECTION_ERRORS" ]; then
-        echo -e "${YELLOW}Found connection-related issues:${NC}"
-        echo "$CONNECTION_ERRORS" | while IFS= read -r line; do
-            echo -e "${YELLOW}  $line${NC}"
-        done
-        echo "----------------------------------------"
+    if [ "$found_errors" = false ]; then
+        echo -e "\033[0;32mNo critical errors found\033[0m"
     fi
     
-    if [ "$FOUND_CRITICAL" = true ]; then
-        echo -e "${RED}⚠️  Critical errors were found in the test execution!${NC}"
-        echo "Please review the log file for details: $LOG_FILE"
-        echo "Critical errors were found in the test execution!" >> "$LOG_FILE"
+    echo "----------------------------------------"
+    
+    # Check if all tests completed successfully
+    if grep -q "TEST.*:.*FAILED" "$log_file"; then
+        echo -e "\033[0;31m❌ Some tests failed\033[0m"
+        has_critical_errors=true
     else
-        echo -e "✅ No critical errors found in the log analysis."
-        echo "No critical errors found in the log analysis." >> "$LOG_FILE"
+        echo -e "\033[0;32m✅ All tests completed successfully\033[0m"
     fi
+    
+    # Check for warnings
+    if grep -q "^.*\| W \|" "$log_file"; then
+        echo -e "\033[1;33m⚠️  Warning: Review logs for potential issues\033[0m"
+    fi
+    
+    # Final status
+    if [ "$has_critical_errors" = true ]; then
+        echo -e "\033[0;31m⚠️  Critical errors were found in the test execution!\033[0m"
+        return 1
+    fi
+    
+    return 0
 }
 
 # Main execution
@@ -193,7 +209,7 @@ else
 fi
 
 # Run error analysis after tests complete
-analyze_log_file
+analyze_log_file "$LOG_FILE"
 
 echo "[INFO] Test execution completed" >> "$LOG_FILE"
 echo "=== Test Run Completed at $(date '+%Y-%m-%d %H:%M:%S') ===" >> "$LOG_FILE"

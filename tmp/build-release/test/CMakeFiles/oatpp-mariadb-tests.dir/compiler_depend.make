@@ -3805,6 +3805,7 @@ test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o: /
   /usr/include/c++/14.2.1/bits/shared_ptr.h \
   /usr/include/c++/14.2.1/bits/shared_ptr_atomic.h \
   /usr/include/c++/14.2.1/bits/shared_ptr_base.h \
+  /usr/include/c++/14.2.1/bits/sstream.tcc \
   /usr/include/c++/14.2.1/bits/std_abs.h \
   /usr/include/c++/14.2.1/bits/std_function.h \
   /usr/include/c++/14.2.1/bits/std_mutex.h \
@@ -3879,6 +3880,7 @@ test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o: /
   /usr/include/c++/14.2.1/new \
   /usr/include/c++/14.2.1/ostream \
   /usr/include/c++/14.2.1/ratio \
+  /usr/include/c++/14.2.1/sstream \
   /usr/include/c++/14.2.1/stdexcept \
   /usr/include/c++/14.2.1/streambuf \
   /usr/include/c++/14.2.1/string \
@@ -4110,6 +4112,8 @@ test/oatpp-mariadb-tests: /usr/lib64/libc.so \
 /usr/lib64/libm.so:
 
 /usr/lib64/libgcc_s.so:
+
+/usr/include/c++/14.2.1/sstream:
 
 /usr/lib32/libssl.so.3:
 
@@ -4542,6 +4546,8 @@ test/oatpp-mariadb-tests: /usr/lib64/libc.so \
 /usr/include/bits/floatn.h:
 
 /usr/include/mysql/mariadb_version.h:
+
+/usr/include/c++/14.2.1/bits/sstream.tcc:
 
 /usr/include/c++/14.2.1/bits/alloc_traits.h:
 

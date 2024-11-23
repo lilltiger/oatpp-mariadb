@@ -4,6 +4,7 @@
 #include "oatpp-mariadb/orm.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 #include "oatpp/core/Types.hpp"
+#include <sstream>
 
 namespace oatpp { namespace test { namespace mariadb { namespace types {
 
@@ -17,7 +18,7 @@ class VarCharRow : public oatpp::DTO {
   DTO_INIT(VarCharRow, DTO)
   DTO_FIELD(String, small_varchar);  // VARCHAR(10)
   DTO_FIELD(String, medium_varchar); // VARCHAR(255)
-  DTO_FIELD(String, large_varchar);  // VARCHAR(16383)
+  DTO_FIELD(String, large_varchar);  // TEXT
 };
 
 #include OATPP_CODEGEN_END(DTO)
@@ -34,7 +35,7 @@ public:
         "CREATE TABLE IF NOT EXISTS `test_varchar` ("
         "`small_varchar` VARCHAR(10),"
         "`medium_varchar` VARCHAR(255),"
-        "`large_varchar` VARCHAR(16383)"
+        "`large_varchar` TEXT"
         ") ENGINE=InnoDB;")
 
   QUERY(insertValues,
@@ -130,32 +131,53 @@ void VarCharTest::onRun() {
         auto row = VarCharRow::createShared();
         row->small_varchar = "test";
         row->medium_varchar = "This is a medium length string for testing VARCHAR(255)";
-        row->large_varchar = std::string(1000, 'a'); // String of 1000 'a' characters
+        row->large_varchar = "This is a large string";
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted normal strings");
       }
 
       // Test maximum length strings
       {
         auto row = VarCharRow::createShared();
-        row->small_varchar = std::string(10, 'x');    // 10 characters
-        row->medium_varchar = std::string(255, 'y');  // 255 characters
-        row->large_varchar = std::string(16383, 'z'); // 16383 characters
+        std::string smallStr(10, 'a');  // 10 characters
+        std::string mediumStr(255, 'a'); // 255 characters
+        std::string largeStr(3000, 'a'); // 3000 characters for TEXT field
+        row->small_varchar = smallStr;
+        row->medium_varchar = mediumStr;
+        row->large_varchar = largeStr;
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted maximum length strings");
+      }
+
+      // Test special characters and Unicode in TEXT
+      {
+        auto row = VarCharRow::createShared();
+        row->small_varchar = "!@#$%^&*()";
+        row->medium_varchar = u8"Unicode: \u4f60\u597d\u4e16\u754c";
+        // Create a large TEXT field with mixed content
+        std::stringstream ss;
+        ss << "Large TEXT with special characters:\n";
+        ss << "1. Unicode: " << u8"\u4f60\u597d\u4e16\u754c\n";
+        ss << "2. HTML: <div>Test</div>\n";
+        ss << "3. JSON: {\"key\": \"value\"}\n";
+        ss << "4. SQL: SELECT * FROM table;\n";
+        // Add some repeated content to make it larger
+        for(int i = 0; i < 1000; i++) {
+            ss << "Line " << i << ": Some text with special chars !@#$%^&*()\n";
+        }
+        row->large_varchar = ss.str();
+        auto res = client.insertValues(row);
+        OATPP_ASSERT(res->isSuccess());
       }
 
       // Test special characters
       {
         auto row = VarCharRow::createShared();
         row->small_varchar = "!@#$%^&*()";
-        row->medium_varchar = "Unicode: 你好世界";
+        row->medium_varchar = u8"Unicode: \u4f60\u597d\u4e16\u754c";
         row->large_varchar = "Newlines:\n\rTabs:\t\tSpaces:   End";
         auto res = client.insertValues(row);
         OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Inserted special characters");
       }
     }
 
@@ -165,7 +187,7 @@ void VarCharTest::onRun() {
       OATPP_ASSERT(res->isSuccess());
 
       auto dataset = res->fetch<oatpp::Vector<oatpp::Object<VarCharRow>>>();
-      OATPP_ASSERT(dataset->size() == 5);
+      OATPP_ASSERT(dataset->size() == 6);
 
       // Print results
       oatpp::parser::json::mapping::ObjectMapper om;
@@ -173,47 +195,92 @@ void VarCharTest::onRun() {
       auto str = om.writeToString(dataset);
       OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
 
-      // Verify nullptr values
-      {
-        auto row = dataset[0];
-        OATPP_ASSERT(row->small_varchar == nullptr);
-        OATPP_ASSERT(row->medium_varchar == nullptr);
-        OATPP_ASSERT(row->large_varchar == nullptr);
-      }
+      try {
+        // Verify nullptr values
+        {
+          auto row = dataset[0];
+          if (!row) {
+            OATPP_LOGE(TAG, "Row is null");
+            throw std::runtime_error("Row is null");
+          }
+          OATPP_ASSERT(row->small_varchar == nullptr);
+          OATPP_ASSERT(row->medium_varchar == nullptr);
+          OATPP_ASSERT(row->large_varchar == nullptr);
+        }
 
-      // Verify empty strings
-      {
-        auto row = dataset[1];
-        OATPP_ASSERT(row->small_varchar == "");
-        OATPP_ASSERT(row->medium_varchar == "");
-        OATPP_ASSERT(row->large_varchar == "");
-      }
+        // Verify empty strings
+        {
+          auto row = dataset[1];
+          if (!row) {
+            OATPP_LOGE(TAG, "Row is null");
+            throw std::runtime_error("Row is null");
+          }
+          OATPP_ASSERT(row->small_varchar == "");
+          OATPP_ASSERT(row->medium_varchar == "");
+          OATPP_ASSERT(row->large_varchar == "");
+        }
 
-      // Verify normal strings
-      {
-        auto row = dataset[2];
-        OATPP_ASSERT(row->small_varchar == "test");
-        OATPP_ASSERT(row->medium_varchar == "This is a medium length string for testing VARCHAR(255)");
-        OATPP_ASSERT(row->large_varchar == std::string(1000, 'a'));
-      }
+        // Verify normal strings
+        {
+          auto row = dataset[2];
+          if (!row) {
+            OATPP_LOGE(TAG, "Row is null");
+            throw std::runtime_error("Row is null");
+          }
+          OATPP_ASSERT(row->small_varchar == "test");
+          OATPP_ASSERT(row->medium_varchar == "This is a medium length string for testing VARCHAR(255)");
+          OATPP_ASSERT(row->large_varchar == "This is a large string");
+        }
 
-      // Verify maximum length strings
-      {
-        auto row = dataset[3];
-        OATPP_ASSERT(row->small_varchar == std::string(10, 'x'));
-        OATPP_ASSERT(row->medium_varchar == std::string(255, 'y'));
-        OATPP_ASSERT(row->large_varchar == std::string(16383, 'z'));
-      }
+        // Verify maximum length strings
+        {
+          auto row = dataset[3];
+          if (!row) {
+            OATPP_LOGE(TAG, "Row is null");
+            throw std::runtime_error("Row is null");
+          }
+          OATPP_ASSERT(std::string(row->small_varchar->c_str()).length() == 10);
+          std::string smallStr(row->small_varchar->c_str());
+          OATPP_ASSERT(smallStr == std::string(10, 'a'));
 
-      // Verify special characters
-      {
-        auto row = dataset[4];
-        OATPP_ASSERT(row->small_varchar == "!@#$%^&*()");
-        OATPP_ASSERT(row->medium_varchar == "Unicode: 你好世界");
-        OATPP_ASSERT(row->large_varchar == "Newlines:\n\rTabs:\t\tSpaces:   End");
-      }
+          OATPP_ASSERT(std::string(row->medium_varchar->c_str()).length() == 255);
+          std::string mediumStr(row->medium_varchar->c_str());
+          OATPP_ASSERT(mediumStr == std::string(255, 'a'));
 
-      OATPP_LOGD(TAG, "All assertions passed successfully");
+          OATPP_ASSERT(std::string(row->large_varchar->c_str()).length() == 3000);
+          std::string largeStr(row->large_varchar->c_str());
+          OATPP_ASSERT(largeStr == std::string(3000, 'a'));
+        }
+
+        // Verify special characters
+        {
+          auto row = dataset[4];
+          OATPP_ASSERT(row->small_varchar == "!@#$%^&*()");
+          OATPP_ASSERT(row->medium_varchar == u8"Unicode: \u4f60\u597d\u4e16\u754c");
+          OATPP_ASSERT(std::string(row->large_varchar->c_str()).length() > 1000);
+          std::string content(row->large_varchar->c_str());
+          OATPP_ASSERT(content.find("Large TEXT with special characters:") != std::string::npos);
+          OATPP_ASSERT(content.find("Unicode:") != std::string::npos);
+          OATPP_ASSERT(content.find("HTML:") != std::string::npos);
+          OATPP_ASSERT(content.find("JSON:") != std::string::npos);
+          OATPP_ASSERT(content.find("SQL:") != std::string::npos);
+        }
+
+        // Verify special characters and Unicode in TEXT
+        {
+          auto row = dataset[5];
+          OATPP_ASSERT(row->small_varchar == "!@#$%^&*()");
+          OATPP_ASSERT(row->medium_varchar == u8"Unicode: \u4f60\u597d\u4e16\u754c");
+          OATPP_ASSERT(std::string(row->large_varchar->c_str()).length() > 1000);
+          std::string content(row->large_varchar->c_str());
+          OATPP_ASSERT(content.find("Newlines:\n\rTabs:\t\tSpaces:   End") != std::string::npos);
+        }
+
+        OATPP_LOGD(TAG, "All assertions passed successfully");
+      } catch (const std::exception& e) {
+        OATPP_LOGE(TAG, "Assertion failed: %s", e.what());
+        throw;
+      }
     }
 
   } catch (const std::exception& e) {

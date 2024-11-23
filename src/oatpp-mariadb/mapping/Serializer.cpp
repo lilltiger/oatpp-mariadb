@@ -132,40 +132,80 @@ void Serializer::setBindParam(MYSQL_BIND& bind, v_uint32 paramIndex) const {
 // Serializer functions
 
 void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph) {
+  OATPP_LOGD("Serializer", "Serializing String value for paramIndex=%d", paramIndex);
+  
+  if (!stmt) {
+    OATPP_LOGE("Serializer", "Error: MySQL statement is null");
+    throw std::runtime_error("MySQL statement is null");
+  }
+  
   if(paramIndex >= _this->m_bindParams.size()) {
+    OATPP_LOGD("Serializer", "Resizing bind params array from %d to %d", _this->m_bindParams.size(), paramIndex + 1);
     _this->m_bindParams.resize(paramIndex + 1);
   }
   
   auto& bind = _this->m_bindParams[paramIndex];
   std::memset(&bind, 0, sizeof(MYSQL_BIND));
-  bind.buffer_type = MYSQL_TYPE_STRING;
+  
+  // Allocate is_null indicator
+  bind.is_null = (my_bool*)malloc(sizeof(my_bool));
+  if(!bind.is_null) {
+    OATPP_LOGE("Serializer", "Failed to allocate memory for is_null indicator");
+    throw std::runtime_error("Failed to allocate memory for is_null indicator");
+  }
+  
+  // Allocate length indicator
+  bind.length = (unsigned long*)malloc(sizeof(unsigned long));
+  if(!bind.length) {
+    free(bind.is_null);
+    OATPP_LOGE("Serializer", "Failed to allocate memory for length indicator");
+    throw std::runtime_error("Failed to allocate memory for length indicator");
+  }
   
   if(polymorph) {
     auto str = polymorph.cast<oatpp::String>();
-    if (str) {
+    if(str) {
       const char* cstr = str->c_str();
       std::size_t len = str->length();
       
-      bind.buffer = malloc(len + 1);
-      if (!bind.buffer) {
+      // Allocate buffer for the string value
+      bind.buffer = malloc(len + 1);  // +1 for null terminator
+      if(!bind.buffer) {
+        free(bind.is_null);
+        free(bind.length);
+        OATPP_LOGE("Serializer", "Failed to allocate memory for string value");
         throw std::runtime_error("Failed to allocate memory for string value");
       }
+      
       std::memcpy(bind.buffer, cstr, len + 1);
-      bind.buffer_length = len;
-      bind.is_null_value = 0;
-      bind.length_value = len;
+      bind.buffer_length = len + 1;
+      *bind.length = len;
+      *bind.is_null = 0;
+      
+      // Use MYSQL_TYPE_BLOB for TEXT fields (length > 255)
+      // Use MYSQL_TYPE_VAR_STRING for VARCHAR fields (length <= 255)
+      if (len > 255) {
+        bind.buffer_type = MYSQL_TYPE_BLOB;
+        OATPP_LOGD("Serializer", "Using BLOB type for TEXT field, length=%lu", *bind.length);
+      } else {
+        bind.buffer_type = MYSQL_TYPE_VAR_STRING;
+        OATPP_LOGD("Serializer", "Using VAR_STRING type for VARCHAR field, length=%lu", *bind.length);
+      }
     } else {
-      bind.is_null_value = 1;
+      bind.buffer = nullptr;
+      bind.buffer_length = 0;
+      *bind.length = 0;
+      *bind.is_null = 1;
+      bind.buffer_type = MYSQL_TYPE_VAR_STRING;  // Default to VAR_STRING for null values
+      OATPP_LOGD("Serializer", "String value is null");
     }
   } else {
-    bind.is_null_value = 1;
-  }
-  
-  bind.is_null = &bind.is_null_value;
-  bind.length = &bind.length_value;
-  
-  if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
-    throw std::runtime_error(mysql_stmt_error(stmt));
+    bind.buffer = nullptr;
+    bind.buffer_length = 0;
+    *bind.length = 0;
+    *bind.is_null = 1;
+    bind.buffer_type = MYSQL_TYPE_VAR_STRING;  // Default to VAR_STRING for null values
+    OATPP_LOGD("Serializer", "String value is null (polymorph is null)");
   }
 }
 

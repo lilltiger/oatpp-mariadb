@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved run.sh script with better output handling and error reporting
 - Enhanced test summary with categorized error reporting and improved detection
 - Reverted explicit cleanup code in Int64Test and VarCharTest to resolve build errors
+- Updated VarChar test cases with proper string length validation (VARCHAR(10), VARCHAR(255), TEXT(3000))
+- Fixed dataset access pattern in VarChar tests
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest

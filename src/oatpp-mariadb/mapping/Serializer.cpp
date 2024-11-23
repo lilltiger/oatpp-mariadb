@@ -204,35 +204,55 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
 }
 
 void Serializer::serializeBoolean(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph) {
-  auto value = static_cast<oatpp::Boolean*>(polymorph.get());
-  
-  if(paramIndex >= _this->m_bindParams.size()) {
-    _this->m_bindParams.resize(paramIndex + 1);
-  }
-  
-  auto& bind = _this->m_bindParams[paramIndex];
-  std::memset(&bind, 0, sizeof(MYSQL_BIND));
-  
-  bind.buffer_type = MYSQL_TYPE_TINY;
-  bind.is_unsigned = true;
-  
-  if(value == nullptr) {
-    bind.is_null_value = 1;
-    bind.is_null = &bind.is_null_value;
-  } else {
-    bind.is_null_value = 0;
-    bind.is_null = &bind.is_null_value;
-    bind.buffer = malloc(sizeof(my_bool));
-    if(!bind.buffer) {
-      throw std::runtime_error("Failed to allocate memory for boolean value");
+    if (!stmt) {
+        OATPP_LOGD("Serializer", "MySQL statement is null");
+        throw std::runtime_error("MySQL statement is null");
     }
-    *static_cast<my_bool*>(bind.buffer) = value->getValue(false) ? 1 : 0;
-    bind.buffer_length = sizeof(my_bool);
-  }
-  
-  if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
-    throw std::runtime_error(mysql_stmt_error(stmt));
-  }
+    
+    if(paramIndex >= _this->m_bindParams.size()) {
+        _this->m_bindParams.resize(paramIndex + 1);
+    }
+    
+    auto& bind = _this->m_bindParams[paramIndex];
+    std::memset(&bind, 0, sizeof(MYSQL_BIND));
+    
+    bind.buffer = malloc(sizeof(signed char));
+    if(!bind.buffer) {
+        OATPP_LOGD("Serializer", "Failed to allocate memory for Boolean value");
+        throw std::runtime_error("Failed to allocate memory for Boolean value");
+    }
+    
+    bind.is_null = (my_bool*)malloc(sizeof(my_bool));
+    if(!bind.is_null) {
+        free(bind.buffer);
+        OATPP_LOGD("Serializer", "Failed to allocate memory for is_null indicator");
+        throw std::runtime_error("Failed to allocate memory for is_null indicator");
+    }
+    
+    bind.buffer_type = MYSQL_TYPE_TINY;
+    bind.is_unsigned = false;
+    bind.buffer_length = sizeof(signed char);
+    *bind.is_null = 0;  // Default to not null
+    
+    if(polymorph) {
+        auto value = polymorph.cast<oatpp::Boolean>();
+        if(value.get() == nullptr) {  // Check for null using get() instead of bool conversion
+            *bind.is_null = 1;
+            OATPP_LOGD("Serializer", "Serializing null boolean value (value is null)");
+        } else {
+            signed char boolVal = value.getValue(false) ? 1 : 0;  // Use false as default value
+            *static_cast<signed char*>(bind.buffer) = boolVal;
+            OATPP_LOGD("Serializer", "Serializing boolean value: %d", (int)boolVal);
+        }
+    } else {
+        *bind.is_null = 1;
+        OATPP_LOGD("Serializer", "Serializing null boolean value (polymorph is null)");
+    }
+    
+    if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
+        OATPP_LOGD("Serializer", "Failed to bind parameter: %s", mysql_stmt_error(stmt));
+        throw std::runtime_error(mysql_stmt_error(stmt));
+    }
 }
 
 void Serializer::serializeInt8(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph) {
@@ -504,6 +524,10 @@ void Serializer::serializeInt64(const Serializer* _this, MYSQL_STMT* stmt, v_uin
     *bind.is_null = 1;
     OATPP_LOGD("Serializer", "Int64 value is null (polymorph is null)");
   }
+  
+  if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
+    throw std::runtime_error(mysql_stmt_error(stmt));
+  }
 }
 
 void Serializer::serializeUInt64(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph) {
@@ -555,6 +579,10 @@ void Serializer::serializeUInt64(const Serializer* _this, MYSQL_STMT* stmt, v_ui
   } else {
     *bind.is_null = 1;
     OATPP_LOGD("Serializer", "UInt64 value is null (polymorph is null)");
+  }
+  
+  if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
+    throw std::runtime_error(mysql_stmt_error(stmt));
   }
 }
 
@@ -640,6 +668,10 @@ void Serializer::serializeFloat64(const Serializer* _this, MYSQL_STMT* stmt, v_u
   } else {
     *bind.is_null = 1;
     OATPP_LOGD("Serializer", "Float64 value is null (polymorph is null)");
+  }
+  
+  if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
+    throw std::runtime_error(mysql_stmt_error(stmt));
   }
 }
 

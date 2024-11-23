@@ -46,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved memory management in Int64/UInt64 serialization methods
 - Added proper handling of maximum and minimum values for 64-bit integers
 - Fixed test summary generation in run.sh to handle broken pipes and newlines correctly
+- Fixed Boolean serialization to properly handle false values by using proper null checking
+- Fixed memory management in Boolean serialization methods
+- Added comprehensive logging for Boolean value handling
 
 ## [1.1.0] - 2024-XX-XX
 ### Fixed

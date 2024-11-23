@@ -19,6 +19,13 @@ provider::ResourceHandle<Connection> ConnectionProvider::get() {
         "Failed to initialize MySQL connection. Error: " + std::string(mysql_error(handle)));
   }
     
+  // Set max_allowed_packet to 16MB to handle large text fields
+  unsigned long max_allowed_packet = 16 * 1024 * 1024;
+  if (mysql_options(handle, MYSQL_OPT_MAX_ALLOWED_PACKET, &max_allowed_packet)) {
+    throw std::runtime_error("[oatpp::mariadb::ConnectionProvider::get()]: " 
+      "Failed to set max_allowed_packet. Error: " + std::string(mysql_error(handle)));
+  }
+
   MYSQL* result = mysql_real_connect(handle, 
     m_options.host->c_str(), 
     m_options.username->c_str(), 

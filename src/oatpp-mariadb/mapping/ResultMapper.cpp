@@ -155,8 +155,8 @@ void ResultMapper::ResultData::bindResultsForCache() {
       case MYSQL_TYPE_BLOB:
       default:
         bind.buffer_type = MYSQL_TYPE_STRING;
-        // Add extra byte for null terminator and ensure minimum size
-        bind.buffer_length = std::max(fields[i].length + 1, (unsigned long)256);
+        // For TEXT fields, allocate a larger buffer (16MB should be enough for most cases)
+        bind.buffer_length = std::max(fields[i].length + 1, (unsigned long)(16 * 1024 * 1024));
         bind.buffer = malloc(bind.buffer_length);
         break;
     }

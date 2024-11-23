@@ -218,40 +218,52 @@ analyze_log_file() {
     echo | tee -a "$log_file"
     
     # Convert log lines to JSON format for reliable parsing
-    # Format: {"timestamp":"2024-11-22 22:07:18","thread":"1732309638090591","level":"ERROR","context":"TEST","test":"mariadb::types::NumericTest","message":"Buffer type is not supported"}
     {
         while IFS= read -r line; do
-            # Skip empty lines
-            [ -z "$line" ] && continue
+            # Skip empty lines and non-log lines
+            [[ -z "$line" || "$line" =~ ^#.*$ || "$line" =~ ^===.*$ ]] && continue
             
-            # Extract components using more reliable parsing
-            if [[ $line =~ \[(.*?)\]\ \|(.*?)\ ([0-9]+)\|\ (.*?) ]]; then
-                local level="${BASH_REMATCH[1]}"
-                local timestamp="${BASH_REMATCH[2]}"
-                local thread="${BASH_REMATCH[3]}"
-                local message="${BASH_REMATCH[4]}"
+            # Extract components using enhanced pattern matching
+            if [[ $line =~ ^(\[([EWID])[[:space:]]\]|\[ERROR\]|\[FAILED\])[[:space:]]*\|?([0-9-]{10}[[:space:]][0-9:]{8})?[[:space:]]*([0-9]+)?\|?[[:space:]]*(.*) ]]; then
+                local raw_level="${BASH_REMATCH[2]:-E}"  # Default to E if not found
+                local timestamp="${BASH_REMATCH[3]}"
+                local thread="${BASH_REMATCH[4]}"
+                local message="${BASH_REMATCH[5]}"
                 
-                # Normalize log level
-                case "$level" in
-                    *E*) level="ERROR" ;;
-                    *W*) level="WARN" ;;
-                    *I*) level="INFO" ;;
-                    *D*) level="DEBUG" ;;
-                    *) level="UNKNOWN" ;;
-                esac
-                
-                # Extract test context if present
-                local test_context=""
+                # Extract test name if present
                 local test_name=""
-                if [[ $message =~ ^TEST\[(.*?)\]: ]]; then
-                    test_context="TEST"
+                if [[ $message =~ TEST\[(.*?)\]: ]]; then
                     test_name="${BASH_REMATCH[1]}"
                     message="${message#*]: }"
                 fi
                 
-                # Create JSON object
+                # Determine log level and context
+                local level="INFO"
+                local context=""
+                
+                # Check for specific patterns
+                if [[ $message =~ ASSERT\[FAILED\] ]]; then
+                    level="ERROR"
+                    context="ASSERT"
+                elif [[ $message =~ START\.\.\. ]]; then
+                    context="TEST_START"
+                elif [[ $message =~ FINISHED.*success! ]]; then
+                    context="TEST_OK"
+                elif [[ $message =~ FINISHED.*FAILED ]]; then
+                    level="ERROR"
+                    context="TEST_FAILED"
+                elif [[ $raw_level == "E" ]]; then
+                    level="ERROR"
+                fi
+                
+                # Create JSON object with escaped strings
                 printf '{"timestamp":"%s","thread":"%s","level":"%s","context":"%s","test":"%s","message":"%s"}\n' \
-                    "$timestamp" "$thread" "$level" "$test_context" "$test_name" "$message"
+                    "${timestamp//\"/\\\"}" \
+                    "${thread//\"/\\\"}" \
+                    "${level//\"/\\\"}" \
+                    "${context//\"/\\\"}" \
+                    "${test_name//\"/\\\"}" \
+                    "${message//\"/\\\"}"
             fi
         done < "$log_file"
     } > "$json_file"
@@ -261,30 +273,36 @@ analyze_log_file() {
     
     # Use jq to analyze the JSON structured logs
     if command -v jq >/dev/null 2>&1; then
-        # Find ERROR level messages
-        echo "Error messages:" | tee -a "$log_file"
-        jq -r 'select(.level == "ERROR") | "  [\(.level)] \(.timestamp) [\(.test)] \(.message)"' "$json_file" | tee -a "$log_file" || true
+        # Count test statistics
+        local total_tests=$(jq -r 'select(.context == "TEST_START") | .test' "$json_file" | sort -u | wc -l)
+        local completed_tests=$(jq -r 'select(.context == "TEST_OK") | .test' "$json_file" | sort -u | wc -l)
+        local failed_tests=$(jq -r 'select(.context == "TEST_FAILED") | .test' "$json_file" | sort -u | wc -l)
+        local assertion_failures=$(jq -r 'select(.context == "ASSERT") | .test' "$json_file" | sort -u | wc -l)
+        local runtime_errors=$(jq -r 'select(.level == "ERROR" and .context != "TEST_FAILED" and .context != "ASSERT") | .test' "$json_file" | sort -u | wc -l)
         
-        # Count errors by type
-        echo -e "\nError summary:" | tee -a "$log_file"
-        jq -r 'select(.level == "ERROR") | .message' "$json_file" | sort | uniq -c | tee -a "$log_file" || true
+        # Show error messages if any
+        if [ $assertion_failures -gt 0 ] || [ $failed_tests -gt 0 ] || [ $runtime_errors -gt 0 ]; then
+            echo "Error messages:" | tee -a "$log_file"
+            # Show assertion failures
+            jq -r 'select(.context == "ASSERT") | "  [ASSERT] \(.timestamp) [\(.test)] \(.message)"' "$json_file" | tee -a "$log_file" || true
+            # Show test failures
+            jq -r 'select(.context == "TEST_FAILED") | "  [FAILED] \(.timestamp) [\(.test)] \(.message)"' "$json_file" | tee -a "$log_file" || true
+            # Show other errors
+            jq -r 'select(.level == "ERROR" and .context != "TEST_FAILED" and .context != "ASSERT") | "  [ERROR] \(.timestamp) [\(.test)] \(.message)"' "$json_file" | tee -a "$log_file" || true
+            echo | tee -a "$log_file"
+        fi
         
-        # Check for specific error conditions
-        local error_count=$(jq -r 'select(.level == "ERROR") | .message' "$json_file" | wc -l)
-        local test_failures=$(jq -r 'select(.message | contains("FAILED")) | .test' "$json_file" | wc -l)
-        local buffer_errors=$(jq -r 'select(.message | contains("Buffer type is not supported")) | .test' "$json_file" | wc -l)
-        local total_tests=$(jq -r 'select(.context == "TEST" and .message == "START") | .test' "$json_file" | wc -l)
-        local completed_tests=$(jq -r 'select(.context == "TEST" and .message == "OK") | .test' "$json_file" | wc -l)
-        
-        echo -e "\nTest Results:" | tee -a "$log_file"
+        # Print test statistics
+        echo "Test Results:" | tee -a "$log_file"
         echo "- Total Tests: $total_tests" | tee -a "$log_file"
         echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
-        echo "- Total Errors: $error_count" | tee -a "$log_file"
-        echo "- Test Failures: $test_failures" | tee -a "$log_FILE"
-        echo "- Buffer Type Errors: $buffer_errors" | tee -a "$log_FILE"
+        echo "- Failed Tests: $failed_tests" | tee -a "$log_file"
+        echo "- Assertion Failures: $assertion_failures" | tee -a "$log_file"
+        echo "- Runtime Errors: $runtime_errors" | tee -a "$log_file"
+        echo "- Total Errors: $((failed_tests + assertion_failures + runtime_errors))" | tee -a "$log_file"
         
         # Set error flag if any critical conditions are met
-        if [ $error_count -gt 0 ] || [ $test_failures -gt 0 ]; then
+        if [ $failed_tests -gt 0 ] || [ $assertion_failures -gt 0 ] || [ $runtime_errors -gt 0 ] || [ $completed_tests -lt $total_tests ]; then
             has_critical_errors=true
         fi
         
@@ -292,27 +310,33 @@ analyze_log_file() {
         echo | tee -a "$log_file"
         if [ $total_tests -eq $completed_tests ] && [ $has_critical_errors = false ]; then
             echo -e "\033[0;32m✓ All tests completed successfully\033[0m" | tee -a "$log_file"
-            echo "- Total Tests: $total_tests" | tee -a "$log_file"
-            echo "- Completed Tests: $completed_tests" | tee -a "$log_file"
         else
-            echo -e "\033[0;31m❌ Some tests did not complete successfully\033[0m" | tee -a "$log_file"
-            echo "- Total Tests: $total_tests" | tee -a "$log_file"
-            echo "- Completed Tests: $completed_tests" | tee -a "$log_FILE"
-            has_critical_errors=true
+            if [ $has_critical_errors = true ]; then
+                echo -e "\033[0;31m❌ Tests failed\033[0m" | tee -a "$log_file"
+                if [ $assertion_failures -gt 0 ]; then
+                    echo "- Found $assertion_failures assertion failures" | tee -a "$log_file"
+                fi
+                if [ $failed_tests -gt 0 ]; then
+                    echo "- Found $failed_tests test failures" | tee -a "$log_file"
+                fi
+                if [ $runtime_errors -gt 0 ]; then
+                    echo "- Found $runtime_errors runtime errors" | tee -a "$log_file"
+                fi
+            fi
+            if [ $total_tests -ne $completed_tests ]; then
+                echo "- $(($total_tests - $completed_tests)) tests did not complete" | tee -a "$log_file"
+            fi
         fi
     else
-        echo "[ERROR] jq command not found - cannot analyze log file" | tee -a "$log_file"
-        has_critical_errors=true
-    fi
-    
-    # Clean up temp file
-    rm -f "$json_file"
-    
-    if [ "$has_critical_errors" = true ]; then
-        echo -e "\033[0;31m⚠️  Critical errors were found in the test execution!\033[0m" | tee -a "$log_file"
+        echo "Error: jq not found. Cannot analyze log file." | tee -a "$log_file"
         return 1
     fi
     
+    # Cleanup
+    rm -f "$json_file"
+    
+    # Return error status if critical errors were found
+    [ "$has_critical_errors" = true ] && return 1
     return 0
 }
 

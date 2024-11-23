@@ -182,21 +182,15 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
       *bind.length = len;
       *bind.is_null = 0;
       
-      // Use MYSQL_TYPE_BLOB for TEXT fields (length > 255)
-      // Use MYSQL_TYPE_VAR_STRING for VARCHAR fields (length <= 255)
-      if (len > 255) {
-        bind.buffer_type = MYSQL_TYPE_BLOB;
-        OATPP_LOGD("Serializer", "Using BLOB type for TEXT field, length=%lu", *bind.length);
-      } else {
-        bind.buffer_type = MYSQL_TYPE_VAR_STRING;
-        OATPP_LOGD("Serializer", "Using VAR_STRING type for VARCHAR field, length=%lu", *bind.length);
-      }
+      // Always use MYSQL_TYPE_BLOB for string fields to ensure proper handling of large text
+      bind.buffer_type = MYSQL_TYPE_BLOB;
+      OATPP_LOGD("Serializer", "Using BLOB type for string field, length=%lu", *bind.length);
     } else {
       bind.buffer = nullptr;
       bind.buffer_length = 0;
       *bind.length = 0;
       *bind.is_null = 1;
-      bind.buffer_type = MYSQL_TYPE_VAR_STRING;  // Default to VAR_STRING for null values
+      bind.buffer_type = MYSQL_TYPE_BLOB;  // Default to BLOB for null values
       OATPP_LOGD("Serializer", "String value is null");
     }
   } else {
@@ -204,7 +198,7 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
     bind.buffer_length = 0;
     *bind.length = 0;
     *bind.is_null = 1;
-    bind.buffer_type = MYSQL_TYPE_VAR_STRING;  // Default to VAR_STRING for null values
+    bind.buffer_type = MYSQL_TYPE_BLOB;  // Default to BLOB for null values
     OATPP_LOGD("Serializer", "String value is null (polymorph is null)");
   }
 }

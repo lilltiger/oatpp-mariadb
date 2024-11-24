@@ -29,6 +29,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/SetTest.cpp
         oatpp-mariadb/types/JsonTest.hpp
         oatpp-mariadb/types/JsonTest.cpp
+        oatpp-mariadb/types/BinaryTest.hpp
+        oatpp-mariadb/types/BinaryTest.cpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp

@@ -147,14 +147,12 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
   auto& bind = _this->m_bindParams[paramIndex];
   std::memset(&bind, 0, sizeof(MYSQL_BIND));
   
-  // Allocate is_null indicator
   bind.is_null = (my_bool*)malloc(sizeof(my_bool));
   if(!bind.is_null) {
     OATPP_LOGE("Serializer", "Failed to allocate memory for is_null indicator");
     throw std::runtime_error("Failed to allocate memory for is_null indicator");
   }
   
-  // Allocate length indicator
   bind.length = (unsigned long*)malloc(sizeof(unsigned long));
   if(!bind.length) {
     free(bind.is_null);
@@ -168,8 +166,8 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
       const char* cstr = str->c_str();
       std::size_t len = str->length();
       
-      // Allocate buffer for the string value
-      bind.buffer = malloc(len + 1);  // +1 for null terminator
+      // Always allocate buffer, even for empty strings
+      bind.buffer = malloc(len > 0 ? len : 1);
       if(!bind.buffer) {
         free(bind.is_null);
         free(bind.length);
@@ -177,20 +175,36 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
         throw std::runtime_error("Failed to allocate memory for string value");
       }
       
-      std::memcpy(bind.buffer, cstr, len + 1);
-      bind.buffer_length = len + 1;
+      if (len > 0) {
+        std::memcpy(bind.buffer, cstr, len);
+      }
+      
+      bind.buffer_length = len;
       *bind.length = len;
       *bind.is_null = 0;
-      
-      // Always use MYSQL_TYPE_BLOB for string fields to ensure proper handling of large text
-      bind.buffer_type = MYSQL_TYPE_BLOB;
-      OATPP_LOGD("Serializer", "Using BLOB type for string field, length=%lu", *bind.length);
+
+      // Check if this is a binary string by looking for non-printable characters
+      bool isBinary = false;
+      for(size_t i = 0; i < len; i++) {
+        unsigned char c = static_cast<unsigned char>(cstr[i]);
+        if(c > 127 || (c < 32 && c != '\t' && c != '\n' && c != '\r')) {
+          isBinary = true;
+          break;
+        }
+      }
+
+      // Use BLOB type for binary data, STRING for text
+      bind.buffer_type = isBinary ? MYSQL_TYPE_BLOB : MYSQL_TYPE_STRING;
+      OATPP_LOGD("Serializer", "Using %s type for field, length=%lu, data=%s", 
+                 isBinary ? "BLOB" : "STRING", 
+                 *bind.length,
+                 isBinary ? "<binary>" : (len > 0 ? cstr : "<empty>"));
     } else {
       bind.buffer = nullptr;
       bind.buffer_length = 0;
       *bind.length = 0;
       *bind.is_null = 1;
-      bind.buffer_type = MYSQL_TYPE_BLOB;  // Default to BLOB for null values
+      bind.buffer_type = MYSQL_TYPE_STRING;
       OATPP_LOGD("Serializer", "String value is null");
     }
   } else {
@@ -198,8 +212,7 @@ void Serializer::serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_ui
     bind.buffer_length = 0;
     *bind.length = 0;
     *bind.is_null = 1;
-    bind.buffer_type = MYSQL_TYPE_BLOB;  // Default to BLOB for null values
-    OATPP_LOGD("Serializer", "String value is null (polymorph is null)");
+    bind.buffer_type = MYSQL_TYPE_STRING;
   }
 }
 
@@ -219,11 +232,15 @@ void Serializer::serializeBoolean(const Serializer* _this, MYSQL_STMT* stmt, v_u
   auto& bind = _this->m_bindParams[paramIndex];
   std::memset(&bind, 0, sizeof(MYSQL_BIND));
   
-  bind.is_null = &bind.is_null_value;
-  bind.is_null_value = 0;  // Default to not null
+  bind.is_null = (my_bool*)malloc(sizeof(my_bool));
+  if(!bind.is_null) {
+    OATPP_LOGE("Serializer", "Failed to allocate memory for is_null indicator");
+    throw std::runtime_error("Failed to allocate memory for is_null indicator");
+  }
   
   bind.buffer = malloc(sizeof(signed char));
   if(!bind.buffer) {
+    free(bind.is_null);
     OATPP_LOGE("Serializer", "Failed to allocate memory for Boolean value");
     throw std::runtime_error("Failed to allocate memory for Boolean value");
   }

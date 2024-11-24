@@ -106,7 +106,6 @@ v_int64 Deserializer::deInt(const InData& data) {
 
 oatpp::Void Deserializer::deserializeString(const Deserializer* _this, const InData& data, const Type* type)
 {
-
   (void) _this;
   (void) type;
 
@@ -115,18 +114,11 @@ oatpp::Void Deserializer::deserializeString(const Deserializer* _this, const InD
   }
 
   auto ptr = (const char*) data.bind->buffer;
-  auto size = std::strlen(ptr);             // not including null-terminator
-  // TODO: check buffer_length vs size
-  size = std::min(size, data.bind->buffer_length - 1);
+  auto size = *data.bind->length;  // Use the actual data length
 
   oatpp::String value(ptr, size);
-
-  // OATPP_LOGD("Deserializer::deserializeString()", "value='%s', size=%d, buffer_length=%d", value->c_str(), size, data.bind->buffer_length);
-
   std::memset(data.bind->buffer, 0, data.bind->buffer_length);
-
   return value;
-
 }
 
 oatpp::Void Deserializer::deserializeFloat32(const Deserializer* _this, const InData& data, const Type* type) {

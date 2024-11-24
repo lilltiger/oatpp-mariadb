@@ -305,6 +305,30 @@ oatpp-mariadb/transaction/TransactionTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
 .PHONY : oatpp-mariadb/transaction/TransactionTest.cpp.s
 
+oatpp-mariadb/types/BinaryTest.o: oatpp-mariadb/types/BinaryTest.cpp.o
+.PHONY : oatpp-mariadb/types/BinaryTest.o
+
+# target to build an object file
+oatpp-mariadb/types/BinaryTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BinaryTest.cpp.o
+.PHONY : oatpp-mariadb/types/BinaryTest.cpp.o
+
+oatpp-mariadb/types/BinaryTest.i: oatpp-mariadb/types/BinaryTest.cpp.i
+.PHONY : oatpp-mariadb/types/BinaryTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/BinaryTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BinaryTest.cpp.i
+.PHONY : oatpp-mariadb/types/BinaryTest.cpp.i
+
+oatpp-mariadb/types/BinaryTest.s: oatpp-mariadb/types/BinaryTest.cpp.s
+.PHONY : oatpp-mariadb/types/BinaryTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/BinaryTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BinaryTest.cpp.s
+.PHONY : oatpp-mariadb/types/BinaryTest.cpp.s
+
 oatpp-mariadb/types/BooleanTest.o: oatpp-mariadb/types/BooleanTest.cpp.o
 .PHONY : oatpp-mariadb/types/BooleanTest.o
 
@@ -670,6 +694,9 @@ help:
 	@echo "... oatpp-mariadb/transaction/TransactionTest.o"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.i"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.s"
+	@echo "... oatpp-mariadb/types/BinaryTest.o"
+	@echo "... oatpp-mariadb/types/BinaryTest.i"
+	@echo "... oatpp-mariadb/types/BinaryTest.s"
 	@echo "... oatpp-mariadb/types/BooleanTest.o"
 	@echo "... oatpp-mariadb/types/BooleanTest.i"
 	@echo "... oatpp-mariadb/types/BooleanTest.s"

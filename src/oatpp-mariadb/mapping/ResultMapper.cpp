@@ -134,8 +134,14 @@ void ResultMapper::ResultData::init() {
           case MYSQL_TYPE_TINY_BLOB:
           case MYSQL_TYPE_MEDIUM_BLOB:
           case MYSQL_TYPE_LONG_BLOB:
+            if (fields[i].flags & BINARY_FLAG) {
+              // For BINARY columns, allocate exact size without null terminator
+              bufferSize = fields[i].length;
+            } else {
+              // For text columns, add null terminator
+              bufferSize = fields[i].length + 1;
+            }
             bind.buffer_type = MYSQL_TYPE_STRING;
-            bufferSize = fields[i].length + 1;  // Add 1 for null terminator
             break;
           case MYSQL_TYPE_DATE:
             bind.buffer_type = MYSQL_TYPE_STRING;
@@ -313,10 +319,11 @@ void ResultMapper::ResultData::bindResultsForCache() {
       fields[i].name,
       fields[i].type,
       fields[i].flags & UNSIGNED_FLAG,
-      fields[i].length
+      fields[i].length,
+      fields[i].flags & BINARY_FLAG  // Add BINARY flag information
     );
     
-    OATPP_LOGD("ResultMapper", "Binding field '%s' of type %d", fieldInfo->name.c_str(), fieldInfo->type);
+    OATPP_LOGD("ResultMapper", "Binding field '%s' of type %d, flags=%lu", fieldInfo->name.c_str(), fieldInfo->type, fields[i].flags);
     
     std::memset(&bindResults[i], 0, sizeof(MYSQL_BIND));
     bindResults[i].is_null = &bindIsNull[i];
@@ -377,10 +384,19 @@ void ResultMapper::ResultData::bindResultsForCache() {
       case MYSQL_TYPE_TINY_BLOB:
       case MYSQL_TYPE_MEDIUM_BLOB:
       case MYSQL_TYPE_LONG_BLOB:
-        bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
-        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = fields[i].length + 1;
+        if (fields[i].flags & BINARY_FLAG) {
+          // For BINARY columns, allocate exact size without null terminator
+          bindBuffers[i].resize(fields[i].length);
+          bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+          bindResults[i].buffer = bindBuffers[i].data();
+          bindResults[i].buffer_length = fields[i].length;
+        } else {
+          // For text columns, add null terminator
+          bindBuffers[i].resize(fields[i].length + 1);
+          bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+          bindResults[i].buffer = bindBuffers[i].data();
+          bindResults[i].buffer_length = fields[i].length + 1;
+        }
         break;
       case MYSQL_TYPE_DATE:
         bindBuffers[i].resize(11);  // YYYY-MM-DD + null terminator
@@ -518,13 +534,24 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
     case MYSQL_TYPE_TINY_BLOB:
     case MYSQL_TYPE_MEDIUM_BLOB:
     case MYSQL_TYPE_LONG_BLOB: {
-      bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for VARCHAR/TEXT buffer");
+      if (fieldInfo->isBinary) {
+        // For BINARY columns, allocate exact size without null terminator
+        bind.buffer = malloc(fieldInfo->columnLength);
+        if(!bind.buffer) {
+          free(bind.is_null);
+          throw std::runtime_error("Failed to allocate memory for BINARY buffer");
+        }
+        bind.buffer_length = fieldInfo->columnLength;
+      } else {
+        // For text columns, add null terminator
+        bind.buffer = malloc(fieldInfo->columnLength + 1);
+        if(!bind.buffer) {
+          free(bind.is_null);
+          throw std::runtime_error("Failed to allocate memory for VARCHAR/TEXT buffer");
+        }
+        bind.buffer_length = fieldInfo->columnLength + 1;
       }
-      bind.buffer_length = fieldInfo->columnLength + 1;
+      bind.buffer_type = MYSQL_TYPE_STRING;
       break;
     }
       

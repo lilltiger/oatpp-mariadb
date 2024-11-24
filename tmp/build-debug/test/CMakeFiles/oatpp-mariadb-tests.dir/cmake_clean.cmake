@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.o.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BinaryTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BinaryTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o"

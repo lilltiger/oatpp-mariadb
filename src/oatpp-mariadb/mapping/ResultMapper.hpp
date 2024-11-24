@@ -118,13 +118,23 @@ public:
 
 private:
   struct FieldInfo {
-    std::string name;
-    enum_field_types type;
-    bool isUnsigned;
-    unsigned long columnLength;
-    
-    FieldInfo(const std::string& n, enum_field_types t, bool u, unsigned long len)
-      : name(n), type(t), isUnsigned(u), columnLength(len) {}
+    const std::string name;
+    const enum_field_types type;
+    const bool isUnsigned;
+    const unsigned long columnLength;
+    const bool isBinary;
+
+    FieldInfo(const std::string& pName,
+             enum_field_types pType,
+             bool pIsUnsigned,
+             unsigned long pColumnLength,
+             bool pIsBinary)
+      : name(pName)
+      , type(pType)
+      , isUnsigned(pIsUnsigned)
+      , columnLength(pColumnLength)
+      , isBinary(pIsBinary)
+    {}
   };
 
   void initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& fieldInfo);

@@ -24,11 +24,11 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::UInt8Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::NumericTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTimeTest);
- //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);

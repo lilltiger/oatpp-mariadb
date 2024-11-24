@@ -130,12 +130,21 @@ void ResultMapper::ResultData::init() {
           case MYSQL_TYPE_STRING:
           case MYSQL_TYPE_VAR_STRING:
           case MYSQL_TYPE_VARCHAR:
+          case MYSQL_TYPE_BLOB:
+          case MYSQL_TYPE_TINY_BLOB:
+          case MYSQL_TYPE_MEDIUM_BLOB:
+          case MYSQL_TYPE_LONG_BLOB:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;  // Add 1 for null terminator
             break;
           case MYSQL_TYPE_DATE:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = 11;  // YYYY-MM-DD + null terminator
+            break;
+          case MYSQL_TYPE_DATETIME:
+          case MYSQL_TYPE_TIMESTAMP:
+            bind.buffer_type = MYSQL_TYPE_STRING;
+            bufferSize = 27;  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
             break;
           default:
             bind.buffer_type = MYSQL_TYPE_STRING;
@@ -350,16 +359,27 @@ void ResultMapper::ResultData::bindResultsForCache() {
       case MYSQL_TYPE_STRING:
       case MYSQL_TYPE_VAR_STRING:
       case MYSQL_TYPE_VARCHAR:
-        bindBuffers[i].resize(fieldInfo->columnLength);
+      case MYSQL_TYPE_BLOB:
+      case MYSQL_TYPE_TINY_BLOB:
+      case MYSQL_TYPE_MEDIUM_BLOB:
+      case MYSQL_TYPE_LONG_BLOB:
+        bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
         bindResults[i].buffer_type = MYSQL_TYPE_STRING;
         bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = fieldInfo->columnLength;
+        bindResults[i].buffer_length = fields[i].length + 1;
         break;
       case MYSQL_TYPE_DATE:
         bindBuffers[i].resize(11);  // YYYY-MM-DD + null terminator
         bindResults[i].buffer_type = MYSQL_TYPE_STRING;
         bindResults[i].buffer = bindBuffers[i].data();
         bindResults[i].buffer_length = 11;
+        break;
+      case MYSQL_TYPE_DATETIME:
+      case MYSQL_TYPE_TIMESTAMP:
+        bindBuffers[i].resize(27);  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
+        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+        bindResults[i].buffer = bindBuffers[i].data();
+        bindResults[i].buffer_length = 27;
         break;
       default:
         throw std::runtime_error("Buffer type is not supported");
@@ -458,23 +478,18 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
       
     case MYSQL_TYPE_STRING:
     case MYSQL_TYPE_VAR_STRING:
+    case MYSQL_TYPE_VARCHAR:
     case MYSQL_TYPE_BLOB:
     case MYSQL_TYPE_TINY_BLOB:
     case MYSQL_TYPE_MEDIUM_BLOB:
     case MYSQL_TYPE_LONG_BLOB: {
       bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(fieldInfo->columnLength + 1);
+      bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
       if(!bind.buffer) {
         free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for STRING/BLOB buffer");
+        throw std::runtime_error("Failed to allocate memory for VARCHAR/TEXT buffer");
       }
-      bind.buffer_length = fieldInfo->columnLength;
-      bind.length = (unsigned long*)malloc(sizeof(unsigned long));
-      if(!bind.length) {
-        free(bind.buffer);
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for STRING/BLOB length");
-      }
+      bind.buffer_length = fieldInfo->columnLength + 1;
       break;
     }
       
@@ -486,6 +501,17 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
         throw std::runtime_error("Failed to allocate memory for DATE buffer");
       }
       bind.buffer_length = 11;
+      break;
+    }
+    case MYSQL_TYPE_DATETIME:
+    case MYSQL_TYPE_TIMESTAMP: {
+      bind.buffer_type = MYSQL_TYPE_STRING;
+      bind.buffer = malloc(27);  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
+      if(!bind.buffer) {
+        free(bind.is_null);
+        throw std::runtime_error("Failed to allocate memory for DATETIME buffer");
+      }
+      bind.buffer_length = 27;
       break;
     }
       

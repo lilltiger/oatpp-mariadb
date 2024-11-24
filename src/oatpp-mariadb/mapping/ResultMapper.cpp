@@ -156,6 +156,7 @@ void ResultMapper::ResultData::init() {
             break;
           case MYSQL_TYPE_ENUM:
           case MYSQL_TYPE_SET:
+          case MYSQL_TYPE_JSON:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;  // Add 1 for null terminator
             break;
@@ -409,6 +410,7 @@ void ResultMapper::ResultData::bindResultsForCache() {
         break;
       case MYSQL_TYPE_ENUM:
       case MYSQL_TYPE_SET:
+      case MYSQL_TYPE_JSON:
         bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
         bindResults[i].buffer_type = MYSQL_TYPE_STRING;
         bindResults[i].buffer = bindBuffers[i].data();
@@ -569,7 +571,8 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
       break;
     }
     case MYSQL_TYPE_ENUM:
-    case MYSQL_TYPE_SET: {
+    case MYSQL_TYPE_SET:
+    case MYSQL_TYPE_JSON: {
       bind.buffer_type = MYSQL_TYPE_STRING;
       bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
       if(!bind.buffer) {

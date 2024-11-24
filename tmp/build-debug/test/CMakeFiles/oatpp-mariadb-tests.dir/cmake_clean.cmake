@@ -22,6 +22,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/JsonTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/JsonTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/ReturningTest.cpp.o"

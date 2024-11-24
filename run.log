@@ -1,5 +1,5 @@
 # INSTRUCTION: Parse this log file entirely to analyze test execution results and any potential issues.
-=== Test Run Started at 2024-11-24 15:31:14 ===
+=== Test Run Started at 2024-11-24 15:37:38 ===
 Mode: debug
 [INFO] Test execution started
 [DEBUG] Starting test with gdb (no timeout monitoring)...
@@ -12,191 +12,191 @@ Debuginfod has been disabled.
 To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
-[32m I [0m|2024-11-24 15:31:14 1732458674322676| TEST[mariadb::types::TimeTest]:[1mSTART[0m...
-[34m D [0m|2024-11-24 15:31:14 1732458674322742| EnvLoader:Trying path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674322759| EnvLoader:Found .env file at: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674322764| EnvLoader:Attempting to load .env file from path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674322796| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
-[34m D [0m|2024-11-24 15:31:14 1732458674322804| EnvLoader:Loaded env var: MARIADB_PORT = 3306
-[34m D [0m|2024-11-24 15:31:14 1732458674322809| EnvLoader:Loaded env var: MARIADB_USER = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674322813| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674322817| EnvLoader:Loaded env var: MARIADB_DATABASE = test
-[34m D [0m|2024-11-24 15:31:14 1732458674322822| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
-[34m D [0m|2024-11-24 15:31:14 1732458674322846| TEST[mariadb::types::TimeTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
-[34m D [0m|2024-11-24 15:31:14 1732458674325083| TEST[mariadb::types::TimeTest]:Successfully connected to database
-[34m D [0m|2024-11-24 15:31:14 1732458674325702| Executor:Preparing to execute query. Connection thread id: 3309
-[34m D [0m|2024-11-24 15:31:14 1732458674325714| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_time` (`time_value` TIME(6)) ENGINE=InnoDB;
-[34m D [0m|2024-11-24 15:31:14 1732458674325726| Executor:Statement initialized. Address: 0x555555708f00
-[34m D [0m|2024-11-24 15:31:14 1732458674325833| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674325871| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674325992| QueryResult:MySQL thread id: 3309
-[34m D [0m|2024-11-24 15:31:14 1732458674325999| QueryResult:Statement address: 0x555555708f00
-[34m D [0m|2024-11-24 15:31:14 1732458674326060| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674326067| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674326073| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674326077| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674326080| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674326092| TEST[mariadb::types::TimeTest]:Successfully created test_time table
-[34m D [0m|2024-11-24 15:31:14 1732458674326148| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674326411| Executor:Preparing to execute query. Connection thread id: 3310
-[34m D [0m|2024-11-24 15:31:14 1732458674326417| Executor:Query template: DELETE FROM test_time;
-[34m D [0m|2024-11-24 15:31:14 1732458674326423| Executor:Statement initialized. Address: 0x555555709510
-[34m D [0m|2024-11-24 15:31:14 1732458674326490| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674326499| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674326557| QueryResult:MySQL thread id: 3310
-[34m D [0m|2024-11-24 15:31:14 1732458674326561| QueryResult:Statement address: 0x555555709510
-[34m D [0m|2024-11-24 15:31:14 1732458674328049| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674328057| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674328061| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674328064| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674328067| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674328074| TEST[mariadb::types::TimeTest]:Cleared existing data
-[34m D [0m|2024-11-24 15:31:14 1732458674328137| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674328477| Executor:Preparing to execute query. Connection thread id: 3311
-[34m D [0m|2024-11-24 15:31:14 1732458674328486| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674328495| Executor:Statement initialized. Address: 0x555555709c40
-[34m D [0m|2024-11-24 15:31:14 1732458674329391| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674329400| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674329485| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674329492| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674329497| Serializer:Resizing bind params array from 0 to 1
-[34m D [0m|2024-11-24 15:31:14 1732458674329524| Serializer:String value is null (polymorph is null)
-[34m D [0m|2024-11-24 15:31:14 1732458674329550| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674329560| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674329673| QueryResult:MySQL thread id: 3311
-[34m D [0m|2024-11-24 15:31:14 1732458674329680| QueryResult:Statement address: 0x555555709c40
-[34m D [0m|2024-11-24 15:31:14 1732458674331115| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674331128| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674331133| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674331136| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674331139| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674331150| TEST[mariadb::types::TimeTest]:Inserted nullptr value
-[34m D [0m|2024-11-24 15:31:14 1732458674331225| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674331542| Executor:Preparing to execute query. Connection thread id: 3312
-[34m D [0m|2024-11-24 15:31:14 1732458674331548| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674331551| Executor:Statement initialized. Address: 0x55555570b8a0
-[34m D [0m|2024-11-24 15:31:14 1732458674331636| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674331644| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674331665| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674331686| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674331706| Serializer:Using BLOB type for string field, length=10
-[34m D [0m|2024-11-24 15:31:14 1732458674331715| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674331724| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674331825| QueryResult:MySQL thread id: 3312
-[34m D [0m|2024-11-24 15:31:14 1732458674331831| QueryResult:Statement address: 0x55555570b8a0
-[34m D [0m|2024-11-24 15:31:14 1732458674334758| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674334774| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674334778| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674334781| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674334782| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674334794| TEST[mariadb::types::TimeTest]:Inserted minimum time value
-[34m D [0m|2024-11-24 15:31:14 1732458674334863| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674335226| Executor:Preparing to execute query. Connection thread id: 3313
-[34m D [0m|2024-11-24 15:31:14 1732458674335235| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674335240| Executor:Statement initialized. Address: 0x55555570ca70
-[34m D [0m|2024-11-24 15:31:14 1732458674335361| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674335368| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674335392| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674335402| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674335409| Serializer:Using BLOB type for string field, length=9
-[34m D [0m|2024-11-24 15:31:14 1732458674335418| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674335427| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674335521| QueryResult:MySQL thread id: 3313
-[34m D [0m|2024-11-24 15:31:14 1732458674335527| QueryResult:Statement address: 0x55555570ca70
-[34m D [0m|2024-11-24 15:31:14 1732458674337008| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674337024| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674337030| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674337033| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674337036| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674337048| TEST[mariadb::types::TimeTest]:Inserted maximum time value
-[34m D [0m|2024-11-24 15:31:14 1732458674337102| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674337442| Executor:Preparing to execute query. Connection thread id: 3314
-[34m D [0m|2024-11-24 15:31:14 1732458674337450| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674337456| Executor:Statement initialized. Address: 0x55555570bde0
-[34m D [0m|2024-11-24 15:31:14 1732458674337544| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674337550| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674337571| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674337577| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674337583| Serializer:Using BLOB type for string field, length=8
-[34m D [0m|2024-11-24 15:31:14 1732458674337590| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674337599| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674337697| QueryResult:MySQL thread id: 3314
-[34m D [0m|2024-11-24 15:31:14 1732458674337703| QueryResult:Statement address: 0x55555570bde0
-[34m D [0m|2024-11-24 15:31:14 1732458674339171| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674339178| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674339181| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674339183| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674339186| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674339194| TEST[mariadb::types::TimeTest]:Inserted zero time
-[34m D [0m|2024-11-24 15:31:14 1732458674339253| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674339529| Executor:Preparing to execute query. Connection thread id: 3315
-[34m D [0m|2024-11-24 15:31:14 1732458674339536| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674339542| Executor:Statement initialized. Address: 0x555555709ff0
-[34m D [0m|2024-11-24 15:31:14 1732458674339607| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674339614| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674339629| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674339634| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674339640| Serializer:Using BLOB type for string field, length=15
-[34m D [0m|2024-11-24 15:31:14 1732458674339646| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674339653| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674339716| QueryResult:MySQL thread id: 3315
-[34m D [0m|2024-11-24 15:31:14 1732458674339722| QueryResult:Statement address: 0x555555709ff0
-[34m D [0m|2024-11-24 15:31:14 1732458674342792| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674342810| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674342816| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674342820| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674342823| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674342837| TEST[mariadb::types::TimeTest]:Inserted time with microseconds
-[34m D [0m|2024-11-24 15:31:14 1732458674342934| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674343365| Executor:Preparing to execute query. Connection thread id: 3316
-[34m D [0m|2024-11-24 15:31:14 1732458674343373| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674343376| Executor:Statement initialized. Address: 0x55555570a5c0
-[34m D [0m|2024-11-24 15:31:14 1732458674343478| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674343487| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674343511| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674343522| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674343530| Serializer:Using BLOB type for string field, length=9
-[34m D [0m|2024-11-24 15:31:14 1732458674343539| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674343549| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674343669| QueryResult:MySQL thread id: 3316
-[34m D [0m|2024-11-24 15:31:14 1732458674343676| QueryResult:Statement address: 0x55555570a5c0
-[34m D [0m|2024-11-24 15:31:14 1732458674345254| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674345270| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674345275| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674345279| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674345282| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674345294| TEST[mariadb::types::TimeTest]:Inserted negative time
-[34m D [0m|2024-11-24 15:31:14 1732458674345395| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674345762| Executor:Preparing to execute query. Connection thread id: 3317
-[34m D [0m|2024-11-24 15:31:14 1732458674345772| Executor:Query template: SELECT * FROM test_time;
-[34m D [0m|2024-11-24 15:31:14 1732458674345778| Executor:Statement initialized. Address: 0x55555570a9b0
-[34m D [0m|2024-11-24 15:31:14 1732458674345882| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674345974| ResultMapper:Binding field 'time_value' of type 11
-[34m D [0m|2024-11-24 15:31:14 1732458674345995| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674346099| QueryResult:MySQL thread id: 3317
-[34m D [0m|2024-11-24 15:31:14 1732458674346108| QueryResult:Statement address: 0x55555570a9b0
-[34m D [0m|2024-11-24 15:31:14 1732458674346247| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674346322| ResultMapper:Initialized column 0: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346329| ResultMapper:Found 6 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674346335| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674346361| ResultMapper:Column value is null
-[34m D [0m|2024-11-24 15:31:14 1732458674346370| ResultMapper:Adding item to collection at index 0
-[34m D [0m|2024-11-24 15:31:14 1732458674346380| ResultMapper:Column name: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346389| ResultMapper:Found property: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346428| ResultMapper:Adding item to collection at index 1
-[34m D [0m|2024-11-24 15:31:14 1732458674346436| ResultMapper:Column name: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346441| ResultMapper:Found property: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346449| ResultMapper:Adding item to collection at index 2
-[34m D [0m|2024-11-24 15:31:14 1732458674346456| ResultMapper:Column name: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346460| ResultMapper:Found property: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346467| ResultMapper:Adding item to collection at index 3
-[34m D [0m|2024-11-24 15:31:14 1732458674346473| ResultMapper:Column name: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346477| ResultMapper:Found property: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346484| ResultMapper:Adding item to collection at index 4
-[34m D [0m|2024-11-24 15:31:14 1732458674346491| ResultMapper:Column name: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346495| ResultMapper:Found property: time_value
-[34m D [0m|2024-11-24 15:31:14 1732458674346501| ResultMapper:Adding item to collection at index 5
-[34m D [0m|2024-11-24 15:31:14 1732458674346576| TEST[mariadb::types::TimeTest]:Query result:
+[32m I [0m|2024-11-24 15:37:39 1732459059256370| TEST[mariadb::types::TimeTest]:[1mSTART[0m...
+[34m D [0m|2024-11-24 15:37:39 1732459059256446| EnvLoader:Trying path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059256463| EnvLoader:Found .env file at: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059256467| EnvLoader:Attempting to load .env file from path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059256499| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
+[34m D [0m|2024-11-24 15:37:39 1732459059256507| EnvLoader:Loaded env var: MARIADB_PORT = 3306
+[34m D [0m|2024-11-24 15:37:39 1732459059256513| EnvLoader:Loaded env var: MARIADB_USER = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059256517| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059256521| EnvLoader:Loaded env var: MARIADB_DATABASE = test
+[34m D [0m|2024-11-24 15:37:39 1732459059256526| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
+[34m D [0m|2024-11-24 15:37:39 1732459059256552| TEST[mariadb::types::TimeTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
+[34m D [0m|2024-11-24 15:37:39 1732459059259563| TEST[mariadb::types::TimeTest]:Successfully connected to database
+[34m D [0m|2024-11-24 15:37:39 1732459059260163| Executor:Preparing to execute query. Connection thread id: 3393
+[34m D [0m|2024-11-24 15:37:39 1732459059260172| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_time` (`time_value` TIME(6)) ENGINE=InnoDB;
+[34m D [0m|2024-11-24 15:37:39 1732459059260180| Executor:Statement initialized. Address: 0x555555716f00
+[34m D [0m|2024-11-24 15:37:39 1732459059260264| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059260300| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059260412| QueryResult:MySQL thread id: 3393
+[34m D [0m|2024-11-24 15:37:39 1732459059260418| QueryResult:Statement address: 0x555555716f00
+[34m D [0m|2024-11-24 15:37:39 1732459059260482| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059260490| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059260495| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059260499| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059260501| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059260511| TEST[mariadb::types::TimeTest]:Successfully created test_time table
+[34m D [0m|2024-11-24 15:37:39 1732459059260576| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059260857| Executor:Preparing to execute query. Connection thread id: 3394
+[34m D [0m|2024-11-24 15:37:39 1732459059260863| Executor:Query template: DELETE FROM test_time;
+[34m D [0m|2024-11-24 15:37:39 1732459059260866| Executor:Statement initialized. Address: 0x555555717510
+[34m D [0m|2024-11-24 15:37:39 1732459059260929| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059260940| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059261009| QueryResult:MySQL thread id: 3394
+[34m D [0m|2024-11-24 15:37:39 1732459059261016| QueryResult:Statement address: 0x555555717510
+[34m D [0m|2024-11-24 15:37:39 1732459059262571| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059262587| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059262593| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059262596| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059262599| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059262609| TEST[mariadb::types::TimeTest]:Cleared existing data
+[34m D [0m|2024-11-24 15:37:39 1732459059262679| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059263076| Executor:Preparing to execute query. Connection thread id: 3395
+[34m D [0m|2024-11-24 15:37:39 1732459059263086| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059263096| Executor:Statement initialized. Address: 0x555555717c40
+[34m D [0m|2024-11-24 15:37:39 1732459059267631| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059267649| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059267752| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059267759| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059267763| Serializer:Resizing bind params array from 0 to 1
+[34m D [0m|2024-11-24 15:37:39 1732459059267791| Serializer:String value is null (polymorph is null)
+[34m D [0m|2024-11-24 15:37:39 1732459059267819| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059267832| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059267988| QueryResult:MySQL thread id: 3395
+[34m D [0m|2024-11-24 15:37:39 1732459059267995| QueryResult:Statement address: 0x555555717c40
+[34m D [0m|2024-11-24 15:37:39 1732459059271059| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059271075| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059271081| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059271084| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059271086| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059271100| TEST[mariadb::types::TimeTest]:Inserted nullptr value
+[34m D [0m|2024-11-24 15:37:39 1732459059271153| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059271498| Executor:Preparing to execute query. Connection thread id: 3396
+[34m D [0m|2024-11-24 15:37:39 1732459059271507| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059271513| Executor:Statement initialized. Address: 0x5555557198a0
+[34m D [0m|2024-11-24 15:37:39 1732459059271608| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059271616| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059271648| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059271654| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059271673| Serializer:Using BLOB type for string field, length=10
+[34m D [0m|2024-11-24 15:37:39 1732459059271682| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059271698| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059271790| QueryResult:MySQL thread id: 3396
+[34m D [0m|2024-11-24 15:37:39 1732459059271797| QueryResult:Statement address: 0x5555557198a0
+[34m D [0m|2024-11-24 15:37:39 1732459059274682| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059274700| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059274706| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059274710| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059274713| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059274727| TEST[mariadb::types::TimeTest]:Inserted minimum time value
+[34m D [0m|2024-11-24 15:37:39 1732459059274787| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059275138| Executor:Preparing to execute query. Connection thread id: 3397
+[34m D [0m|2024-11-24 15:37:39 1732459059275146| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059275150| Executor:Statement initialized. Address: 0x55555571aa70
+[34m D [0m|2024-11-24 15:37:39 1732459059275230| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059275235| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059275258| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059275264| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059275271| Serializer:Using BLOB type for string field, length=9
+[34m D [0m|2024-11-24 15:37:39 1732459059275278| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059275287| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059275387| QueryResult:MySQL thread id: 3397
+[34m D [0m|2024-11-24 15:37:39 1732459059275393| QueryResult:Statement address: 0x55555571aa70
+[34m D [0m|2024-11-24 15:37:39 1732459059276803| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059276813| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059276818| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059276821| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059276823| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059276833| TEST[mariadb::types::TimeTest]:Inserted maximum time value
+[34m D [0m|2024-11-24 15:37:39 1732459059276874| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059277160| Executor:Preparing to execute query. Connection thread id: 3398
+[34m D [0m|2024-11-24 15:37:39 1732459059277166| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059277169| Executor:Statement initialized. Address: 0x555555719de0
+[34m D [0m|2024-11-24 15:37:39 1732459059277245| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059277252| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059277267| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059277270| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059277276| Serializer:Using BLOB type for string field, length=8
+[34m D [0m|2024-11-24 15:37:39 1732459059277283| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059277291| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059277373| QueryResult:MySQL thread id: 3398
+[34m D [0m|2024-11-24 15:37:39 1732459059277378| QueryResult:Statement address: 0x555555719de0
+[34m D [0m|2024-11-24 15:37:39 1732459059280189| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059280195| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059280198| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059280200| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059280201| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059280205| TEST[mariadb::types::TimeTest]:Inserted zero time
+[34m D [0m|2024-11-24 15:37:39 1732459059280259| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059280505| Executor:Preparing to execute query. Connection thread id: 3399
+[34m D [0m|2024-11-24 15:37:39 1732459059280513| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059280519| Executor:Statement initialized. Address: 0x555555717ff0
+[34m D [0m|2024-11-24 15:37:39 1732459059280608| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059280614| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059280626| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059280629| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059280634| Serializer:Using BLOB type for string field, length=15
+[34m D [0m|2024-11-24 15:37:39 1732459059280641| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059280648| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059280730| QueryResult:MySQL thread id: 3399
+[34m D [0m|2024-11-24 15:37:39 1732459059280738| QueryResult:Statement address: 0x555555717ff0
+[34m D [0m|2024-11-24 15:37:39 1732459059283752| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059283768| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059283774| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059283777| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059283780| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059283793| TEST[mariadb::types::TimeTest]:Inserted time with microseconds
+[34m D [0m|2024-11-24 15:37:39 1732459059283860| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059284199| Executor:Preparing to execute query. Connection thread id: 3400
+[34m D [0m|2024-11-24 15:37:39 1732459059284205| Executor:Query template: INSERT INTO test_time (time_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059284209| Executor:Statement initialized. Address: 0x5555557185c0
+[34m D [0m|2024-11-24 15:37:39 1732459059284302| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059284308| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059284329| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059284334| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059284341| Serializer:Using BLOB type for string field, length=9
+[34m D [0m|2024-11-24 15:37:39 1732459059284349| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059284358| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059284471| QueryResult:MySQL thread id: 3400
+[34m D [0m|2024-11-24 15:37:39 1732459059284476| QueryResult:Statement address: 0x5555557185c0
+[34m D [0m|2024-11-24 15:37:39 1732459059287327| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059287341| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059287344| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059287346| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059287348| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059287358| TEST[mariadb::types::TimeTest]:Inserted negative time
+[34m D [0m|2024-11-24 15:37:39 1732459059287411| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059287729| Executor:Preparing to execute query. Connection thread id: 3401
+[34m D [0m|2024-11-24 15:37:39 1732459059287737| Executor:Query template: SELECT * FROM test_time;
+[34m D [0m|2024-11-24 15:37:39 1732459059287740| Executor:Statement initialized. Address: 0x5555557189b0
+[34m D [0m|2024-11-24 15:37:39 1732459059287830| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059287910| ResultMapper:Binding field 'time_value' of type 11
+[34m D [0m|2024-11-24 15:37:39 1732459059287932| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059288025| QueryResult:MySQL thread id: 3401
+[34m D [0m|2024-11-24 15:37:39 1732459059288032| QueryResult:Statement address: 0x5555557189b0
+[34m D [0m|2024-11-24 15:37:39 1732459059288147| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059288210| ResultMapper:Initialized column 0: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288216| ResultMapper:Found 6 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059288220| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059288243| ResultMapper:Column value is null
+[34m D [0m|2024-11-24 15:37:39 1732459059288254| ResultMapper:Adding item to collection at index 0
+[34m D [0m|2024-11-24 15:37:39 1732459059288263| ResultMapper:Column name: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288272| ResultMapper:Found property: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288319| ResultMapper:Adding item to collection at index 1
+[34m D [0m|2024-11-24 15:37:39 1732459059288329| ResultMapper:Column name: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288334| ResultMapper:Found property: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288343| ResultMapper:Adding item to collection at index 2
+[34m D [0m|2024-11-24 15:37:39 1732459059288350| ResultMapper:Column name: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288354| ResultMapper:Found property: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288362| ResultMapper:Adding item to collection at index 3
+[34m D [0m|2024-11-24 15:37:39 1732459059288367| ResultMapper:Column name: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288372| ResultMapper:Found property: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288378| ResultMapper:Adding item to collection at index 4
+[34m D [0m|2024-11-24 15:37:39 1732459059288385| ResultMapper:Column name: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288389| ResultMapper:Found property: time_value
+[34m D [0m|2024-11-24 15:37:39 1732459059288395| ResultMapper:Adding item to collection at index 5
+[34m D [0m|2024-11-24 15:37:39 1732459059288458| TEST[mariadb::types::TimeTest]:Query result:
 [
   {
     "time_value": null
@@ -217,163 +217,163 @@ Using host libthread_db library "/usr/lib/libthread_db.so.1".
     "time_value": "-12:34:56.000000"
   }
 ]
-[34m D [0m|2024-11-24 15:31:14 1732458674346585| TEST[mariadb::types::TimeTest]:All assertions passed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674346691| QueryResult:Statement cleaned up successfully
-[32m I [0m|2024-11-24 15:31:14 1732458674346838| TEST[mariadb::types::TimeTest]:[1mFINISHED[0m - [1;32msuccess![0m
-[32m I [0m|2024-11-24 15:31:14 1732458674346846| TEST[mariadb::types::TimeTest]:[33m24113(micro), 29(objs)[0m
+[34m D [0m|2024-11-24 15:37:39 1732459059288466| TEST[mariadb::types::TimeTest]:All assertions passed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059288681| QueryResult:Statement cleaned up successfully
+[32m I [0m|2024-11-24 15:37:39 1732459059288793| TEST[mariadb::types::TimeTest]:[1mFINISHED[0m - [1;32msuccess![0m
+[32m I [0m|2024-11-24 15:37:39 1732459059288799| TEST[mariadb::types::TimeTest]:[33m32363(micro), 29(objs)[0m
 
-[32m I [0m|2024-11-24 15:31:14 1732458674346850| TEST[mariadb::types::YearTest]:[1mSTART[0m...
-[34m D [0m|2024-11-24 15:31:14 1732458674346855| EnvLoader:Trying path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674346876| EnvLoader:Found .env file at: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674346880| EnvLoader:Attempting to load .env file from path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674346896| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
-[34m D [0m|2024-11-24 15:31:14 1732458674346902| EnvLoader:Loaded env var: MARIADB_PORT = 3306
-[34m D [0m|2024-11-24 15:31:14 1732458674346906| EnvLoader:Loaded env var: MARIADB_USER = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674346910| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674346914| EnvLoader:Loaded env var: MARIADB_DATABASE = test
-[34m D [0m|2024-11-24 15:31:14 1732458674346919| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
-[34m D [0m|2024-11-24 15:31:14 1732458674346936| TEST[mariadb::types::YearTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
-[34m D [0m|2024-11-24 15:31:14 1732458674347247| TEST[mariadb::types::YearTest]:Successfully connected to database
-[34m D [0m|2024-11-24 15:31:14 1732458674347568| Executor:Preparing to execute query. Connection thread id: 3319
-[34m D [0m|2024-11-24 15:31:14 1732458674347577| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_year` (`year_value` YEAR) ENGINE=InnoDB;
-[34m D [0m|2024-11-24 15:31:14 1732458674347583| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674347689| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674347701| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674347804| QueryResult:MySQL thread id: 3319
-[34m D [0m|2024-11-24 15:31:14 1732458674347810| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674347883| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674347889| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674347893| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674347896| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674347899| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674347905| TEST[mariadb::types::YearTest]:Successfully created test_year table
-[34m D [0m|2024-11-24 15:31:14 1732458674347952| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674348220| Executor:Preparing to execute query. Connection thread id: 3320
-[34m D [0m|2024-11-24 15:31:14 1732458674348228| Executor:Query template: DELETE FROM test_year;
-[34m D [0m|2024-11-24 15:31:14 1732458674348233| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674348791| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674348805| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674348896| QueryResult:MySQL thread id: 3320
-[34m D [0m|2024-11-24 15:31:14 1732458674348902| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674350433| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674350444| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674350449| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674350452| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674350455| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674350464| TEST[mariadb::types::YearTest]:Cleared existing data
-[34m D [0m|2024-11-24 15:31:14 1732458674350537| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674350952| Executor:Preparing to execute query. Connection thread id: 3321
-[34m D [0m|2024-11-24 15:31:14 1732458674350961| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674350966| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674351075| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674351081| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674351108| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d514
-[34m D [0m|2024-11-24 15:31:14 1732458674351122| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674351131| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674351230| QueryResult:MySQL thread id: 3321
-[34m D [0m|2024-11-24 15:31:14 1732458674351237| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674352777| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674352792| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674352796| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674352800| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674352803| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674352815| TEST[mariadb::types::YearTest]:Inserted nullptr value
-[34m D [0m|2024-11-24 15:31:14 1732458674352870| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674353203| Executor:Preparing to execute query. Connection thread id: 3322
-[34m D [0m|2024-11-24 15:31:14 1732458674353211| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674353216| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674353311| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674353318| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674353339| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d514
-[34m D [0m|2024-11-24 15:31:14 1732458674353365| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674353376| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674353474| QueryResult:MySQL thread id: 3322
-[34m D [0m|2024-11-24 15:31:14 1732458674353480| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674354941| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674354947| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674354950| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674354952| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674354954| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674354959| TEST[mariadb::types::YearTest]:Inserted minimum year value
-[34m D [0m|2024-11-24 15:31:14 1732458674355041| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674355292| Executor:Preparing to execute query. Connection thread id: 3323
-[34m D [0m|2024-11-24 15:31:14 1732458674355298| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674355303| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674355395| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674355400| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674355418| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d514
-[34m D [0m|2024-11-24 15:31:14 1732458674355428| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674355437| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674355505| QueryResult:MySQL thread id: 3323
-[34m D [0m|2024-11-24 15:31:14 1732458674355510| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674356908| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674356916| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674356920| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674356922| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674356925| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674356933| TEST[mariadb::types::YearTest]:Inserted maximum year value
-[34m D [0m|2024-11-24 15:31:14 1732458674356980| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674357238| Executor:Preparing to execute query. Connection thread id: 3324
-[34m D [0m|2024-11-24 15:31:14 1732458674357243| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674357247| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674357314| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674357322| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674357338| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d514
-[34m D [0m|2024-11-24 15:31:14 1732458674357348| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674357358| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674357452| QueryResult:MySQL thread id: 3324
-[34m D [0m|2024-11-24 15:31:14 1732458674357456| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674360303| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674360317| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674360321| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674360323| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674360324| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674360336| TEST[mariadb::types::YearTest]:Inserted current year
-[34m D [0m|2024-11-24 15:31:14 1732458674360433| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674360751| Executor:Preparing to execute query. Connection thread id: 3325
-[34m D [0m|2024-11-24 15:31:14 1732458674360758| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674360762| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674360844| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674360850| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674360871| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d514
-[34m D [0m|2024-11-24 15:31:14 1732458674360884| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674360893| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674360989| QueryResult:MySQL thread id: 3325
-[34m D [0m|2024-11-24 15:31:14 1732458674360994| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674362539| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674362546| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674362550| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674362553| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674362556| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674362564| TEST[mariadb::types::YearTest]:Inserted zero year
-[34m D [0m|2024-11-24 15:31:14 1732458674362613| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674362852| Executor:Preparing to execute query. Connection thread id: 3326
-[34m D [0m|2024-11-24 15:31:14 1732458674362858| Executor:Query template: SELECT * FROM test_year;
-[34m D [0m|2024-11-24 15:31:14 1732458674362864| Executor:Statement initialized. Address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674362946| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674362971| ResultMapper:Binding field 'year_value' of type 13
-[34m D [0m|2024-11-24 15:31:14 1732458674362979| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674363059| QueryResult:MySQL thread id: 3326
-[34m D [0m|2024-11-24 15:31:14 1732458674363065| QueryResult:Statement address: 0x55555570a970
-[34m D [0m|2024-11-24 15:31:14 1732458674363186| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674363202| ResultMapper:Initialized column 0: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363206| ResultMapper:Found 5 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674363210| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674363225| ResultMapper:Column value is null
-[34m D [0m|2024-11-24 15:31:14 1732458674363232| ResultMapper:Adding item to collection at index 0
-[34m D [0m|2024-11-24 15:31:14 1732458674363239| ResultMapper:Column name: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363245| ResultMapper:Found property: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363265| ResultMapper:Adding item to collection at index 1
-[34m D [0m|2024-11-24 15:31:14 1732458674363274| ResultMapper:Column name: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363279| ResultMapper:Found property: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363286| ResultMapper:Adding item to collection at index 2
-[34m D [0m|2024-11-24 15:31:14 1732458674363293| ResultMapper:Column name: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363298| ResultMapper:Found property: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363304| ResultMapper:Adding item to collection at index 3
-[34m D [0m|2024-11-24 15:31:14 1732458674363311| ResultMapper:Column name: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363316| ResultMapper:Found property: year_value
-[34m D [0m|2024-11-24 15:31:14 1732458674363321| ResultMapper:Adding item to collection at index 4
-[34m D [0m|2024-11-24 15:31:14 1732458674363364| TEST[mariadb::types::YearTest]:Query result:
+[32m I [0m|2024-11-24 15:37:39 1732459059288801| TEST[mariadb::types::YearTest]:[1mSTART[0m...
+[34m D [0m|2024-11-24 15:37:39 1732459059288804| EnvLoader:Trying path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059288819| EnvLoader:Found .env file at: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059288824| EnvLoader:Attempting to load .env file from path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059288841| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
+[34m D [0m|2024-11-24 15:37:39 1732459059288847| EnvLoader:Loaded env var: MARIADB_PORT = 3306
+[34m D [0m|2024-11-24 15:37:39 1732459059288852| EnvLoader:Loaded env var: MARIADB_USER = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059288856| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059288861| EnvLoader:Loaded env var: MARIADB_DATABASE = test
+[34m D [0m|2024-11-24 15:37:39 1732459059288866| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
+[34m D [0m|2024-11-24 15:37:39 1732459059288882| TEST[mariadb::types::YearTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
+[34m D [0m|2024-11-24 15:37:39 1732459059289097| TEST[mariadb::types::YearTest]:Successfully connected to database
+[34m D [0m|2024-11-24 15:37:39 1732459059289376| Executor:Preparing to execute query. Connection thread id: 3403
+[34m D [0m|2024-11-24 15:37:39 1732459059289385| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_year` (`year_value` YEAR) ENGINE=InnoDB;
+[34m D [0m|2024-11-24 15:37:39 1732459059289390| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059289535| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059289550| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059289651| QueryResult:MySQL thread id: 3403
+[34m D [0m|2024-11-24 15:37:39 1732459059289661| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059289748| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059289755| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059289759| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059289762| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059289764| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059289769| TEST[mariadb::types::YearTest]:Successfully created test_year table
+[34m D [0m|2024-11-24 15:37:39 1732459059289823| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059290147| Executor:Preparing to execute query. Connection thread id: 3404
+[34m D [0m|2024-11-24 15:37:39 1732459059290157| Executor:Query template: DELETE FROM test_year;
+[34m D [0m|2024-11-24 15:37:39 1732459059290163| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059290246| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059290260| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059290353| QueryResult:MySQL thread id: 3404
+[34m D [0m|2024-11-24 15:37:39 1732459059290360| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059292867| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059292883| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059292886| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059292888| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059292890| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059292899| TEST[mariadb::types::YearTest]:Cleared existing data
+[34m D [0m|2024-11-24 15:37:39 1732459059292985| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059293333| Executor:Preparing to execute query. Connection thread id: 3405
+[34m D [0m|2024-11-24 15:37:39 1732459059293342| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059293347| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059293484| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059293490| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059293515| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d54e
+[34m D [0m|2024-11-24 15:37:39 1732459059293530| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059293539| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059293645| QueryResult:MySQL thread id: 3405
+[34m D [0m|2024-11-24 15:37:39 1732459059293652| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059296750| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059296769| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059296774| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059296778| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059296781| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059296793| TEST[mariadb::types::YearTest]:Inserted nullptr value
+[34m D [0m|2024-11-24 15:37:39 1732459059296866| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059297218| Executor:Preparing to execute query. Connection thread id: 3406
+[34m D [0m|2024-11-24 15:37:39 1732459059297226| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059297231| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059297324| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059297331| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059297355| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d54e
+[34m D [0m|2024-11-24 15:37:39 1732459059297386| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059297397| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059297502| QueryResult:MySQL thread id: 3406
+[34m D [0m|2024-11-24 15:37:39 1732459059297507| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059300541| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059300557| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059300563| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059300567| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059300570| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059300583| TEST[mariadb::types::YearTest]:Inserted minimum year value
+[34m D [0m|2024-11-24 15:37:39 1732459059300647| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059300987| Executor:Preparing to execute query. Connection thread id: 3407
+[34m D [0m|2024-11-24 15:37:39 1732459059300995| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059301001| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059301088| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059301095| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059301119| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d54e
+[34m D [0m|2024-11-24 15:37:39 1732459059301133| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059301144| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059301252| QueryResult:MySQL thread id: 3407
+[34m D [0m|2024-11-24 15:37:39 1732459059301257| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059304317| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059304328| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059304332| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059304334| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059304335| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059304346| TEST[mariadb::types::YearTest]:Inserted maximum year value
+[34m D [0m|2024-11-24 15:37:39 1732459059304453| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059304759| Executor:Preparing to execute query. Connection thread id: 3408
+[34m D [0m|2024-11-24 15:37:39 1732459059304764| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059304767| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059304855| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059304860| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059304880| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d54e
+[34m D [0m|2024-11-24 15:37:39 1732459059304892| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059304901| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059305002| QueryResult:MySQL thread id: 3408
+[34m D [0m|2024-11-24 15:37:39 1732459059305011| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059308079| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059308097| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059308104| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059308108| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059308111| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059308126| TEST[mariadb::types::YearTest]:Inserted current year
+[34m D [0m|2024-11-24 15:37:39 1732459059308241| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059308658| Executor:Preparing to execute query. Connection thread id: 3409
+[34m D [0m|2024-11-24 15:37:39 1732459059308667| Executor:Query template: INSERT INTO test_year (year_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059308702| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059308796| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059308801| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059308824| Serializer::serialize():classId=8, className=Int16, paramIndex=0, method=0x7ffff7f7d54e
+[34m D [0m|2024-11-24 15:37:39 1732459059308837| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059308847| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059308944| QueryResult:MySQL thread id: 3409
+[34m D [0m|2024-11-24 15:37:39 1732459059308952| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059314583| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059314593| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059314597| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059314599| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059314600| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059314609| TEST[mariadb::types::YearTest]:Inserted zero year
+[34m D [0m|2024-11-24 15:37:39 1732459059314656| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059314948| Executor:Preparing to execute query. Connection thread id: 3410
+[34m D [0m|2024-11-24 15:37:39 1732459059314954| Executor:Query template: SELECT * FROM test_year;
+[34m D [0m|2024-11-24 15:37:39 1732459059314959| Executor:Statement initialized. Address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059315047| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059315077| ResultMapper:Binding field 'year_value' of type 13
+[34m D [0m|2024-11-24 15:37:39 1732459059315085| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059315171| QueryResult:MySQL thread id: 3410
+[34m D [0m|2024-11-24 15:37:39 1732459059315176| QueryResult:Statement address: 0x555555718970
+[34m D [0m|2024-11-24 15:37:39 1732459059315294| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059315310| ResultMapper:Initialized column 0: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315317| ResultMapper:Found 5 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059315321| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059315336| ResultMapper:Column value is null
+[34m D [0m|2024-11-24 15:37:39 1732459059315342| ResultMapper:Adding item to collection at index 0
+[34m D [0m|2024-11-24 15:37:39 1732459059315349| ResultMapper:Column name: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315355| ResultMapper:Found property: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315374| ResultMapper:Adding item to collection at index 1
+[34m D [0m|2024-11-24 15:37:39 1732459059315381| ResultMapper:Column name: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315386| ResultMapper:Found property: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315393| ResultMapper:Adding item to collection at index 2
+[34m D [0m|2024-11-24 15:37:39 1732459059315400| ResultMapper:Column name: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315404| ResultMapper:Found property: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315410| ResultMapper:Adding item to collection at index 3
+[34m D [0m|2024-11-24 15:37:39 1732459059315416| ResultMapper:Column name: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315421| ResultMapper:Found property: year_value
+[34m D [0m|2024-11-24 15:37:39 1732459059315426| ResultMapper:Adding item to collection at index 4
+[34m D [0m|2024-11-24 15:37:39 1732459059315461| TEST[mariadb::types::YearTest]:Query result:
 [
   {
     "year_value": null
@@ -391,185 +391,185 @@ Using host libthread_db library "/usr/lib/libthread_db.so.1".
     "year_value": 0
   }
 ]
-[34m D [0m|2024-11-24 15:31:14 1732458674363371| TEST[mariadb::types::YearTest]:All assertions passed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674363434| QueryResult:Statement cleaned up successfully
-[32m I [0m|2024-11-24 15:31:14 1732458674363521| TEST[mariadb::types::YearTest]:[1mFINISHED[0m - [1;32msuccess![0m
-[32m I [0m|2024-11-24 15:31:14 1732458674363529| TEST[mariadb::types::YearTest]:[33m16668(micro), 26(objs)[0m
+[34m D [0m|2024-11-24 15:37:39 1732459059315467| TEST[mariadb::types::YearTest]:All assertions passed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059315516| QueryResult:Statement cleaned up successfully
+[32m I [0m|2024-11-24 15:37:39 1732459059315586| TEST[mariadb::types::YearTest]:[1mFINISHED[0m - [1;32msuccess![0m
+[32m I [0m|2024-11-24 15:37:39 1732459059315593| TEST[mariadb::types::YearTest]:[33m26783(micro), 26(objs)[0m
 
-[32m I [0m|2024-11-24 15:31:14 1732458674363533| TEST[mariadb::types::EnumTest]:[1mSTART[0m...
-[34m D [0m|2024-11-24 15:31:14 1732458674363539| EnvLoader:Trying path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674363557| EnvLoader:Found .env file at: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674363561| EnvLoader:Attempting to load .env file from path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674363577| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
-[34m D [0m|2024-11-24 15:31:14 1732458674363583| EnvLoader:Loaded env var: MARIADB_PORT = 3306
-[34m D [0m|2024-11-24 15:31:14 1732458674363587| EnvLoader:Loaded env var: MARIADB_USER = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674363592| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674363596| EnvLoader:Loaded env var: MARIADB_DATABASE = test
-[34m D [0m|2024-11-24 15:31:14 1732458674363601| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
-[34m D [0m|2024-11-24 15:31:14 1732458674363617| TEST[mariadb::types::EnumTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
-[34m D [0m|2024-11-24 15:31:14 1732458674363836| TEST[mariadb::types::EnumTest]:Successfully connected to database
-[34m D [0m|2024-11-24 15:31:14 1732458674364086| Executor:Preparing to execute query. Connection thread id: 3328
-[34m D [0m|2024-11-24 15:31:14 1732458674364092| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_enum` (`enum_value` ENUM('small', 'medium', 'large', 'x-large')) ENGINE=InnoDB;
-[34m D [0m|2024-11-24 15:31:14 1732458674364095| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674364161| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674364171| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674364253| QueryResult:MySQL thread id: 3328
-[34m D [0m|2024-11-24 15:31:14 1732458674364261| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674364314| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674364319| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674364321| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674364323| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674364324| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674364328| TEST[mariadb::types::EnumTest]:Successfully created test_enum table
-[34m D [0m|2024-11-24 15:31:14 1732458674364377| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674364609| Executor:Preparing to execute query. Connection thread id: 3329
-[34m D [0m|2024-11-24 15:31:14 1732458674364617| Executor:Query template: DELETE FROM test_enum;
-[34m D [0m|2024-11-24 15:31:14 1732458674364621| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674364678| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674364692| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674364757| QueryResult:MySQL thread id: 3329
-[34m D [0m|2024-11-24 15:31:14 1732458674364763| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674367833| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674367844| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674367847| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674367849| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674367851| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674367857| TEST[mariadb::types::EnumTest]:Cleared existing data
-[34m D [0m|2024-11-24 15:31:14 1732458674367943| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674368284| Executor:Preparing to execute query. Connection thread id: 3330
-[34m D [0m|2024-11-24 15:31:14 1732458674368292| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674368298| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674370696| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674370714| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674370748| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674370754| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674370759| Serializer:Resizing bind params array from 0 to 1
-[34m D [0m|2024-11-24 15:31:14 1732458674370768| Serializer:String value is null (polymorph is null)
-[34m D [0m|2024-11-24 15:31:14 1732458674370778| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674370790| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674370933| QueryResult:MySQL thread id: 3330
-[34m D [0m|2024-11-24 15:31:14 1732458674370947| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674376903| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674376919| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674376922| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674376924| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674376926| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674376937| TEST[mariadb::types::EnumTest]:Inserted nullptr value
-[34m D [0m|2024-11-24 15:31:14 1732458674377001| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674377322| Executor:Preparing to execute query. Connection thread id: 3331
-[34m D [0m|2024-11-24 15:31:14 1732458674377330| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674377333| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674377421| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674377428| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674377452| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674377458| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674377465| Serializer:Using BLOB type for string field, length=5
-[34m D [0m|2024-11-24 15:31:14 1732458674377474| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674377484| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674377576| QueryResult:MySQL thread id: 3331
-[34m D [0m|2024-11-24 15:31:14 1732458674377583| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674380207| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674380215| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674380218| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674380220| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674380222| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674380227| TEST[mariadb::types::EnumTest]:Inserted 'small' value
-[34m D [0m|2024-11-24 15:31:14 1732458674380281| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674380533| Executor:Preparing to execute query. Connection thread id: 3332
-[34m D [0m|2024-11-24 15:31:14 1732458674380539| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674380542| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674380616| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674380622| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674380637| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674380642| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674380646| Serializer:Using BLOB type for string field, length=6
-[34m D [0m|2024-11-24 15:31:14 1732458674380652| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674380660| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674380738| QueryResult:MySQL thread id: 3332
-[34m D [0m|2024-11-24 15:31:14 1732458674380746| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674383457| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674383465| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674383467| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674383469| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674383471| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674383479| TEST[mariadb::types::EnumTest]:Inserted 'medium' value
-[34m D [0m|2024-11-24 15:31:14 1732458674383525| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674383783| Executor:Preparing to execute query. Connection thread id: 3333
-[34m D [0m|2024-11-24 15:31:14 1732458674383789| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674383792| Executor:Statement initialized. Address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674383861| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674383867| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674383883| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674383888| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674383893| Serializer:Using BLOB type for string field, length=5
-[34m D [0m|2024-11-24 15:31:14 1732458674383900| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674383908| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674383982| QueryResult:MySQL thread id: 3333
-[34m D [0m|2024-11-24 15:31:14 1732458674383987| QueryResult:Statement address: 0x55555570a8d0
-[34m D [0m|2024-11-24 15:31:14 1732458674386368| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674386385| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674386390| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674386394| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674386397| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674386410| TEST[mariadb::types::EnumTest]:Inserted 'large' value
-[34m D [0m|2024-11-24 15:31:14 1732458674386537| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674386852| Executor:Preparing to execute query. Connection thread id: 3334
-[34m D [0m|2024-11-24 15:31:14 1732458674386859| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674386862| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674386950| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674386958| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674386981| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674386985| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674386989| Serializer:Using BLOB type for string field, length=7
-[34m D [0m|2024-11-24 15:31:14 1732458674386995| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674387002| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674387097| QueryResult:MySQL thread id: 3334
-[34m D [0m|2024-11-24 15:31:14 1732458674387104| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674389520| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674389533| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674389537| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674389539| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674389540| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674389550| TEST[mariadb::types::EnumTest]:Inserted 'x-large' value
-[34m D [0m|2024-11-24 15:31:14 1732458674389612| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674389933| Executor:Preparing to execute query. Connection thread id: 3335
-[34m D [0m|2024-11-24 15:31:14 1732458674389941| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES ('invalid');
-[34m D [0m|2024-11-24 15:31:14 1732458674389947| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674390040| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674390054| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674390150| QueryResult:MySQL thread id: 3335
-[34m D [0m|2024-11-24 15:31:14 1732458674390156| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674390251| QueryResult:Statement execution error: Error executing statement: Data truncated for column 'enum_value' at row 1
-[34m D [0m|2024-11-24 15:31:14 1732458674390260| QueryResult:MySQL error: Data truncated for column 'enum_value' at row 1
-[34m D [0m|2024-11-24 15:31:14 1732458674390265| TEST[mariadb::types::EnumTest]:Verified that invalid enum value is rejected
-[34m D [0m|2024-11-24 15:31:14 1732458674390321| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674390578| Executor:Preparing to execute query. Connection thread id: 3336
-[34m D [0m|2024-11-24 15:31:14 1732458674390585| Executor:Query template: SELECT * FROM test_enum;
-[34m D [0m|2024-11-24 15:31:14 1732458674390590| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674390666| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674390692| ResultMapper:Binding field 'enum_value' of type 254
-[34m D [0m|2024-11-24 15:31:14 1732458674390702| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674390778| QueryResult:MySQL thread id: 3336
-[34m D [0m|2024-11-24 15:31:14 1732458674390784| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674390895| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674390914| ResultMapper:Initialized column 0: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674390921| ResultMapper:Found 5 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674390925| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674390943| ResultMapper:Column value is null
-[34m D [0m|2024-11-24 15:31:14 1732458674390949| ResultMapper:Adding item to collection at index 0
-[34m D [0m|2024-11-24 15:31:14 1732458674390957| ResultMapper:Column name: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674390963| ResultMapper:Found property: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674390973| ResultMapper:Adding item to collection at index 1
-[34m D [0m|2024-11-24 15:31:14 1732458674390981| ResultMapper:Column name: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674390985| ResultMapper:Found property: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674390991| ResultMapper:Adding item to collection at index 2
-[34m D [0m|2024-11-24 15:31:14 1732458674391000| ResultMapper:Column name: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674391005| ResultMapper:Found property: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674391011| ResultMapper:Adding item to collection at index 3
-[34m D [0m|2024-11-24 15:31:14 1732458674391017| ResultMapper:Column name: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674391021| ResultMapper:Found property: enum_value
-[34m D [0m|2024-11-24 15:31:14 1732458674391027| ResultMapper:Adding item to collection at index 4
-[34m D [0m|2024-11-24 15:31:14 1732458674391064| TEST[mariadb::types::EnumTest]:Query result:
+[32m I [0m|2024-11-24 15:37:39 1732459059315597| TEST[mariadb::types::EnumTest]:[1mSTART[0m...
+[34m D [0m|2024-11-24 15:37:39 1732459059315602| EnvLoader:Trying path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059315617| EnvLoader:Found .env file at: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059315621| EnvLoader:Attempting to load .env file from path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059315634| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
+[34m D [0m|2024-11-24 15:37:39 1732459059315638| EnvLoader:Loaded env var: MARIADB_PORT = 3306
+[34m D [0m|2024-11-24 15:37:39 1732459059315641| EnvLoader:Loaded env var: MARIADB_USER = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059315644| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059315648| EnvLoader:Loaded env var: MARIADB_DATABASE = test
+[34m D [0m|2024-11-24 15:37:39 1732459059315653| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
+[34m D [0m|2024-11-24 15:37:39 1732459059315668| TEST[mariadb::types::EnumTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
+[34m D [0m|2024-11-24 15:37:39 1732459059315856| TEST[mariadb::types::EnumTest]:Successfully connected to database
+[34m D [0m|2024-11-24 15:37:39 1732459059316073| Executor:Preparing to execute query. Connection thread id: 3412
+[34m D [0m|2024-11-24 15:37:39 1732459059316079| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_enum` (`enum_value` ENUM('small', 'medium', 'large', 'x-large')) ENGINE=InnoDB;
+[34m D [0m|2024-11-24 15:37:39 1732459059316084| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059316146| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059316155| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059316220| QueryResult:MySQL thread id: 3412
+[34m D [0m|2024-11-24 15:37:39 1732459059316224| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059316276| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059316282| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059316286| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059316288| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059316290| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059316293| TEST[mariadb::types::EnumTest]:Successfully created test_enum table
+[34m D [0m|2024-11-24 15:37:39 1732459059316338| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059316560| Executor:Preparing to execute query. Connection thread id: 3413
+[34m D [0m|2024-11-24 15:37:39 1732459059316566| Executor:Query template: DELETE FROM test_enum;
+[34m D [0m|2024-11-24 15:37:39 1732459059316569| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059316630| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059316638| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059316708| QueryResult:MySQL thread id: 3413
+[34m D [0m|2024-11-24 15:37:39 1732459059316714| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059319571| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059319587| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059319592| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059319594| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059319595| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059319604| TEST[mariadb::types::EnumTest]:Cleared existing data
+[34m D [0m|2024-11-24 15:37:39 1732459059319672| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059320010| Executor:Preparing to execute query. Connection thread id: 3414
+[34m D [0m|2024-11-24 15:37:39 1732459059320019| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059320024| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059322418| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059322428| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059322454| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059322459| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059322462| Serializer:Resizing bind params array from 0 to 1
+[34m D [0m|2024-11-24 15:37:39 1732459059322470| Serializer:String value is null (polymorph is null)
+[34m D [0m|2024-11-24 15:37:39 1732459059322478| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059322487| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059322589| QueryResult:MySQL thread id: 3414
+[34m D [0m|2024-11-24 15:37:39 1732459059322597| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059325480| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059325493| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059325499| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059325502| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059325505| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059325516| TEST[mariadb::types::EnumTest]:Inserted nullptr value
+[34m D [0m|2024-11-24 15:37:39 1732459059325571| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059325910| Executor:Preparing to execute query. Connection thread id: 3415
+[34m D [0m|2024-11-24 15:37:39 1732459059325919| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059325924| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059326012| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059326019| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059326043| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059326048| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059326052| Serializer:Using BLOB type for string field, length=5
+[34m D [0m|2024-11-24 15:37:39 1732459059326058| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059326067| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059326180| QueryResult:MySQL thread id: 3415
+[34m D [0m|2024-11-24 15:37:39 1732459059326186| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059328682| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059328688| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059328691| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059328692| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059328694| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059328700| TEST[mariadb::types::EnumTest]:Inserted 'small' value
+[34m D [0m|2024-11-24 15:37:39 1732459059328740| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059329012| Executor:Preparing to execute query. Connection thread id: 3416
+[34m D [0m|2024-11-24 15:37:39 1732459059329017| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059329020| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059329083| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059329089| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059329105| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059329110| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059329115| Serializer:Using BLOB type for string field, length=6
+[34m D [0m|2024-11-24 15:37:39 1732459059329122| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059329129| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059329196| QueryResult:MySQL thread id: 3416
+[34m D [0m|2024-11-24 15:37:39 1732459059329202| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059332076| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059332088| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059332093| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059332096| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059332098| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059332105| TEST[mariadb::types::EnumTest]:Inserted 'medium' value
+[34m D [0m|2024-11-24 15:37:39 1732459059332160| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059332453| Executor:Preparing to execute query. Connection thread id: 3417
+[34m D [0m|2024-11-24 15:37:39 1732459059332461| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059332464| Executor:Statement initialized. Address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059332544| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059332551| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059332571| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059332577| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059332582| Serializer:Using BLOB type for string field, length=5
+[34m D [0m|2024-11-24 15:37:39 1732459059332589| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059332597| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059332711| QueryResult:MySQL thread id: 3417
+[34m D [0m|2024-11-24 15:37:39 1732459059332718| QueryResult:Statement address: 0x5555557188d0
+[34m D [0m|2024-11-24 15:37:39 1732459059335113| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059335128| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059335131| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059335133| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059335135| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059335147| TEST[mariadb::types::EnumTest]:Inserted 'large' value
+[34m D [0m|2024-11-24 15:37:39 1732459059335224| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059335572| Executor:Preparing to execute query. Connection thread id: 3418
+[34m D [0m|2024-11-24 15:37:39 1732459059335582| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059335587| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059335712| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059335720| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059335744| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059335750| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059335757| Serializer:Using BLOB type for string field, length=7
+[34m D [0m|2024-11-24 15:37:39 1732459059335766| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059335775| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059335878| QueryResult:MySQL thread id: 3418
+[34m D [0m|2024-11-24 15:37:39 1732459059335885| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059338349| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059338369| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059338374| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059338378| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059338381| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059338394| TEST[mariadb::types::EnumTest]:Inserted 'x-large' value
+[34m D [0m|2024-11-24 15:37:39 1732459059338649| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059338992| Executor:Preparing to execute query. Connection thread id: 3419
+[34m D [0m|2024-11-24 15:37:39 1732459059339001| Executor:Query template: INSERT INTO test_enum (enum_value) VALUES ('invalid');
+[34m D [0m|2024-11-24 15:37:39 1732459059339008| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059339094| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059339108| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059339189| QueryResult:MySQL thread id: 3419
+[34m D [0m|2024-11-24 15:37:39 1732459059339194| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059339278| QueryResult:Statement execution error: Error executing statement: Data truncated for column 'enum_value' at row 1
+[34m D [0m|2024-11-24 15:37:39 1732459059339285| QueryResult:MySQL error: Data truncated for column 'enum_value' at row 1
+[34m D [0m|2024-11-24 15:37:39 1732459059339290| TEST[mariadb::types::EnumTest]:Verified that invalid enum value is rejected
+[34m D [0m|2024-11-24 15:37:39 1732459059339329| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059339548| Executor:Preparing to execute query. Connection thread id: 3420
+[34m D [0m|2024-11-24 15:37:39 1732459059339553| Executor:Query template: SELECT * FROM test_enum;
+[34m D [0m|2024-11-24 15:37:39 1732459059339556| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059339619| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059339644| ResultMapper:Binding field 'enum_value' of type 254
+[34m D [0m|2024-11-24 15:37:39 1732459059339654| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059339720| QueryResult:MySQL thread id: 3420
+[34m D [0m|2024-11-24 15:37:39 1732459059339727| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059339840| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059339858| ResultMapper:Initialized column 0: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339865| ResultMapper:Found 5 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059339869| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059339884| ResultMapper:Column value is null
+[34m D [0m|2024-11-24 15:37:39 1732459059339891| ResultMapper:Adding item to collection at index 0
+[34m D [0m|2024-11-24 15:37:39 1732459059339899| ResultMapper:Column name: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339905| ResultMapper:Found property: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339915| ResultMapper:Adding item to collection at index 1
+[34m D [0m|2024-11-24 15:37:39 1732459059339922| ResultMapper:Column name: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339927| ResultMapper:Found property: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339934| ResultMapper:Adding item to collection at index 2
+[34m D [0m|2024-11-24 15:37:39 1732459059339940| ResultMapper:Column name: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339944| ResultMapper:Found property: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339951| ResultMapper:Adding item to collection at index 3
+[34m D [0m|2024-11-24 15:37:39 1732459059339957| ResultMapper:Column name: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339962| ResultMapper:Found property: enum_value
+[34m D [0m|2024-11-24 15:37:39 1732459059339968| ResultMapper:Adding item to collection at index 4
+[34m D [0m|2024-11-24 15:37:39 1732459059340006| TEST[mariadb::types::EnumTest]:Query result:
 [
   {
     "enum_value": null
@@ -587,152 +587,152 @@ Using host libthread_db library "/usr/lib/libthread_db.so.1".
     "enum_value": "x-large"
   }
 ]
-[34m D [0m|2024-11-24 15:31:14 1732458674391071| TEST[mariadb::types::EnumTest]:All assertions passed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674391152| QueryResult:Statement cleaned up successfully
-[32m I [0m|2024-11-24 15:31:14 1732458674391231| TEST[mariadb::types::EnumTest]:[1mFINISHED[0m - [1;32msuccess![0m
-[32m I [0m|2024-11-24 15:31:14 1732458674391238| TEST[mariadb::types::EnumTest]:[33m27693(micro), 27(objs)[0m
+[34m D [0m|2024-11-24 15:37:39 1732459059340012| TEST[mariadb::types::EnumTest]:All assertions passed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059340072| QueryResult:Statement cleaned up successfully
+[32m I [0m|2024-11-24 15:37:39 1732459059340149| TEST[mariadb::types::EnumTest]:[1mFINISHED[0m - [1;32msuccess![0m
+[32m I [0m|2024-11-24 15:37:39 1732459059340156| TEST[mariadb::types::EnumTest]:[33m24548(micro), 27(objs)[0m
 
-[32m I [0m|2024-11-24 15:31:14 1732458674391241| TEST[mariadb::types::SetTest]:[1mSTART[0m...
-[34m D [0m|2024-11-24 15:31:14 1732458674391246| EnvLoader:Trying path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674391265| EnvLoader:Found .env file at: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674391271| EnvLoader:Attempting to load .env file from path: .env
-[34m D [0m|2024-11-24 15:31:14 1732458674391287| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
-[34m D [0m|2024-11-24 15:31:14 1732458674391294| EnvLoader:Loaded env var: MARIADB_PORT = 3306
-[34m D [0m|2024-11-24 15:31:14 1732458674391298| EnvLoader:Loaded env var: MARIADB_USER = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674391303| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
-[34m D [0m|2024-11-24 15:31:14 1732458674391307| EnvLoader:Loaded env var: MARIADB_DATABASE = test
-[34m D [0m|2024-11-24 15:31:14 1732458674391312| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
-[34m D [0m|2024-11-24 15:31:14 1732458674391328| TEST[mariadb::types::SetTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
-[34m D [0m|2024-11-24 15:31:14 1732458674391531| TEST[mariadb::types::SetTest]:Successfully connected to database
-[34m D [0m|2024-11-24 15:31:14 1732458674391765| Executor:Preparing to execute query. Connection thread id: 3338
-[34m D [0m|2024-11-24 15:31:14 1732458674391771| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_set` (`set_value` SET('red', 'green', 'blue', 'yellow')) ENGINE=InnoDB;
-[34m D [0m|2024-11-24 15:31:14 1732458674391774| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674391832| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674391842| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674391917| QueryResult:MySQL thread id: 3338
-[34m D [0m|2024-11-24 15:31:14 1732458674391923| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674412217| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674412235| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674412239| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674412241| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674412243| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674412253| TEST[mariadb::types::SetTest]:Successfully created test_set table
-[34m D [0m|2024-11-24 15:31:14 1732458674412341| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674412753| Executor:Preparing to execute query. Connection thread id: 3339
-[34m D [0m|2024-11-24 15:31:14 1732458674412763| Executor:Query template: DELETE FROM test_set;
-[34m D [0m|2024-11-24 15:31:14 1732458674412767| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674412953| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674412968| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674413059| QueryResult:MySQL thread id: 3339
-[34m D [0m|2024-11-24 15:31:14 1732458674413064| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674413134| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674413139| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674413141| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674413144| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674413147| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674413153| TEST[mariadb::types::SetTest]:Cleared existing data
-[34m D [0m|2024-11-24 15:31:14 1732458674413190| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674413571| Executor:Preparing to execute query. Connection thread id: 3340
-[34m D [0m|2024-11-24 15:31:14 1732458674413577| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674413581| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674413648| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674413653| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674413675| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674413679| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674413681| Serializer:Resizing bind params array from 0 to 1
-[34m D [0m|2024-11-24 15:31:14 1732458674413686| Serializer:String value is null (polymorph is null)
-[34m D [0m|2024-11-24 15:31:14 1732458674413693| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674413701| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674413766| QueryResult:MySQL thread id: 3340
-[34m D [0m|2024-11-24 15:31:14 1732458674413770| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674416339| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674416347| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674416351| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674416354| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674416356| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674416363| TEST[mariadb::types::SetTest]:Inserted nullptr value
-[34m D [0m|2024-11-24 15:31:14 1732458674416418| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674416669| Executor:Preparing to execute query. Connection thread id: 3341
-[34m D [0m|2024-11-24 15:31:14 1732458674416675| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674416678| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674416755| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674416764| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674416783| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674416788| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674416795| Serializer:Using BLOB type for string field, length=3
-[34m D [0m|2024-11-24 15:31:14 1732458674416802| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674416811| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674416911| QueryResult:MySQL thread id: 3341
-[34m D [0m|2024-11-24 15:31:14 1732458674416918| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674420028| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674420045| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674420049| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674420051| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674420053| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674420063| TEST[mariadb::types::SetTest]:Inserted single value 'red'
-[34m D [0m|2024-11-24 15:31:14 1732458674420137| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674420476| Executor:Preparing to execute query. Connection thread id: 3342
-[34m D [0m|2024-11-24 15:31:14 1732458674420485| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674420490| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674424369| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674424383| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674424411| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674424417| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674424425| Serializer:Using BLOB type for string field, length=8
-[34m D [0m|2024-11-24 15:31:14 1732458674424435| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674424448| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674424570| QueryResult:MySQL thread id: 3342
-[34m D [0m|2024-11-24 15:31:14 1732458674424576| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674427389| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674427396| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674427400| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674427402| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674427404| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674427411| TEST[mariadb::types::SetTest]:Inserted multiple values 'red,blue'
-[34m D [0m|2024-11-24 15:31:14 1732458674427466| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674427765| Executor:Preparing to execute query. Connection thread id: 3343
-[34m D [0m|2024-11-24 15:31:14 1732458674427771| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
-[34m D [0m|2024-11-24 15:31:14 1732458674427775| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674427858| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674427863| Executor:Binding parameters...
-[34m D [0m|2024-11-24 15:31:14 1732458674427876| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b538
-[34m D [0m|2024-11-24 15:31:14 1732458674427879| Serializer:Serializing String value for paramIndex=0
-[34m D [0m|2024-11-24 15:31:14 1732458674427883| Serializer:Using BLOB type for string field, length=21
-[34m D [0m|2024-11-24 15:31:14 1732458674427889| Executor:Parameters bound successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674427897| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674427969| QueryResult:MySQL thread id: 3343
-[34m D [0m|2024-11-24 15:31:14 1732458674427973| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674429329| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674429336| ResultMapper:No metadata in init() (normal for non-SELECT queries)
-[34m D [0m|2024-11-24 15:31:14 1732458674429338| ResultMapper:Found 0 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674429340| ResultMapper:No metadata for RETURNING clause
-[34m D [0m|2024-11-24 15:31:14 1732458674429341| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674429346| TEST[mariadb::types::SetTest]:Inserted all values
-[34m D [0m|2024-11-24 15:31:14 1732458674429397| QueryResult:Statement cleaned up successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674429672| Executor:Preparing to execute query. Connection thread id: 3344
-[34m D [0m|2024-11-24 15:31:14 1732458674429680| Executor:Query template: SELECT * FROM test_set;
-[34m D [0m|2024-11-24 15:31:14 1732458674429685| Executor:Statement initialized. Address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674429779| Executor:Statement prepared successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674429806| ResultMapper:Binding field 'set_value' of type 254
-[34m D [0m|2024-11-24 15:31:14 1732458674429817| QueryResult:Executing statement...
-[34m D [0m|2024-11-24 15:31:14 1732458674429893| QueryResult:MySQL thread id: 3344
-[34m D [0m|2024-11-24 15:31:14 1732458674429900| QueryResult:Statement address: 0x555555700670
-[34m D [0m|2024-11-24 15:31:14 1732458674430015| QueryResult:Statement executed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674430032| ResultMapper:Initialized column 0: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430046| ResultMapper:Found 4 rows in result
-[34m D [0m|2024-11-24 15:31:14 1732458674430050| QueryResult:Result data initialized
-[34m D [0m|2024-11-24 15:31:14 1732458674430066| ResultMapper:Column value is null
-[34m D [0m|2024-11-24 15:31:14 1732458674430071| ResultMapper:Adding item to collection at index 0
-[34m D [0m|2024-11-24 15:31:14 1732458674430078| ResultMapper:Column name: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430085| ResultMapper:Found property: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430100| ResultMapper:Adding item to collection at index 1
-[34m D [0m|2024-11-24 15:31:14 1732458674430108| ResultMapper:Column name: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430112| ResultMapper:Found property: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430119| ResultMapper:Adding item to collection at index 2
-[34m D [0m|2024-11-24 15:31:14 1732458674430125| ResultMapper:Column name: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430130| ResultMapper:Found property: set_value
-[34m D [0m|2024-11-24 15:31:14 1732458674430137| ResultMapper:Adding item to collection at index 3
-[34m D [0m|2024-11-24 15:31:14 1732458674430171| TEST[mariadb::types::SetTest]:Query result:
+[32m I [0m|2024-11-24 15:37:39 1732459059340160| TEST[mariadb::types::SetTest]:[1mSTART[0m...
+[34m D [0m|2024-11-24 15:37:39 1732459059340165| EnvLoader:Trying path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059340181| EnvLoader:Found .env file at: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059340186| EnvLoader:Attempting to load .env file from path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059340202| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
+[34m D [0m|2024-11-24 15:37:39 1732459059340209| EnvLoader:Loaded env var: MARIADB_PORT = 3306
+[34m D [0m|2024-11-24 15:37:39 1732459059340213| EnvLoader:Loaded env var: MARIADB_USER = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059340217| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059340221| EnvLoader:Loaded env var: MARIADB_DATABASE = test
+[34m D [0m|2024-11-24 15:37:39 1732459059340226| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
+[34m D [0m|2024-11-24 15:37:39 1732459059340240| TEST[mariadb::types::SetTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
+[34m D [0m|2024-11-24 15:37:39 1732459059340440| TEST[mariadb::types::SetTest]:Successfully connected to database
+[34m D [0m|2024-11-24 15:37:39 1732459059340693| Executor:Preparing to execute query. Connection thread id: 3422
+[34m D [0m|2024-11-24 15:37:39 1732459059340700| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_set` (`set_value` SET('red', 'green', 'blue', 'yellow')) ENGINE=InnoDB;
+[34m D [0m|2024-11-24 15:37:39 1732459059340705| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059340763| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059340773| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059340836| QueryResult:MySQL thread id: 3422
+[34m D [0m|2024-11-24 15:37:39 1732459059340842| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059340895| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059340901| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059340904| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059340907| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059340910| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059340915| TEST[mariadb::types::SetTest]:Successfully created test_set table
+[34m D [0m|2024-11-24 15:37:39 1732459059340969| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059341191| Executor:Preparing to execute query. Connection thread id: 3423
+[34m D [0m|2024-11-24 15:37:39 1732459059341198| Executor:Query template: DELETE FROM test_set;
+[34m D [0m|2024-11-24 15:37:39 1732459059341202| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059341266| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059341275| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059341336| QueryResult:MySQL thread id: 3423
+[34m D [0m|2024-11-24 15:37:39 1732459059341342| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059342804| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059342817| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059342821| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059342825| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059342827| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059342836| TEST[mariadb::types::SetTest]:Cleared existing data
+[34m D [0m|2024-11-24 15:37:39 1732459059342887| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059343174| Executor:Preparing to execute query. Connection thread id: 3424
+[34m D [0m|2024-11-24 15:37:39 1732459059343181| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059343184| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059346361| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059346370| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059346397| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059346403| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059346406| Serializer:Resizing bind params array from 0 to 1
+[34m D [0m|2024-11-24 15:37:39 1732459059346413| Serializer:String value is null (polymorph is null)
+[34m D [0m|2024-11-24 15:37:39 1732459059346421| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059346430| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059346550| QueryResult:MySQL thread id: 3424
+[34m D [0m|2024-11-24 15:37:39 1732459059346558| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059348910| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059348921| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059348925| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059348929| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059348932| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059348941| TEST[mariadb::types::SetTest]:Inserted nullptr value
+[34m D [0m|2024-11-24 15:37:39 1732459059348987| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059349299| Executor:Preparing to execute query. Connection thread id: 3425
+[34m D [0m|2024-11-24 15:37:39 1732459059349306| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059349312| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059349384| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059349390| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059349408| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059349413| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059349420| Serializer:Using BLOB type for string field, length=3
+[34m D [0m|2024-11-24 15:37:39 1732459059349427| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059349435| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059349509| QueryResult:MySQL thread id: 3425
+[34m D [0m|2024-11-24 15:37:39 1732459059349515| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059350996| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059351008| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059351012| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059351016| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059351019| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059351030| TEST[mariadb::types::SetTest]:Inserted single value 'red'
+[34m D [0m|2024-11-24 15:37:39 1732459059351094| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059351421| Executor:Preparing to execute query. Connection thread id: 3426
+[34m D [0m|2024-11-24 15:37:39 1732459059351427| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059351431| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059351521| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059351529| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059351550| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059351556| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059351562| Serializer:Using BLOB type for string field, length=8
+[34m D [0m|2024-11-24 15:37:39 1732459059351569| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059351577| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059351915| QueryResult:MySQL thread id: 3426
+[34m D [0m|2024-11-24 15:37:39 1732459059351923| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059353434| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059353448| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059353454| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059353458| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059353461| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059353474| TEST[mariadb::types::SetTest]:Inserted multiple values 'red,blue'
+[34m D [0m|2024-11-24 15:37:39 1732459059353531| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059353864| Executor:Preparing to execute query. Connection thread id: 3427
+[34m D [0m|2024-11-24 15:37:39 1732459059353873| Executor:Query template: INSERT INTO test_set (set_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059353878| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059353979| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059353986| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059354008| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059354018| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059354025| Serializer:Using BLOB type for string field, length=21
+[34m D [0m|2024-11-24 15:37:39 1732459059354034| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059354043| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059354136| QueryResult:MySQL thread id: 3427
+[34m D [0m|2024-11-24 15:37:39 1732459059354142| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059357224| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059357234| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059357239| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059357243| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059357246| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059357255| TEST[mariadb::types::SetTest]:Inserted all values
+[34m D [0m|2024-11-24 15:37:39 1732459059357362| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059357665| Executor:Preparing to execute query. Connection thread id: 3428
+[34m D [0m|2024-11-24 15:37:39 1732459059357674| Executor:Query template: SELECT * FROM test_set;
+[34m D [0m|2024-11-24 15:37:39 1732459059357679| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059357763| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059357790| ResultMapper:Binding field 'set_value' of type 254
+[34m D [0m|2024-11-24 15:37:39 1732459059357800| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059357889| QueryResult:MySQL thread id: 3428
+[34m D [0m|2024-11-24 15:37:39 1732459059357895| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059358006| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059358025| ResultMapper:Initialized column 0: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358031| ResultMapper:Found 4 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059358035| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059358051| ResultMapper:Column value is null
+[34m D [0m|2024-11-24 15:37:39 1732459059358058| ResultMapper:Adding item to collection at index 0
+[34m D [0m|2024-11-24 15:37:39 1732459059358064| ResultMapper:Column name: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358070| ResultMapper:Found property: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358080| ResultMapper:Adding item to collection at index 1
+[34m D [0m|2024-11-24 15:37:39 1732459059358092| ResultMapper:Column name: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358097| ResultMapper:Found property: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358104| ResultMapper:Adding item to collection at index 2
+[34m D [0m|2024-11-24 15:37:39 1732459059358109| ResultMapper:Column name: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358113| ResultMapper:Found property: set_value
+[34m D [0m|2024-11-24 15:37:39 1732459059358119| ResultMapper:Adding item to collection at index 3
+[34m D [0m|2024-11-24 15:37:39 1732459059358152| TEST[mariadb::types::SetTest]:Query result:
 [
   {
     "set_value": null
@@ -747,21 +747,231 @@ Using host libthread_db library "/usr/lib/libthread_db.so.1".
     "set_value": "red,green,blue,yellow"
   }
 ]
-[34m D [0m|2024-11-24 15:31:14 1732458674430178| TEST[mariadb::types::SetTest]:All assertions passed successfully
-[34m D [0m|2024-11-24 15:31:14 1732458674430241| QueryResult:Statement cleaned up successfully
-[32m I [0m|2024-11-24 15:31:14 1732458674430326| TEST[mariadb::types::SetTest]:[1mFINISHED[0m - [1;32msuccess![0m
-[32m I [0m|2024-11-24 15:31:14 1732458674430334| TEST[mariadb::types::SetTest]:[33m39081(micro), 23(objs)[0m
+[34m D [0m|2024-11-24 15:37:39 1732459059358159| TEST[mariadb::types::SetTest]:All assertions passed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059358210| QueryResult:Statement cleaned up successfully
+[32m I [0m|2024-11-24 15:37:39 1732459059358284| TEST[mariadb::types::SetTest]:[1mFINISHED[0m - [1;32msuccess![0m
+[32m I [0m|2024-11-24 15:37:39 1732459059358291| TEST[mariadb::types::SetTest]:[33m18121(micro), 23(objs)[0m
+
+[32m I [0m|2024-11-24 15:37:39 1732459059358307| TEST[mariadb::types::JsonTest]:[1mSTART[0m...
+[34m D [0m|2024-11-24 15:37:39 1732459059358313| EnvLoader:Trying path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059358329| EnvLoader:Found .env file at: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059358334| EnvLoader:Attempting to load .env file from path: .env
+[34m D [0m|2024-11-24 15:37:39 1732459059358352| EnvLoader:Loaded env var: MARIADB_HOST = 127.0.0.1
+[34m D [0m|2024-11-24 15:37:39 1732459059358358| EnvLoader:Loaded env var: MARIADB_PORT = 3306
+[34m D [0m|2024-11-24 15:37:39 1732459059358362| EnvLoader:Loaded env var: MARIADB_USER = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059358367| EnvLoader:Loaded env var: MARIADB_PASSWORD = tiger
+[34m D [0m|2024-11-24 15:37:39 1732459059358370| EnvLoader:Loaded env var: MARIADB_DATABASE = test
+[34m D [0m|2024-11-24 15:37:39 1732459059358375| EnvLoader:Loaded env var: MAX_RETRIES = 3  # Maximum number of retries for deadlock scenarios
+[34m D [0m|2024-11-24 15:37:39 1732459059358391| TEST[mariadb::types::JsonTest]:Attempting to connect to database 'test' on '127.0.0.1:3306' as user 'tiger'
+[34m D [0m|2024-11-24 15:37:39 1732459059358611| TEST[mariadb::types::JsonTest]:Successfully connected to database
+[34m D [0m|2024-11-24 15:37:39 1732459059358828| Executor:Preparing to execute query. Connection thread id: 3430
+[34m D [0m|2024-11-24 15:37:39 1732459059358833| Executor:Query template: CREATE TABLE IF NOT EXISTS `test_json` (`json_value` JSON) ENGINE=InnoDB;
+[34m D [0m|2024-11-24 15:37:39 1732459059358836| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059358898| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059358907| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059358975| QueryResult:MySQL thread id: 3430
+[34m D [0m|2024-11-24 15:37:39 1732459059358979| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059359032| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059359037| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059359039| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059359041| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059359043| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059359047| TEST[mariadb::types::JsonTest]:Successfully created test_json table
+[34m D [0m|2024-11-24 15:37:39 1732459059359091| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059359331| Executor:Preparing to execute query. Connection thread id: 3431
+[34m D [0m|2024-11-24 15:37:39 1732459059359336| Executor:Query template: DELETE FROM test_json;
+[34m D [0m|2024-11-24 15:37:39 1732459059359339| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059359396| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059359403| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059359472| QueryResult:MySQL thread id: 3431
+[34m D [0m|2024-11-24 15:37:39 1732459059359476| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059362047| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059362057| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059362061| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059362064| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059362067| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059362074| TEST[mariadb::types::JsonTest]:Cleared existing data
+[34m D [0m|2024-11-24 15:37:39 1732459059362127| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059362437| Executor:Preparing to execute query. Connection thread id: 3432
+[34m D [0m|2024-11-24 15:37:39 1732459059362446| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059362452| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059363335| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059363342| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059363366| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059363373| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059363377| Serializer:Resizing bind params array from 0 to 1
+[34m D [0m|2024-11-24 15:37:39 1732459059363384| Serializer:String value is null (polymorph is null)
+[34m D [0m|2024-11-24 15:37:39 1732459059363392| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059363401| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059363486| QueryResult:MySQL thread id: 3432
+[34m D [0m|2024-11-24 15:37:39 1732459059363494| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059364921| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059364927| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059364930| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059364932| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059364934| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059364939| TEST[mariadb::types::JsonTest]:Inserted nullptr value
+[34m D [0m|2024-11-24 15:37:39 1732459059364997| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059365265| Executor:Preparing to execute query. Connection thread id: 3433
+[34m D [0m|2024-11-24 15:37:39 1732459059365273| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059365278| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059365345| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059365352| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059365369| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059365375| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059365381| Serializer:Using BLOB type for string field, length=2
+[34m D [0m|2024-11-24 15:37:39 1732459059365388| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059365396| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059365472| QueryResult:MySQL thread id: 3433
+[34m D [0m|2024-11-24 15:37:39 1732459059365477| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059368034| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059368046| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059368050| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059368054| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059368056| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059368067| TEST[mariadb::types::JsonTest]:Inserted empty object
+[34m D [0m|2024-11-24 15:37:39 1732459059368324| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059368713| Executor:Preparing to execute query. Connection thread id: 3434
+[34m D [0m|2024-11-24 15:37:39 1732459059368723| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059368728| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059368847| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059368857| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059368884| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059368889| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059368896| Serializer:Using BLOB type for string field, length=2
+[34m D [0m|2024-11-24 15:37:39 1732459059368905| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059368914| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059369024| QueryResult:MySQL thread id: 3434
+[34m D [0m|2024-11-24 15:37:39 1732459059369030| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059374367| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059374382| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059374387| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059374390| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059374393| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059374406| TEST[mariadb::types::JsonTest]:Inserted empty array
+[34m D [0m|2024-11-24 15:37:39 1732459059374470| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059374805| Executor:Preparing to execute query. Connection thread id: 3435
+[34m D [0m|2024-11-24 15:37:39 1732459059374813| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059374817| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059374905| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059374912| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059374933| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059374938| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059374945| Serializer:Using BLOB type for string field, length=24
+[34m D [0m|2024-11-24 15:37:39 1732459059374954| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059374969| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059375067| QueryResult:MySQL thread id: 3435
+[34m D [0m|2024-11-24 15:37:39 1732459059375073| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059377673| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059377687| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059377691| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059377693| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059377695| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059377705| TEST[mariadb::types::JsonTest]:Inserted simple object
+[34m D [0m|2024-11-24 15:37:39 1732459059377752| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059378064| Executor:Preparing to execute query. Connection thread id: 3436
+[34m D [0m|2024-11-24 15:37:39 1732459059378070| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059378076| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059378162| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059378169| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059378191| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059378195| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059378200| Serializer:Using BLOB type for string field, length=52
+[34m D [0m|2024-11-24 15:37:39 1732459059378206| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059378214| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059378310| QueryResult:MySQL thread id: 3436
+[34m D [0m|2024-11-24 15:37:39 1732459059378316| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059380693| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059380702| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059380705| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059380707| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059380709| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059380715| TEST[mariadb::types::JsonTest]:Inserted array with objects
+[34m D [0m|2024-11-24 15:37:39 1732459059380778| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059381086| Executor:Preparing to execute query. Connection thread id: 3437
+[34m D [0m|2024-11-24 15:37:39 1732459059381095| Executor:Query template: INSERT INTO test_json (json_value) VALUES (?);
+[34m D [0m|2024-11-24 15:37:39 1732459059381100| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059381190| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059381196| Executor:Binding parameters...
+[34m D [0m|2024-11-24 15:37:39 1732459059381216| Serializer::serialize():classId=5, className=String, paramIndex=0, method=0x7ffff7f7b572
+[34m D [0m|2024-11-24 15:37:39 1732459059381222| Serializer:Serializing String value for paramIndex=0
+[34m D [0m|2024-11-24 15:37:39 1732459059381228| Serializer:Using BLOB type for string field, length=70
+[34m D [0m|2024-11-24 15:37:39 1732459059381236| Executor:Parameters bound successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059381244| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059381342| QueryResult:MySQL thread id: 3437
+[34m D [0m|2024-11-24 15:37:39 1732459059381348| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059382811| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059382818| ResultMapper:No metadata in init() (normal for non-SELECT queries)
+[34m D [0m|2024-11-24 15:37:39 1732459059382821| ResultMapper:Found 0 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059382823| ResultMapper:No metadata for RETURNING clause
+[34m D [0m|2024-11-24 15:37:39 1732459059382824| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059382830| TEST[mariadb::types::JsonTest]:Inserted nested object
+[34m D [0m|2024-11-24 15:37:39 1732459059382873| QueryResult:Statement cleaned up successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059383118| Executor:Preparing to execute query. Connection thread id: 3438
+[34m D [0m|2024-11-24 15:37:39 1732459059383124| Executor:Query template: SELECT * FROM test_json;
+[34m D [0m|2024-11-24 15:37:39 1732459059383127| Executor:Statement initialized. Address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059383190| Executor:Statement prepared successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059383216| ResultMapper:Binding field 'json_value' of type 252
+[34m D [0m|2024-11-24 15:37:39 1732459059945133| QueryResult:Executing statement...
+[34m D [0m|2024-11-24 15:37:39 1732459059945305| QueryResult:MySQL thread id: 3438
+[34m D [0m|2024-11-24 15:37:39 1732459059945311| QueryResult:Statement address: 0x55555570e670
+[34m D [0m|2024-11-24 15:37:39 1732459059945555| QueryResult:Statement executed successfully
+[34m D [0m|2024-11-24 15:37:39 1732459059945585| ResultMapper:Initialized column 0: json_value
+[34m D [0m|2024-11-24 15:37:39 1732459059945593| ResultMapper:Found 6 rows in result
+[34m D [0m|2024-11-24 15:37:39 1732459059945599| QueryResult:Result data initialized
+[34m D [0m|2024-11-24 15:37:39 1732459059945622| ResultMapper:Column value is null
+[34m D [0m|2024-11-24 15:37:39 1732459059945630| ResultMapper:Adding item to collection at index 0
+[34m D [0m|2024-11-24 15:37:39 1732459059945637| ResultMapper:Column name: json_value
+[34m D [0m|2024-11-24 15:37:39 1732459059945643| ResultMapper:Found property: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060162847| ResultMapper:Adding item to collection at index 1
+[34m D [0m|2024-11-24 15:37:40 1732459060162871| ResultMapper:Column name: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060162876| ResultMapper:Found property: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060365244| ResultMapper:Adding item to collection at index 2
+[34m D [0m|2024-11-24 15:37:40 1732459060365268| ResultMapper:Column name: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060365273| ResultMapper:Found property: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060566026| ResultMapper:Adding item to collection at index 3
+[34m D [0m|2024-11-24 15:37:40 1732459060566051| ResultMapper:Column name: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060566056| ResultMapper:Found property: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060764675| ResultMapper:Adding item to collection at index 4
+[34m D [0m|2024-11-24 15:37:40 1732459060764700| ResultMapper:Column name: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060764705| ResultMapper:Found property: json_value
+[34m D [0m|2024-11-24 15:37:40 1732459060963026| ResultMapper:Adding item to collection at index 5
+[34m D [0m|2024-11-24 15:37:40 1732459060963081| TEST[mariadb::types::JsonTest]:Query result:
+[
+  {
+    "json_value": null
+  },
+  {
+    "json_value": "{}"
+  },
+  {
+    "json_value": "[]"
+  },
+  {
+    "json_value": "{\"name\":\"John\",\"age\":30}"
+  },
+  {
+    "json_value": "[{\"id\":1,\"value\":\"first\"},{\"id\":2,\"value\":\"second\"}]"
+  },
+  {
+    "json_value": "{\"user\":{\"name\":\"John\",\"address\":{\"city\":\"New York\",\"country\":\"USA\"}}}"
+  }
+]
+[34m D [0m|2024-11-24 15:37:40 1732459060963086| TEST[mariadb::types::JsonTest]:All assertions passed successfully
+[34m D [0m|2024-11-24 15:37:40 1732459060963250| QueryResult:Statement cleaned up successfully
+[32m I [0m|2024-11-24 15:37:40 1732459060973705| TEST[mariadb::types::JsonTest]:[1mFINISHED[0m - [1;32msuccess![0m
+[32m I [0m|2024-11-24 15:37:40 1732459060973723| TEST[mariadb::types::JsonTest]:[33m1615390(micro), 29(objs)[0m
 
 
 Environment:
 objectsCount = 0
-objectsCreated = 105
+objectsCreated = 134
 
-[Inferior 1 (process 355716) exited normally]
+[Inferior 1 (process 356546) exited normally]
 [INFO] Test execution completed
-=== Test Run Completed at 2024-11-24 15:31:14 ===
+=== Test Run Completed at 2024-11-24 15:37:40 ===
 [INFO] Test execution completed
-=== Test Run Completed at 2024-11-24 15:31:14 ===
+=== Test Run Completed at 2024-11-24 15:37:40 ===
 Analyzing log file for critical errors...
 
 === Test Summary ===

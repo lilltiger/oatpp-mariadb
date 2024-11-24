@@ -15,6 +15,7 @@
 #include "oatpp-mariadb/transaction/TransactionTest.hpp"
 #include "oatpp-mariadb/crud/CrudTest.hpp"
 #include "oatpp-mariadb/crud/ProductCrudTest.hpp"
+#include "oatpp-mariadb/types/JsonTest.hpp"
 
 #include "oatpp/core/base/Environment.hpp"
 
@@ -57,6 +58,10 @@ void runSetTest() {
   OATPP_RUN_TEST(oatpp::test::mariadb::types::SetTest);
 }
 
+void runJsonTest() {
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::JsonTest);
+}
+
 }
 
 int main() {
@@ -67,6 +72,7 @@ int main() {
   runYearTest();
   runEnumTest();
   runSetTest();
+  runJsonTest();
 
   /* Print how much objects were created during app running, and what have left-probably leaked */
   /* Disable object counting for release builds using '-D OATPP_DISABLE_ENV_OBJECT_COUNTERS' flag for better performance */

@@ -27,6 +27,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/EnumTest.cpp
         oatpp-mariadb/types/SetTest.hpp
         oatpp-mariadb/types/SetTest.cpp
+        oatpp-mariadb/types/JsonTest.hpp
+        oatpp-mariadb/types/JsonTest.cpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp

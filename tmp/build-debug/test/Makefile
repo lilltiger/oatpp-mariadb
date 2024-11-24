@@ -449,6 +449,30 @@ oatpp-mariadb/types/Int64Test.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.s
 .PHONY : oatpp-mariadb/types/Int64Test.cpp.s
 
+oatpp-mariadb/types/JsonTest.o: oatpp-mariadb/types/JsonTest.cpp.o
+.PHONY : oatpp-mariadb/types/JsonTest.o
+
+# target to build an object file
+oatpp-mariadb/types/JsonTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/JsonTest.cpp.o
+.PHONY : oatpp-mariadb/types/JsonTest.cpp.o
+
+oatpp-mariadb/types/JsonTest.i: oatpp-mariadb/types/JsonTest.cpp.i
+.PHONY : oatpp-mariadb/types/JsonTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/JsonTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/JsonTest.cpp.i
+.PHONY : oatpp-mariadb/types/JsonTest.cpp.i
+
+oatpp-mariadb/types/JsonTest.s: oatpp-mariadb/types/JsonTest.cpp.s
+.PHONY : oatpp-mariadb/types/JsonTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/JsonTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/JsonTest.cpp.s
+.PHONY : oatpp-mariadb/types/JsonTest.cpp.s
+
 oatpp-mariadb/types/NumericTest.o: oatpp-mariadb/types/NumericTest.cpp.o
 .PHONY : oatpp-mariadb/types/NumericTest.o
 
@@ -664,6 +688,9 @@ help:
 	@echo "... oatpp-mariadb/types/Int64Test.o"
 	@echo "... oatpp-mariadb/types/Int64Test.i"
 	@echo "... oatpp-mariadb/types/Int64Test.s"
+	@echo "... oatpp-mariadb/types/JsonTest.o"
+	@echo "... oatpp-mariadb/types/JsonTest.i"
+	@echo "... oatpp-mariadb/types/JsonTest.s"
 	@echo "... oatpp-mariadb/types/NumericTest.o"
 	@echo "... oatpp-mariadb/types/NumericTest.i"
 	@echo "... oatpp-mariadb/types/NumericTest.s"

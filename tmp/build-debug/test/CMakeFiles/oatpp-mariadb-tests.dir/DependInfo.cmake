@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/BooleanTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/DateTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/DateTimeTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o.d"
+  "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/EnumTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Float64Test.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/Int64Test.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/NumericTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o.d"
@@ -23,6 +24,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/TimeTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/TimeTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/TimeTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/UInt8Test.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/VarCharTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o.d"
+  "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/types/YearTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.o.d"
   "" "test/oatpp-mariadb-tests" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/link.d"
   )
 

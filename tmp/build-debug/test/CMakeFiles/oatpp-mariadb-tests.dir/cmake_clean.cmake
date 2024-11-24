@@ -16,6 +16,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o"
@@ -30,6 +32,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.o.d"
   "oatpp-mariadb-tests"
   "oatpp-mariadb-tests.pdb"
 )

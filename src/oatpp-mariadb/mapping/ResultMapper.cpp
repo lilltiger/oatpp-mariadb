@@ -150,6 +150,14 @@ void ResultMapper::ResultData::init() {
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = 17;  // -838:59:59.000000 + null terminator
             break;
+          case MYSQL_TYPE_YEAR:
+            bind.buffer_type = MYSQL_TYPE_SHORT;  // YEAR is stored as a 2-byte integer
+            bufferSize = sizeof(int16_t);
+            break;
+          case MYSQL_TYPE_ENUM:
+            bind.buffer_type = MYSQL_TYPE_STRING;
+            bufferSize = fields[i].length + 1;  // Add 1 for null terminator
+            break;
           default:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;
@@ -391,6 +399,19 @@ void ResultMapper::ResultData::bindResultsForCache() {
         bindResults[i].buffer = bindBuffers[i].data();
         bindResults[i].buffer_length = 17;
         break;
+      case MYSQL_TYPE_YEAR:
+        bindBuffers[i].resize(sizeof(int16_t));
+        bindResults[i].buffer_type = MYSQL_TYPE_SHORT;
+        bindResults[i].buffer = bindBuffers[i].data();
+        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
+        bindResults[i].buffer_length = sizeof(int16_t);
+        break;
+      case MYSQL_TYPE_ENUM:
+        bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
+        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+        bindResults[i].buffer = bindBuffers[i].data();
+        bindResults[i].buffer_length = fields[i].length + 1;
+        break;
       default:
         throw std::runtime_error("Buffer type is not supported");
     }
@@ -532,6 +553,27 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
         throw std::runtime_error("Failed to allocate memory for TIME buffer");
       }
       bind.buffer_length = 17;
+      break;
+    }
+    case MYSQL_TYPE_YEAR: {
+      bind.buffer_type = MYSQL_TYPE_SHORT;
+      bind.buffer = malloc(sizeof(int16_t));
+      if(!bind.buffer) {
+        free(bind.is_null);
+        throw std::runtime_error("Failed to allocate memory for YEAR buffer");
+      }
+      bind.is_unsigned = fieldInfo->isUnsigned;
+      bind.buffer_length = sizeof(int16_t);
+      break;
+    }
+    case MYSQL_TYPE_ENUM: {
+      bind.buffer_type = MYSQL_TYPE_STRING;
+      bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
+      if(!bind.buffer) {
+        free(bind.is_null);
+        throw std::runtime_error("Failed to allocate memory for ENUM buffer");
+      }
+      bind.buffer_length = fieldInfo->columnLength + 1;
       break;
     }
       

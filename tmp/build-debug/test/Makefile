@@ -377,6 +377,30 @@ oatpp-mariadb/types/DateTimeTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.s
 .PHONY : oatpp-mariadb/types/DateTimeTest.cpp.s
 
+oatpp-mariadb/types/EnumTest.o: oatpp-mariadb/types/EnumTest.cpp.o
+.PHONY : oatpp-mariadb/types/EnumTest.o
+
+# target to build an object file
+oatpp-mariadb/types/EnumTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.o
+.PHONY : oatpp-mariadb/types/EnumTest.cpp.o
+
+oatpp-mariadb/types/EnumTest.i: oatpp-mariadb/types/EnumTest.cpp.i
+.PHONY : oatpp-mariadb/types/EnumTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/EnumTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.i
+.PHONY : oatpp-mariadb/types/EnumTest.cpp.i
+
+oatpp-mariadb/types/EnumTest.s: oatpp-mariadb/types/EnumTest.cpp.s
+.PHONY : oatpp-mariadb/types/EnumTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/EnumTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/EnumTest.cpp.s
+.PHONY : oatpp-mariadb/types/EnumTest.cpp.s
+
 oatpp-mariadb/types/Float64Test.o: oatpp-mariadb/types/Float64Test.cpp.o
 .PHONY : oatpp-mariadb/types/Float64Test.o
 
@@ -545,6 +569,30 @@ oatpp-mariadb/types/VarCharTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.s
 .PHONY : oatpp-mariadb/types/VarCharTest.cpp.s
 
+oatpp-mariadb/types/YearTest.o: oatpp-mariadb/types/YearTest.cpp.o
+.PHONY : oatpp-mariadb/types/YearTest.o
+
+# target to build an object file
+oatpp-mariadb/types/YearTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.o
+.PHONY : oatpp-mariadb/types/YearTest.cpp.o
+
+oatpp-mariadb/types/YearTest.i: oatpp-mariadb/types/YearTest.cpp.i
+.PHONY : oatpp-mariadb/types/YearTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/YearTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.i
+.PHONY : oatpp-mariadb/types/YearTest.cpp.i
+
+oatpp-mariadb/types/YearTest.s: oatpp-mariadb/types/YearTest.cpp.s
+.PHONY : oatpp-mariadb/types/YearTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/YearTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/YearTest.cpp.s
+.PHONY : oatpp-mariadb/types/YearTest.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -583,6 +631,9 @@ help:
 	@echo "... oatpp-mariadb/types/DateTimeTest.o"
 	@echo "... oatpp-mariadb/types/DateTimeTest.i"
 	@echo "... oatpp-mariadb/types/DateTimeTest.s"
+	@echo "... oatpp-mariadb/types/EnumTest.o"
+	@echo "... oatpp-mariadb/types/EnumTest.i"
+	@echo "... oatpp-mariadb/types/EnumTest.s"
 	@echo "... oatpp-mariadb/types/Float64Test.o"
 	@echo "... oatpp-mariadb/types/Float64Test.i"
 	@echo "... oatpp-mariadb/types/Float64Test.s"
@@ -604,6 +655,9 @@ help:
 	@echo "... oatpp-mariadb/types/VarCharTest.o"
 	@echo "... oatpp-mariadb/types/VarCharTest.i"
 	@echo "... oatpp-mariadb/types/VarCharTest.s"
+	@echo "... oatpp-mariadb/types/YearTest.o"
+	@echo "... oatpp-mariadb/types/YearTest.i"
+	@echo "... oatpp-mariadb/types/YearTest.s"
 .PHONY : help
 
 

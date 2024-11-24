@@ -1,9 +1,9 @@
-=== Build Started at lör 23 nov 2024 15:53:39 CET ===
+=== Build Started at sön 24 nov 2024 04:26:04 CET ===
 Build Configuration:
-- Build Type: Release
+- Build Type: Debug
 - Clean Build: 0
-Using build directory: tmp/build-release
-Configuring Release build...
+Using build directory: tmp/build-debug
+Configuring Debug build...
 Running cmake...
 CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
   Compatibility with CMake < 3.10 will be removed from a future version of
@@ -39,12 +39,10 @@ OATPP_THIS_MODULE_DIRECTORIES=oatpp-mariadb
 target_link_oatpp(oatpp-mariadb-tests) to installed oatpp lib
 -- Configuring done (0.0s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release
+-- Build files have been written to: /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug
 Building project...
-[  4%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/ResultMapper.cpp.o
-[  8%] Linking CXX shared library liboatpp-mariadb.so
-[ 43%] Built target oatpp-mariadb
-[ 47%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o
-[ 52%] Linking CXX executable oatpp-mariadb-tests
+[ 40%] Built target oatpp-mariadb
+[ 44%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o
+[ 48%] Linking CXX executable oatpp-mariadb-tests
 [100%] Built target oatpp-mariadb-tests
-Release build completed successfully!
+Debug build completed successfully!

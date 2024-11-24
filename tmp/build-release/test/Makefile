@@ -305,6 +305,30 @@ oatpp-mariadb/transaction/TransactionTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/transaction/TransactionTest.cpp.s
 .PHONY : oatpp-mariadb/transaction/TransactionTest.cpp.s
 
+oatpp-mariadb/types/BooleanTest.o: oatpp-mariadb/types/BooleanTest.cpp.o
+.PHONY : oatpp-mariadb/types/BooleanTest.o
+
+# target to build an object file
+oatpp-mariadb/types/BooleanTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o
+.PHONY : oatpp-mariadb/types/BooleanTest.cpp.o
+
+oatpp-mariadb/types/BooleanTest.i: oatpp-mariadb/types/BooleanTest.cpp.i
+.PHONY : oatpp-mariadb/types/BooleanTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/BooleanTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.i
+.PHONY : oatpp-mariadb/types/BooleanTest.cpp.i
+
+oatpp-mariadb/types/BooleanTest.s: oatpp-mariadb/types/BooleanTest.cpp.s
+.PHONY : oatpp-mariadb/types/BooleanTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/BooleanTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.s
+.PHONY : oatpp-mariadb/types/BooleanTest.cpp.s
+
 oatpp-mariadb/types/DateTest.o: oatpp-mariadb/types/DateTest.cpp.o
 .PHONY : oatpp-mariadb/types/DateTest.o
 
@@ -502,6 +526,9 @@ help:
 	@echo "... oatpp-mariadb/transaction/TransactionTest.o"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.i"
 	@echo "... oatpp-mariadb/transaction/TransactionTest.s"
+	@echo "... oatpp-mariadb/types/BooleanTest.o"
+	@echo "... oatpp-mariadb/types/BooleanTest.i"
+	@echo "... oatpp-mariadb/types/BooleanTest.s"
 	@echo "... oatpp-mariadb/types/DateTest.o"
 	@echo "... oatpp-mariadb/types/DateTest.i"
 	@echo "... oatpp-mariadb/types/DateTest.s"

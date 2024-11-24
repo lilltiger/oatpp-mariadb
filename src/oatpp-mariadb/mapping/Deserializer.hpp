@@ -51,20 +51,13 @@ private:
   static oatpp::Void deserializeString(const Deserializer* _this, const InData& data, const Type* type);
 
   template<class IntWrapper>
-  static oatpp::Void deserializeInt(const Deserializer* _this, const InData& data, const Type* type) {
-    (void) _this;
-    (void) type;
-
-    if(data.isNull) {
-      return IntWrapper();
-    }
-    auto value = deInt(data);
-    return IntWrapper((typename IntWrapper::UnderlyingType) value);
-  }
+  static oatpp::Void deserializeInt(const Deserializer* _this, const InData& data, const Type* type);
 
   static oatpp::Void deserializeFloat32(const Deserializer* _this, const InData& data, const Type* type);
 
   static oatpp::Void deserializeFloat64(const Deserializer* _this, const InData& data, const Type* type);
+
+  static oatpp::Void deserializeBoolean(const Deserializer* _this, const InData& data, const Type* type);
 
   static oatpp::Void deserializeAny(const Deserializer* _this, const InData& data, const Type* type);
 

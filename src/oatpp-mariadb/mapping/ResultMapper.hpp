@@ -78,6 +78,21 @@ public:
     std::vector<MYSQL_BIND> bindResults;
 
     /**
+     * Null indicators for bound columns.
+     */
+    std::vector<my_bool> bindIsNull;
+
+    /**
+     * Length indicators for bound columns.
+     */
+    std::vector<unsigned long> bindLengths;
+
+    /**
+     * Data buffers for bound columns.
+     */
+    std::vector<std::vector<char>> bindBuffers;
+
+    /**
      * Meta results, the null represents that it is no result.
      */
     MYSQL_RES* metaResults;
@@ -102,6 +117,18 @@ public:
   };
 
 private:
+  struct FieldInfo {
+    std::string name;
+    enum_field_types type;
+    bool isUnsigned;
+    unsigned long columnLength;
+    
+    FieldInfo(const std::string& n, enum_field_types t, bool u, unsigned long len)
+      : name(n), type(t), isUnsigned(u), columnLength(len) {}
+  };
+
+  void initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& fieldInfo);
+
   typedef oatpp::data::mapping::type::Type Type;
   typedef oatpp::Void (*ReadOneRowMethod)(ResultMapper*, ResultData*, const Type*);
   typedef oatpp::Void (*ReadRowsMethod)(ResultMapper*, ResultData*, const Type*, v_int64);

@@ -6,6 +6,8 @@
 #include "oatpp-mariadb/types/DateTest.hpp"
 #include "oatpp-mariadb/types/DateTimeTest.hpp"
 #include "oatpp-mariadb/types/VarCharTest.hpp"
+#include "oatpp-mariadb/types/BooleanTest.hpp"
+#include "oatpp-mariadb/types/ReturningTest.hpp"
 #include "oatpp-mariadb/transaction/TransactionTest.hpp"
 #include "oatpp-mariadb/crud/CrudTest.hpp"
 #include "oatpp-mariadb/crud/ProductCrudTest.hpp"
@@ -18,15 +20,17 @@ namespace {
 
 void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::ql_template::ParserTest);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::Int64Test);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::Int64Test);
+ // OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::UInt8Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::NumericTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);
 }
 

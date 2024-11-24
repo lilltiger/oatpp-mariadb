@@ -5,6 +5,7 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/mapping/ResultMapper.hpp
         oatpp-mariadb/mapping/Serializer.cpp
         oatpp-mariadb/mapping/Serializer.hpp
+        oatpp-mariadb/mapping/JsonHelper.hpp
         oatpp-mariadb/ql_template/Parser.cpp
         oatpp-mariadb/ql_template/Parser.hpp
         oatpp-mariadb/ql_template/TemplateValueProvider.cpp

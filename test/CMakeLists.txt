@@ -15,6 +15,10 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/DateTimeTest.cpp
         oatpp-mariadb/types/VarCharTest.hpp
         oatpp-mariadb/types/VarCharTest.cpp
+        oatpp-mariadb/types/BooleanTest.hpp
+        oatpp-mariadb/types/BooleanTest.cpp
+        oatpp-mariadb/types/ReturningTest.hpp
+        oatpp-mariadb/types/ReturningTest.cpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp

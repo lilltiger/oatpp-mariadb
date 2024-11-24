@@ -2,6 +2,7 @@
 #include "../utils/EnvLoader.hpp"
 
 #include "oatpp-mariadb/orm.hpp"
+#include "oatpp-mariadb/mapping/JsonHelper.hpp"
 #include "oatpp/parser/json/mapping/ObjectMapper.hpp"
 #include "oatpp/core/Types.hpp"
 
@@ -155,12 +156,28 @@ void Int64Test::onRun() {
 
       auto dataset = res->fetch<oatpp::Vector<oatpp::Object<Int64Row>>>();
       OATPP_ASSERT(dataset->size() == 4);
+      OATPP_LOGD(TAG, "Fetched %d rows from database", dataset->size());
 
       // Print results
       oatpp::parser::json::mapping::ObjectMapper om;
       om.getSerializer()->getConfig()->useBeautifier = true;
+      OATPP_LOGD(TAG, "Setting up ObjectMapper with beautifier enabled");
+      
+      oatpp::mariadb::mapping::JsonHelper::setupIntegerSerializers(om);
+      OATPP_LOGD(TAG, "Integer serializers configured");
+
+      // Log each row before serialization
+      for(size_t i = 0; i < dataset->size(); i++) {
+        auto& row = dataset[i];
+        OATPP_LOGD(TAG, "Row[%d] before serialization: signed_value=%s, unsigned_value=%s",
+                   i,
+                   (row->signed_value ? std::to_string(*(row->signed_value)).c_str() : "null"),
+                   (row->unsigned_value ? std::to_string(*(row->unsigned_value)).c_str() : "null"));
+      }
+
+      OATPP_LOGD(TAG, "Attempting to serialize dataset");
       auto str = om.writeToString(dataset);
-      OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
+      OATPP_LOGD(TAG, "Serialization successful. Result:\n%s", str->c_str());
 
       // Verify nullptr values
       {

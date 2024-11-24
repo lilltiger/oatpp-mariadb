@@ -43,3 +43,6 @@ build/
 
 # Environment files
 .env
+
+# AI instructions
+.aiinstructions

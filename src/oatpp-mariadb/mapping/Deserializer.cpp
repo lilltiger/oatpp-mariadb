@@ -8,7 +8,7 @@ Deserializer::InData::InData(MYSQL_BIND* pBind,
   bind = pBind;
   typeResolver = pTypeResolver;
   oid = bind->buffer_type;
-  isNull = (*bind->is_null == 1);
+  isNull = (bind->is_null != nullptr && *bind->is_null == 1);
 }
 
 Deserializer::Deserializer() {
@@ -17,6 +17,7 @@ Deserializer::Deserializer() {
 
   setDeserializerMethod(data::mapping::type::__class::String::CLASS_ID, &Deserializer::deserializeString);
   setDeserializerMethod(data::mapping::type::__class::Any::CLASS_ID, &Deserializer::deserializeAny);
+  setDeserializerMethod(data::mapping::type::__class::Boolean::CLASS_ID, &Deserializer::deserializeBoolean);
 
   setDeserializerMethod(data::mapping::type::__class::Int8::CLASS_ID, &Deserializer::deserializeInt<oatpp::Int8>);
   setDeserializerMethod(data::mapping::type::__class::UInt8::CLASS_ID, &Deserializer::deserializeInt<oatpp::UInt8>);
@@ -153,67 +154,159 @@ oatpp::Void Deserializer::deserializeFloat32(const Deserializer* _this, const In
 }
 
 oatpp::Void Deserializer::deserializeFloat64(const Deserializer* _this, const InData& data, const Type* type) {
+  OATPP_LOGD("Deserializer", "Deserializing Float64 value");
+  
+  if(data.isNull) {
+    OATPP_LOGD("Deserializer", "Float64 value is null");
+    return oatpp::Float64();
+  }
+  
+  double value = 0;
+  
+  switch(data.oid) {
+    case MYSQL_TYPE_TINY: {
+      value = static_cast<double>(*static_cast<int8_t*>(data.bind->buffer));
+      break;
+    }
+    case MYSQL_TYPE_SHORT: {
+      value = static_cast<double>(*static_cast<int16_t*>(data.bind->buffer));
+      break;
+    }
+    case MYSQL_TYPE_LONG: {
+      value = static_cast<double>(*static_cast<int32_t*>(data.bind->buffer));
+      break;
+    }
+    case MYSQL_TYPE_LONGLONG: {
+      value = static_cast<double>(*static_cast<int64_t*>(data.bind->buffer));
+      break;
+    }
+    case MYSQL_TYPE_FLOAT: {
+      value = static_cast<double>(*static_cast<float*>(data.bind->buffer));
+      break;
+    }
+    case MYSQL_TYPE_DOUBLE: {
+      value = *static_cast<double*>(data.bind->buffer);
+      break;
+    }
+    default:
+      OATPP_LOGE("Deserializer", "Unsupported buffer type for Float64: %d", data.oid);
+      throw std::runtime_error("Unsupported buffer type for Float64: " + std::to_string(data.oid));
+  }
+  
+  OATPP_LOGD("Deserializer", "Float64 value: %f", value);
+  return oatpp::Float64(value);
+}
+
+template<class IntWrapper>
+oatpp::Void Deserializer::deserializeInt(const Deserializer* _this, const InData& data, const Type* type) {
   (void) _this;
   (void) type;
 
   if(data.isNull) {
-    return oatpp::Float64();
+    OATPP_LOGD("Deserializer", "Int value is null");
+    return IntWrapper();
   }
 
-  double value = 0;
+  if (std::is_same<IntWrapper, oatpp::Int64>::value || std::is_same<IntWrapper, oatpp::UInt64>::value) {
+    switch(data.oid) {
+      case MYSQL_TYPE_LONGLONG: {
+        if (data.bind->is_unsigned) {
+          uint64_t value = *static_cast<uint64_t*>(data.bind->buffer);
+          OATPP_LOGD("Deserializer", "Unsigned Int64 value: %llu", value);
+          if (std::is_same<IntWrapper, oatpp::UInt64>::value) {
+            return IntWrapper(value);
+          } else {
+            return IntWrapper(static_cast<int64_t>(value));
+          }
+        } else {
+          int64_t value = *static_cast<int64_t*>(data.bind->buffer);
+          OATPP_LOGD("Deserializer", "Signed Int64 value: %lld", value);
+          if (std::is_same<IntWrapper, oatpp::UInt64>::value) {
+            return IntWrapper(static_cast<uint64_t>(value));
+          } else {
+            return IntWrapper(value);
+          }
+        }
+      }
+      default: {
+        auto value = deInt(data);
+        if (std::is_same<IntWrapper, oatpp::UInt64>::value) {
+          return IntWrapper(static_cast<uint64_t>(value));
+        } else {
+          return IntWrapper(value);
+        }
+      }
+    }
+  }
+
+  auto value = deInt(data);
+  return IntWrapper((typename IntWrapper::UnderlyingType) value);
+}
+
+// Explicit template instantiations
+template oatpp::Void Deserializer::deserializeInt<oatpp::Int8>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::UInt8>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::Int16>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::UInt16>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::Int32>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::UInt32>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::Int64>(const Deserializer* _this, const InData& data, const Type* type);
+template oatpp::Void Deserializer::deserializeInt<oatpp::UInt64>(const Deserializer* _this, const InData& data, const Type* type);
+
+oatpp::Void Deserializer::deserializeBoolean(const Deserializer* _this, const InData& data, const Type* type) {
+  (void) _this;
+  (void) type;
+
+  if(data.isNull || data.bind->is_null_value) {
+    OATPP_LOGD("Deserializer", "Deserializing null boolean value");
+    return oatpp::Boolean();
+  }
 
   switch(data.oid) {
     case MYSQL_TYPE_TINY: {
-      value = static_cast<double>(*(int8_t*)data.bind->buffer);
-      std::memset(data.bind->buffer, 0, sizeof(int8_t));
-      break;
-    }
-    case MYSQL_TYPE_SHORT: {
-      value = static_cast<double>(*(int16_t*)data.bind->buffer);
-      std::memset(data.bind->buffer, 0, sizeof(int16_t));
-      break;
-    }
-    case MYSQL_TYPE_LONG: {
-      value = static_cast<double>(*(int32_t*)data.bind->buffer);
-      std::memset(data.bind->buffer, 0, sizeof(int32_t));
-      break;
-    }
-    case MYSQL_TYPE_LONGLONG: {
-      value = static_cast<double>(*(int64_t*)data.bind->buffer);
-      std::memset(data.bind->buffer, 0, sizeof(int64_t));
-      break;
-    }
-    case MYSQL_TYPE_FLOAT: {
-      value = static_cast<double>(*(float*)data.bind->buffer);
-      std::memset(data.bind->buffer, 0, sizeof(float));
-      break;
-    }
-    case MYSQL_TYPE_DOUBLE: {
-      value = *(double*)data.bind->buffer;
-      std::memset(data.bind->buffer, 0, sizeof(double));
-      break;
+      bool value;
+      if (data.bind->is_unsigned) {
+        auto rawValue = *static_cast<unsigned char*>(data.bind->buffer);
+        value = (rawValue != 0);
+        OATPP_LOGD("Deserializer", "Deserializing unsigned boolean value: raw=%u, result=%d", rawValue, value);
+      } else {
+        auto rawValue = *static_cast<signed char*>(data.bind->buffer);
+        value = (rawValue != 0);
+        OATPP_LOGD("Deserializer", "Deserializing signed boolean value: raw=%d, result=%d", rawValue, value);
+      }
+      return oatpp::Boolean(value);
     }
     default:
-      throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeFloat64()]: Error. Unsupported buffer type: " + std::to_string(data.oid));
+      OATPP_LOGD("Deserializer", "Unsupported buffer type: %d", data.oid);
+      throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeBoolean()]: Error. Unsupported buffer type: " + std::to_string(data.oid));
   }
-
-  return oatpp::Float64(value);
 }
 
-oatpp::Void Deserializer::deserializeAny(const Deserializer* _this, const InData& data, const Type* type) {
+oatpp::Void Deserializer::deserializeAny(const Deserializer* _this, const InData& inData, const Type* type) {
 
   (void) type;
 
-  if(data.isNull) {
+  if(inData.isNull) {
     return oatpp::Void(Any::Class::getType());
   }
 
   const Type* valueType;
 
-  switch(data.oid) {
+  switch(inData.oid) {
     case MYSQL_TYPE_TINY:
-      valueType = oatpp::Int8::Class::getType();
-      break;
+      if (inData.bind->is_unsigned) {
+        auto value = *(static_cast<unsigned char*>(inData.bind->buffer));
+        if (type == oatpp::Boolean::Class::getType()) {
+          return oatpp::Boolean(value != 0);
+        }
+        return oatpp::UInt8(value);
+      } else {
+        auto value = *(static_cast<signed char*>(inData.bind->buffer));
+        if (type == oatpp::Boolean::Class::getType()) {
+          return oatpp::Boolean(value != 0);
+        }
+        return oatpp::Int8(value);
+      }
     case MYSQL_TYPE_SHORT:
       valueType = oatpp::Int16::Class::getType();
       break;
@@ -236,7 +329,7 @@ oatpp::Void Deserializer::deserializeAny(const Deserializer* _this, const InData
       throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeAny()]: Error. Unknown OID.");
   }
 
-  auto value = _this->deserialize(data, valueType);
+  auto value = _this->deserialize(inData, valueType);
   auto anyHandle = std::make_shared<data::mapping::type::AnyHandle>(value.getPtr(), value.getValueType());
   return oatpp::Void(anyHandle, Any::Class::getType());
 

@@ -36,37 +36,22 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::YearTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::EnumTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::YearTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::EnumTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::SetTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::JsonTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::BinaryTest);
+
 }
 
-void runTimeTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
-}
 
-void runYearTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::YearTest);
-}
-
-void runEnumTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::EnumTest);
-}
-
-void runSetTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::SetTest);
-}
-
-void runJsonTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::JsonTest);
-}
-
-void runBinaryTest() {
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::BinaryTest);
-}
 
 }
 
@@ -74,14 +59,7 @@ int main() {
 
   oatpp::base::Environment::init();
 
-/*
-  runTimeTest();
-  runYearTest();
-  runEnumTest();
-  runSetTest();
-  runJsonTest();
-  */
-  runBinaryTest();
+  runTests();
 
   /* Print how much objects were created during app running, and what have left-probably leaked */
   /* Disable object counting for release builds using '-D OATPP_DISABLE_ENV_OBJECT_COUNTERS' flag for better performance */

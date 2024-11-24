@@ -1,0 +1,16 @@
+feat: Implement binary data handling in MariaDB integration
+
+Add support for storing and retrieving binary data with proper JSON serialization:
+
+- Add BinaryTest to validate binary data handling
+- Implement custom JSON serializer for binary data that:
+  - Detects binary content by checking for non-printable chars
+  - Converts binary data to hex string representation in JSON
+  - Preserves regular string data as-is
+- Use MYSQL_TYPE_BLOB for binary storage and MYSQL_TYPE_STRING for text
+- Add tmp/ directory to .gitignore
+- Clean up test runner code structure
+
+The implementation ensures accurate handling of binary data while maintaining
+readable JSON output. Binary values are stored efficiently in the database
+and presented as hex strings (e.g. "FF00") in JSON responses.

@@ -41,6 +41,9 @@ cmake-build-debug/
 # custom build
 build/
 
+# Build folders
+tmp/
+
 # Environment files
 .env
 

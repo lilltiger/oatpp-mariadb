@@ -20,13 +20,13 @@ namespace {
 
 void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::ql_template::ParserTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::Int64Test);
- // OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::Int64Test);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::UInt8Test);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::NumericTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTimeTest);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);

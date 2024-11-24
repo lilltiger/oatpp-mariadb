@@ -617,98 +617,46 @@ void Serializer::serializeFloat64(const Serializer* _this, MYSQL_STMT* stmt, v_u
     throw std::runtime_error("MySQL statement is null");
   }
   
-  // Ensure we have enough space in the bind params array
   if(paramIndex >= _this->m_bindParams.size()) {
     OATPP_LOGD("Serializer", "Resizing bind params array from %d to %d", _this->m_bindParams.size(), paramIndex + 1);
-    size_t oldSize = _this->m_bindParams.size();
     _this->m_bindParams.resize(paramIndex + 1);
-    
-    // Initialize new elements
-    for(size_t i = oldSize; i < _this->m_bindParams.size(); i++) {
-      MYSQL_BIND& bind = _this->m_bindParams[i];
-      std::memset(&bind, 0, sizeof(MYSQL_BIND));
-      
-      // Allocate buffer for the value
-      bind.buffer = malloc(sizeof(double));
-      if(!_this->m_bindParams[i].buffer) {
-        OATPP_LOGE("Serializer", "Failed to allocate memory for Float64 value at index %zu", i);
-        throw std::runtime_error("Failed to allocate memory for Float64 value");
-      }
-      std::memset(bind.buffer, 0, sizeof(double));
-      
-      // Allocate memory for is_null indicator
-      bind.is_null = (my_bool*)malloc(sizeof(my_bool));
-      if(!_this->m_bindParams[i].is_null) {
-        free(_this->m_bindParams[i].buffer);
-        OATPP_LOGE("Serializer", "Failed to allocate memory for is_null indicator at index %zu", i);
-        throw std::runtime_error("Failed to allocate memory for is_null indicator");
-      }
-      *_this->m_bindParams[i].is_null = 0;
-      
-      // Allocate memory for error indicator
-      bind.error = (my_bool*)malloc(sizeof(my_bool));
-      if(!_this->m_bindParams[i].error) {
-        free(_this->m_bindParams[i].buffer);
-        free(_this->m_bindParams[i].is_null);
-        OATPP_LOGE("Serializer", "Failed to allocate memory for error indicator at index %zu", i);
-        throw std::runtime_error("Failed to allocate memory for error indicator");
-      }
-      *_this->m_bindParams[i].error = 0;
-      
-      // Allocate memory for length
-      bind.length = (unsigned long*)malloc(sizeof(unsigned long));
-      if(!_this->m_bindParams[i].length) {
-        free(_this->m_bindParams[i].buffer);
-        free(_this->m_bindParams[i].is_null);
-        free(_this->m_bindParams[i].error);
-        OATPP_LOGE("Serializer", "Failed to allocate memory for length at index %zu", i);
-        throw std::runtime_error("Failed to allocate memory for length");
-      }
-      *_this->m_bindParams[i].length = sizeof(double);
-      
-      // Initialize the bind structure
-      bind.buffer_type = MYSQL_TYPE_DOUBLE;
-      bind.buffer_length = sizeof(double);
-      bind.is_unsigned = 0;
-      bind.length_value = 0;  // Fixed length type
-      bind.error_value = 0;
-    }
   }
   
   auto& bind = _this->m_bindParams[paramIndex];
+  std::memset(&bind, 0, sizeof(MYSQL_BIND));
+  bind.buffer_type = MYSQL_TYPE_DOUBLE;
+  bind.is_unsigned = 0;  // Not applicable for doubles, but set for consistency
+  bind.length_value = sizeof(double);
+  bind.length = &bind.length_value;
+  bind.buffer_length = sizeof(double);
+  
+  // Allocate buffer regardless of value to maintain consistent memory layout
+  bind.buffer = malloc(sizeof(double));
+  if(!bind.buffer) {
+    OATPP_LOGE("Serializer", "Failed to allocate memory for Float64 value");
+    throw std::runtime_error("Failed to allocate memory for Float64 value");
+  }
+  
+  // Initialize buffer to 0
+  std::memset(bind.buffer, 0, sizeof(double));
   
   if(polymorph) {
     auto value = polymorph.cast<oatpp::Float64>();
     if(value) {
       *static_cast<double*>(bind.buffer) = static_cast<double>(*value);
-      *bind.is_null = 0;
+      bind.is_null_value = 0;
       OATPP_LOGD("Serializer", "Float64 value set: %f", *static_cast<double*>(bind.buffer));
     } else {
-      *bind.is_null = 1;
+      bind.is_null_value = 1;
       OATPP_LOGD("Serializer", "Float64 value is null");
     }
   } else {
-    *bind.is_null = 1;
+    bind.is_null_value = 1;
     OATPP_LOGD("Serializer", "Float64 value is null (polymorph is null)");
   }
   
-  // Only bind parameters if this is the last parameter or if we're binding a single parameter
-  if(paramIndex == _this->m_bindParams.size() - 1) {
-    OATPP_LOGD("Serializer", "Binding all parameters...");
-    for(size_t i = 0; i < _this->m_bindParams.size(); i++) {
-      OATPP_LOGD("Serializer", "Parameter %zu: buffer_type=%d, is_null=%d, buffer_length=%lu", 
-                 i, _this->m_bindParams[i].buffer_type, 
-                 _this->m_bindParams[i].is_null ? *_this->m_bindParams[i].is_null : -1,
-                 _this->m_bindParams[i].buffer_length);
-    }
-    
-    if(mysql_stmt_bind_param(stmt, _this->m_bindParams.data())) {
-      std::string error = mysql_stmt_error(stmt);
-      OATPP_LOGE("Serializer", "Failed to bind parameters: %s", error.c_str());
-      throw std::runtime_error(error);
-    }
-    OATPP_LOGD("Serializer", "Parameters bound successfully");
-  }
+  bind.is_null = &bind.is_null_value;
+  OATPP_LOGD("Serializer", "Float64 binding completed for paramIndex=%d, is_null=%d", paramIndex, bind.is_null_value);
 }
 
 void Serializer::serializeEnum(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph) {

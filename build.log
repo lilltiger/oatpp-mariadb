@@ -1,4 +1,4 @@
-=== Build Started at sön 24 nov 2024 04:26:04 CET ===
+=== Build Started at sön 24 nov 2024 04:52:04 CET ===
 Build Configuration:
 - Build Type: Debug
 - Clean Build: 0
@@ -42,7 +42,7 @@ target_link_oatpp(oatpp-mariadb-tests) to installed oatpp lib
 -- Build files have been written to: /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug
 Building project...
 [ 40%] Built target oatpp-mariadb
-[ 44%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o
+[ 44%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o
 [ 48%] Linking CXX executable oatpp-mariadb-tests
 [100%] Built target oatpp-mariadb-tests
 Debug build completed successfully!

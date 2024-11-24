@@ -158,12 +158,12 @@ src/CMakeFiles/oatpp-mariadb.dir/clean:
 test/CMakeFiles/oatpp-mariadb-tests.dir/all: src/CMakeFiles/oatpp-mariadb.dir/all
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug/CMakeFiles --progress-num=11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 "Built target oatpp-mariadb-tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug/CMakeFiles --progress-num=11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 "Built target oatpp-mariadb-tests"
 .PHONY : test/CMakeFiles/oatpp-mariadb-tests.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/oatpp-mariadb-tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug/CMakeFiles 28
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug/CMakeFiles 29
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/oatpp-mariadb-tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug/CMakeFiles 0
 .PHONY : test/CMakeFiles/oatpp-mariadb-tests.dir/rule

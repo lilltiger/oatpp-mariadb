@@ -155,6 +155,7 @@ void ResultMapper::ResultData::init() {
             bufferSize = sizeof(int16_t);
             break;
           case MYSQL_TYPE_ENUM:
+          case MYSQL_TYPE_SET:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;  // Add 1 for null terminator
             break;
@@ -407,6 +408,7 @@ void ResultMapper::ResultData::bindResultsForCache() {
         bindResults[i].buffer_length = sizeof(int16_t);
         break;
       case MYSQL_TYPE_ENUM:
+      case MYSQL_TYPE_SET:
         bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
         bindResults[i].buffer_type = MYSQL_TYPE_STRING;
         bindResults[i].buffer = bindBuffers[i].data();
@@ -566,12 +568,13 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
       bind.buffer_length = sizeof(int16_t);
       break;
     }
-    case MYSQL_TYPE_ENUM: {
+    case MYSQL_TYPE_ENUM:
+    case MYSQL_TYPE_SET: {
       bind.buffer_type = MYSQL_TYPE_STRING;
       bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
       if(!bind.buffer) {
         free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for ENUM buffer");
+        throw std::runtime_error("Failed to allocate memory for ENUM/SET buffer");
       }
       bind.buffer_length = fieldInfo->columnLength + 1;
       break;

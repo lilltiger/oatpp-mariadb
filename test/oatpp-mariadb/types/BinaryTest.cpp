@@ -217,7 +217,26 @@ void BinaryTest::onRun() {
           } else {
             // For regular strings, use normal string serialization
             stream->writeSimple("\"", 1);
-            serializer->serializeString(stream, str);
+            for(v_buff_size i = 0; i < size; i++) {
+              char c = data[i];
+              switch(c) {
+                case '"': stream->writeSimple("\\\"", 2); break;
+                case '\\': stream->writeSimple("\\\\", 2); break;
+                case '\b': stream->writeSimple("\\b", 2); break;
+                case '\f': stream->writeSimple("\\f", 2); break;
+                case '\n': stream->writeSimple("\\n", 2); break;
+                case '\r': stream->writeSimple("\\r", 2); break;
+                case '\t': stream->writeSimple("\\t", 2); break;
+                default:
+                  if (c >= 32) {
+                    stream->writeSimple(&c, 1);
+                  } else {
+                    char buffer[7];
+                    snprintf(buffer, sizeof(buffer), "\\u%04X", c);
+                    stream->writeSimple(buffer, 6);
+                  }
+              }
+            }
             stream->writeSimple("\"", 1);
           }
         });

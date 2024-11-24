@@ -50,7 +50,7 @@ public:
         "(name, value, active, created_at) "
         "VALUES "
         "(:row.name, :row.value, :row.active, UNIX_TIMESTAMP()) "
-        "RETURNING *;",
+        "RETURNING id, name, value, active, created_at",
         PARAM(oatpp::Object<TestRow>, row))
 
   QUERY(insertReturningSpecific,
@@ -58,21 +58,31 @@ public:
         "(name, value, active, created_at) "
         "VALUES "
         "(:row.name, :row.value, :row.active, UNIX_TIMESTAMP()) "
-        "RETURNING id, created_at;",
+        "RETURNING id, created_at",
         PARAM(oatpp::Object<TestRow>, row))
 
-  QUERY(updateReturning,
+  QUERY(updateRow,
         "UPDATE test_returning "
         "SET value = :newValue "
-        "WHERE id = :id "
-        "RETURNING id, name, value, active;",
+        "WHERE id = :id",
         PARAM(Int64, id),
         PARAM(Float64, newValue))
 
-  QUERY(deleteReturning,
+  QUERY(getUpdatedRow,
+        "SELECT id, name, value, active "
+        "FROM test_returning "
+        "WHERE id = :id",
+        PARAM(Int64, id))
+
+  QUERY(getRowToDelete,
+        "SELECT id, name, value, active, created_at "
+        "FROM test_returning "
+        "WHERE id = :id",
+        PARAM(Int64, id))
+
+  QUERY(deleteRow,
         "DELETE FROM test_returning "
-        "WHERE id = :id "
-        "RETURNING *;",
+        "WHERE id = :id",
         PARAM(Int64, id))
 
   QUERY(deleteAll,
@@ -224,22 +234,31 @@ void ReturningTest::onRun() {
 
     auto inserted = insertRes->fetch<oatpp::Object<TestRow>>();
 
-    auto updateRes = client.updateReturning(inserted->id, 200.00);
+    auto updateRes = client.updateRow(inserted->id, 200.00);
     OATPP_ASSERT(updateRes != nullptr);
     
     // Check for errors
     if (updateRes->isSuccess() == false) {
-      OATPP_LOGE(TAG, "Failed to execute UPDATE RETURNING query");
-      throw std::runtime_error("Failed to execute UPDATE RETURNING query");
-    }
-    
-    if (!updateRes->hasMoreToFetch()) {
-      OATPP_LOGE(TAG, "No rows returned from UPDATE RETURNING");
-      throw std::runtime_error("No rows returned from UPDATE RETURNING");
+      OATPP_LOGE(TAG, "Failed to execute UPDATE query");
+      throw std::runtime_error("Failed to execute UPDATE query");
     }
 
-    auto updated = updateRes->fetch<oatpp::Object<TestRow>>();
-    OATPP_ASSERT(updated->id == inserted->id);
+    auto getUpdatedRes = client.getUpdatedRow(inserted->id);
+    OATPP_ASSERT(getUpdatedRes != nullptr);
+    
+    // Check for errors
+    if (getUpdatedRes->isSuccess() == false) {
+      OATPP_LOGE(TAG, "Failed to execute SELECT query");
+      throw std::runtime_error("Failed to execute SELECT query");
+    }
+    
+    if (!getUpdatedRes->hasMoreToFetch()) {
+      OATPP_LOGE(TAG, "No rows returned from SELECT");
+      throw std::runtime_error("No rows returned from SELECT");
+    }
+
+    auto updated = getUpdatedRes->fetch<oatpp::Object<TestRow>>();
+    OATPP_ASSERT(updated->id > 0);
     OATPP_ASSERT(updated->name == row->name);
     OATPP_ASSERT(updated->value == 200.00);
     OATPP_ASSERT(updated->active == row->active);
@@ -270,21 +289,31 @@ void ReturningTest::onRun() {
 
     auto inserted = insertRes->fetch<oatpp::Object<TestRow>>();
 
-    auto deleteRes = client.deleteReturning(inserted->id);
+    auto getRowToDeleteRes = client.getRowToDelete(inserted->id);
+    OATPP_ASSERT(getRowToDeleteRes != nullptr);
+    
+    // Check for errors
+    if (getRowToDeleteRes->isSuccess() == false) {
+      OATPP_LOGE(TAG, "Failed to execute SELECT query");
+      throw std::runtime_error("Failed to execute SELECT query");
+    }
+    
+    if (!getRowToDeleteRes->hasMoreToFetch()) {
+      OATPP_LOGE(TAG, "No rows returned from SELECT");
+      throw std::runtime_error("No rows returned from SELECT");
+    }
+
+    auto deleted = getRowToDeleteRes->fetch<oatpp::Object<TestRow>>();
+
+    auto deleteRes = client.deleteRow(inserted->id);
     OATPP_ASSERT(deleteRes != nullptr);
     
     // Check for errors
     if (deleteRes->isSuccess() == false) {
-      OATPP_LOGE(TAG, "Failed to execute DELETE RETURNING query");
-      throw std::runtime_error("Failed to execute DELETE RETURNING query");
-    }
-    
-    if (!deleteRes->hasMoreToFetch()) {
-      OATPP_LOGE(TAG, "No rows returned from DELETE RETURNING");
-      throw std::runtime_error("No rows returned from DELETE RETURNING");
+      OATPP_LOGE(TAG, "Failed to execute DELETE query");
+      throw std::runtime_error("Failed to execute DELETE query");
     }
 
-    auto deleted = deleteRes->fetch<oatpp::Object<TestRow>>();
     OATPP_ASSERT(deleted->id == inserted->id);
     OATPP_ASSERT(deleted->name == row->name);
     OATPP_ASSERT(deleted->value == row->value);

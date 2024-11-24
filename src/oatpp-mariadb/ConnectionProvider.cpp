@@ -33,7 +33,7 @@ provider::ResourceHandle<Connection> ConnectionProvider::get() {
     m_options.database->c_str(), 
     m_options.port, 
     nullptr, 
-    0);
+    CLIENT_FOUND_ROWS | CLIENT_MULTI_STATEMENTS);  // Enable RETURNING support and multi-statement support
 
   if (result == nullptr) {
     throw std::runtime_error("[oatpp::mariadb::ConnectionProvider::get()]: " 

@@ -133,6 +133,10 @@ void ResultMapper::ResultData::init() {
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;  // Add 1 for null terminator
             break;
+          case MYSQL_TYPE_DATE:
+            bind.buffer_type = MYSQL_TYPE_STRING;
+            bufferSize = 11;  // YYYY-MM-DD + null terminator
+            break;
           default:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;
@@ -345,16 +349,18 @@ void ResultMapper::ResultData::bindResultsForCache() {
         
       case MYSQL_TYPE_STRING:
       case MYSQL_TYPE_VAR_STRING:
-      case MYSQL_TYPE_BLOB:
-      case MYSQL_TYPE_TINY_BLOB:
-      case MYSQL_TYPE_MEDIUM_BLOB:
-      case MYSQL_TYPE_LONG_BLOB:
+      case MYSQL_TYPE_VARCHAR:
         bindBuffers[i].resize(fieldInfo->columnLength);
         bindResults[i].buffer_type = MYSQL_TYPE_STRING;
         bindResults[i].buffer = bindBuffers[i].data();
         bindResults[i].buffer_length = fieldInfo->columnLength;
         break;
-        
+      case MYSQL_TYPE_DATE:
+        bindBuffers[i].resize(11);  // YYYY-MM-DD + null terminator
+        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+        bindResults[i].buffer = bindBuffers[i].data();
+        bindResults[i].buffer_length = 11;
+        break;
       default:
         throw std::runtime_error("Buffer type is not supported");
     }
@@ -469,6 +475,17 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
         free(bind.is_null);
         throw std::runtime_error("Failed to allocate memory for STRING/BLOB length");
       }
+      break;
+    }
+      
+    case MYSQL_TYPE_DATE: {
+      bind.buffer_type = MYSQL_TYPE_STRING;
+      bind.buffer = malloc(11);  // YYYY-MM-DD + null terminator
+      if(!bind.buffer) {
+        free(bind.is_null);
+        throw std::runtime_error("Failed to allocate memory for DATE buffer");
+      }
+      bind.buffer_length = 11;
       break;
     }
       
@@ -731,67 +748,68 @@ oatpp::Void ResultMapper::readOneRowAsObject(ResultMapper* _this, ResultData* db
       
       oatpp::String fieldName = dbData->colNames[i];
       auto it = fieldsMap.find(*fieldName);
+      
+      // For RETURNING clauses, try to match with 'id' property if exact match not found
       if (it == fieldsMap.end()) {
-        OATPP_LOGD("ResultMapper", "Property not found for column %s", fieldName->c_str());
-        continue;
+        OATPP_LOGD("ResultMapper", "Column name not found, trying 'id'");
+        it = fieldsMap.find("id");  // Common case for RETURNING id
       }
 
-      auto property = it->second;
-      if (!property) {
-        OATPP_LOGD("ResultMapper", "Property is null for column %s", fieldName->c_str());
-        continue;
-      }
-
-      if (*bind.is_null) {
-        OATPP_LOGD("ResultMapper", "Column value is null");
-        property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
-        continue;
-      }
-
-      if (property->type == oatpp::data::mapping::type::__class::Boolean::getType()) {
-        if (bind.buffer_type == MYSQL_TYPE_TINY) {
-          if (*bind.is_null) {
-            OATPP_LOGD("ResultMapper", "Setting null boolean value for property %s", fieldName->c_str());
-            property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
-          } else {
-            signed char value = *static_cast<signed char*>(bind.buffer);
-            OATPP_LOGD("ResultMapper", "Setting boolean value %d for property %s", (int)value, fieldName->c_str());
-            property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Boolean(value != 0));
-          }
-        } else {
-          mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
-          property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
-        }
-      } else if (property->type == oatpp::data::mapping::type::__class::Int64::getType() ||
-                 property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
-        if (bind.buffer_type == MYSQL_TYPE_LONGLONG) {
-          if (*bind.is_null) {
-            OATPP_LOGD("ResultMapper", "Setting null int64 value for property %s", fieldName->c_str());
-            property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
-          } else if (bind.is_unsigned) {
-            uint64_t value = *static_cast<uint64_t*>(bind.buffer);
-            OATPP_LOGD("ResultMapper", "Setting unsigned int64 value %llu for property %s", value, fieldName->c_str());
-            if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
-              property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(value));
+      if (it != fieldsMap.end()) {
+        auto property = it->second;
+        OATPP_LOGD("ResultMapper", "Found property: %s", it->first.c_str());
+        
+        if (property) {
+          if (property->type == oatpp::data::mapping::type::__class::Boolean::getType()) {
+            if (bind.buffer_type == MYSQL_TYPE_TINY) {
+              if (*bind.is_null) {
+                OATPP_LOGD("ResultMapper", "Setting null boolean value for property %s", fieldName->c_str());
+                property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
+              } else {
+                signed char value = *static_cast<signed char*>(bind.buffer);
+                OATPP_LOGD("ResultMapper", "Setting boolean value %d for property %s", (int)value, fieldName->c_str());
+                property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Boolean(value != 0));
+              }
             } else {
-              property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Int64(static_cast<int64_t>(value)));
+              mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
+              property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
+            }
+          } else if (property->type == oatpp::data::mapping::type::__class::Int64::getType() ||
+                     property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
+            if (bind.buffer_type == MYSQL_TYPE_LONGLONG) {
+              if (*bind.is_null) {
+                OATPP_LOGD("ResultMapper", "Setting null int64 value for property %s", fieldName->c_str());
+                property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
+              } else if (bind.is_unsigned) {
+                uint64_t value = *static_cast<uint64_t*>(bind.buffer);
+                OATPP_LOGD("ResultMapper", "Setting unsigned int64 value %llu for property %s", value, fieldName->c_str());
+                if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
+                  property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(value));
+                } else {
+                  property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Int64(static_cast<int64_t>(value)));
+                }
+              } else {
+                int64_t value = *static_cast<int64_t*>(bind.buffer);
+                OATPP_LOGD("ResultMapper", "Setting signed int64 value %lld for property %s", value, fieldName->c_str());
+                if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
+                  property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(static_cast<uint64_t>(value)));
+                } else {
+                  property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Int64(value));
+                }
+              }
+            } else {
+              mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
+              property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
             }
           } else {
-            int64_t value = *static_cast<int64_t*>(bind.buffer);
-            OATPP_LOGD("ResultMapper", "Setting signed int64 value %lld for property %s", value, fieldName->c_str());
-            if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
-              property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(static_cast<uint64_t>(value)));
-            } else {
-              property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Int64(value));
-            }
+            mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
+            property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
           }
         } else {
-          mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
-          property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
+          OATPP_LOGD("ResultMapper", "Property is null");
         }
       } else {
-        mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
-        property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
+        OATPP_LOGD("ResultMapper", "No matching property found");
       }
     }
   }

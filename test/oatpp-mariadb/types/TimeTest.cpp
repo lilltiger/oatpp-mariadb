@@ -176,7 +176,7 @@ void TimeTest::onRun() {
       // Verify minimum time value
       {
         auto row = dataset[1];
-        OATPP_ASSERT(row->time_value == "-838:59:59.00000");
+        OATPP_ASSERT(row->time_value == "-838:59:59.000000");
       }
 
       // Verify maximum time value

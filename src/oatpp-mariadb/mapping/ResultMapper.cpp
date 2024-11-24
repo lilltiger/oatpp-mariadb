@@ -102,7 +102,8 @@ void ResultMapper::ResultData::init() {
         switch (fields[i].type) {
           case MYSQL_TYPE_TINY:
             bind.buffer_type = MYSQL_TYPE_TINY;
-            bufferSize = sizeof(int8_t);
+            bind.is_unsigned = fields[i].flags & UNSIGNED_FLAG;  // Use the actual unsigned flag from the field
+            bufferSize = sizeof(signed char);
             break;
           case MYSQL_TYPE_SHORT:
             bind.buffer_type = MYSQL_TYPE_SHORT;
@@ -320,61 +321,62 @@ void ResultMapper::ResultData::bindResultsForCache() {
       fields[i].type,
       fields[i].flags & UNSIGNED_FLAG,
       fields[i].length,
-      fields[i].flags & BINARY_FLAG  // Add BINARY flag information
+      fields[i].flags & BINARY_FLAG
     );
     
     OATPP_LOGD("ResultMapper", "Binding field '%s' of type %d, flags=%lu", fieldInfo->name.c_str(), fieldInfo->type, fields[i].flags);
     
-    std::memset(&bindResults[i], 0, sizeof(MYSQL_BIND));
-    bindResults[i].is_null = &bindIsNull[i];
-    bindResults[i].length = &bindLengths[i];
+    MYSQL_BIND& bind = bindResults[i];
+    std::memset(&bind, 0, sizeof(MYSQL_BIND));
+    bind.is_null = &bindIsNull[i];
+    bind.length = &bindLengths[i];
     
     switch(fieldInfo->type) {
       case MYSQL_TYPE_TINY:
-        bindBuffers[i].resize(sizeof(int8_t));
-        bindResults[i].buffer_type = MYSQL_TYPE_TINY;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
-        bindResults[i].buffer_length = sizeof(int8_t);
+        bindBuffers[i].resize(sizeof(signed char));
+        bind.buffer_type = MYSQL_TYPE_TINY;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = fieldInfo->isUnsigned;  // Use the actual unsigned flag from the field
+        bind.buffer_length = sizeof(signed char);
         break;
         
       case MYSQL_TYPE_SHORT:
         bindBuffers[i].resize(sizeof(int16_t));
-        bindResults[i].buffer_type = MYSQL_TYPE_SHORT;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
-        bindResults[i].buffer_length = sizeof(int16_t);
+        bind.buffer_type = MYSQL_TYPE_SHORT;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = fieldInfo->isUnsigned;
+        bind.buffer_length = sizeof(int16_t);
         break;
         
       case MYSQL_TYPE_INT24:
       case MYSQL_TYPE_LONG:
         bindBuffers[i].resize(sizeof(int32_t));
-        bindResults[i].buffer_type = MYSQL_TYPE_LONG;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
-        bindResults[i].buffer_length = sizeof(int32_t);
+        bind.buffer_type = MYSQL_TYPE_LONG;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = fieldInfo->isUnsigned;
+        bind.buffer_length = sizeof(int32_t);
         break;
         
       case MYSQL_TYPE_LONGLONG:
         bindBuffers[i].resize(sizeof(int64_t));
-        bindResults[i].buffer_type = MYSQL_TYPE_LONGLONG;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
-        bindResults[i].buffer_length = sizeof(int64_t);
+        bind.buffer_type = MYSQL_TYPE_LONGLONG;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = fieldInfo->isUnsigned;
+        bind.buffer_length = sizeof(int64_t);
         break;
         
       case MYSQL_TYPE_FLOAT:
         bindBuffers[i].resize(sizeof(float));
-        bindResults[i].buffer_type = MYSQL_TYPE_FLOAT;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = sizeof(float);
+        bind.buffer_type = MYSQL_TYPE_FLOAT;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = sizeof(float);
         break;
         
       case MYSQL_TYPE_DOUBLE:
         bindBuffers[i].resize(sizeof(double));
-        bindResults[i].buffer_type = MYSQL_TYPE_DOUBLE;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = sizeof(double);
+        bind.buffer_type = MYSQL_TYPE_DOUBLE;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = sizeof(double);
         break;
         
       case MYSQL_TYPE_STRING:
@@ -384,54 +386,60 @@ void ResultMapper::ResultData::bindResultsForCache() {
       case MYSQL_TYPE_TINY_BLOB:
       case MYSQL_TYPE_MEDIUM_BLOB:
       case MYSQL_TYPE_LONG_BLOB:
-        if (fields[i].flags & BINARY_FLAG) {
+        if (fieldInfo->isBinary) {
           // For BINARY columns, allocate exact size without null terminator
-          bindBuffers[i].resize(fields[i].length);
-          bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-          bindResults[i].buffer = bindBuffers[i].data();
-          bindResults[i].buffer_length = fields[i].length;
+          bindBuffers[i].resize(fieldInfo->columnLength);
+          bind.buffer_type = MYSQL_TYPE_STRING;
+          bind.buffer = bindBuffers[i].data();
+          bind.buffer_length = fieldInfo->columnLength;
         } else {
           // For text columns, add null terminator
-          bindBuffers[i].resize(fields[i].length + 1);
-          bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-          bindResults[i].buffer = bindBuffers[i].data();
-          bindResults[i].buffer_length = fields[i].length + 1;
+          bindBuffers[i].resize(fieldInfo->columnLength + 1);
+          bind.buffer_type = MYSQL_TYPE_STRING;
+          bind.buffer = bindBuffers[i].data();
+          bind.buffer_length = fieldInfo->columnLength + 1;
         }
         break;
+        
       case MYSQL_TYPE_DATE:
         bindBuffers[i].resize(11);  // YYYY-MM-DD + null terminator
-        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = 11;
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = 11;
         break;
+        
       case MYSQL_TYPE_DATETIME:
       case MYSQL_TYPE_TIMESTAMP:
         bindBuffers[i].resize(27);  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
-        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = 27;
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = 27;
         break;
+        
       case MYSQL_TYPE_TIME:
         bindBuffers[i].resize(17);  // -838:59:59.000000 + null terminator
-        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = 17;
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = 17;
         break;
+        
       case MYSQL_TYPE_YEAR:
         bindBuffers[i].resize(sizeof(int16_t));
-        bindResults[i].buffer_type = MYSQL_TYPE_SHORT;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].is_unsigned = fieldInfo->isUnsigned;
-        bindResults[i].buffer_length = sizeof(int16_t);
+        bind.buffer_type = MYSQL_TYPE_SHORT;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = fieldInfo->isUnsigned;
+        bind.buffer_length = sizeof(int16_t);
         break;
+        
       case MYSQL_TYPE_ENUM:
       case MYSQL_TYPE_SET:
       case MYSQL_TYPE_JSON:
-        bindBuffers[i].resize(fields[i].length + 1);  // Add 1 for null terminator
-        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
-        bindResults[i].buffer = bindBuffers[i].data();
-        bindResults[i].buffer_length = fields[i].length + 1;
+        bindBuffers[i].resize(fieldInfo->columnLength + 1);  // Add 1 for null terminator
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = bindBuffers[i].data();
+        bind.buffer_length = fieldInfo->columnLength + 1;
         break;
+        
       default:
         throw std::runtime_error("Buffer type is not supported");
     }
@@ -448,33 +456,25 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
   OATPP_LOGD("ResultMapper", "Initializing bind for field '%s' of type %d", fieldInfo->name.c_str(), fieldInfo->type);
   std::memset(&bind, 0, sizeof(MYSQL_BIND));
   
-  bind.is_null = (my_bool*)malloc(sizeof(my_bool));
-  if(!bind.is_null) {
-    throw std::runtime_error("Failed to allocate memory for is_null indicator");
-  }
+  bind.is_null = new my_bool;
   *bind.is_null = 0;
   
+  std::vector<char> buffer;  // Local buffer for this bind
+  
   switch(fieldInfo->type) {
-    
     case MYSQL_TYPE_TINY: {
+      buffer.resize(sizeof(int8_t));
       bind.buffer_type = MYSQL_TYPE_TINY;
-      bind.buffer = malloc(sizeof(int8_t));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for TINY buffer");
-      }
-      bind.is_unsigned = fieldInfo->isUnsigned;
+      bind.buffer = buffer.data();
+      bind.is_unsigned = fieldInfo->isUnsigned;  // Use the actual unsigned flag from the field
       bind.buffer_length = sizeof(int8_t);
       break;
     }
       
     case MYSQL_TYPE_SHORT: {
+      buffer.resize(sizeof(int16_t));
       bind.buffer_type = MYSQL_TYPE_SHORT;
-      bind.buffer = malloc(sizeof(int16_t));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for SHORT buffer");
-      }
+      bind.buffer = buffer.data();
       bind.is_unsigned = fieldInfo->isUnsigned;
       bind.buffer_length = sizeof(int16_t);
       break;
@@ -482,47 +482,35 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
       
     case MYSQL_TYPE_INT24:
     case MYSQL_TYPE_LONG: {
+      buffer.resize(sizeof(int32_t));
       bind.buffer_type = MYSQL_TYPE_LONG;
-      bind.buffer = malloc(sizeof(int32_t));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for LONG buffer");
-      }
+      bind.buffer = buffer.data();
       bind.is_unsigned = fieldInfo->isUnsigned;
       bind.buffer_length = sizeof(int32_t);
       break;
     }
       
     case MYSQL_TYPE_LONGLONG: {
+      buffer.resize(sizeof(int64_t));
       bind.buffer_type = MYSQL_TYPE_LONGLONG;
-      bind.buffer = malloc(sizeof(int64_t));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for LONGLONG buffer");
-      }
+      bind.buffer = buffer.data();
       bind.is_unsigned = fieldInfo->isUnsigned;
       bind.buffer_length = sizeof(int64_t);
       break;
     }
       
     case MYSQL_TYPE_FLOAT: {
+      buffer.resize(sizeof(float));
       bind.buffer_type = MYSQL_TYPE_FLOAT;
-      bind.buffer = malloc(sizeof(float));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for FLOAT buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = sizeof(float);
       break;
     }
       
     case MYSQL_TYPE_DOUBLE: {
+      buffer.resize(sizeof(double));
       bind.buffer_type = MYSQL_TYPE_DOUBLE;
-      bind.buffer = malloc(sizeof(double));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for DOUBLE buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = sizeof(double);
       break;
     }
@@ -536,85 +524,76 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
     case MYSQL_TYPE_LONG_BLOB: {
       if (fieldInfo->isBinary) {
         // For BINARY columns, allocate exact size without null terminator
-        bind.buffer = malloc(fieldInfo->columnLength);
-        if(!bind.buffer) {
-          free(bind.is_null);
-          throw std::runtime_error("Failed to allocate memory for BINARY buffer");
-        }
+        buffer.resize(fieldInfo->columnLength);
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = buffer.data();
         bind.buffer_length = fieldInfo->columnLength;
       } else {
         // For text columns, add null terminator
-        bind.buffer = malloc(fieldInfo->columnLength + 1);
-        if(!bind.buffer) {
-          free(bind.is_null);
-          throw std::runtime_error("Failed to allocate memory for VARCHAR/TEXT buffer");
-        }
+        buffer.resize(fieldInfo->columnLength + 1);
+        bind.buffer_type = MYSQL_TYPE_STRING;
+        bind.buffer = buffer.data();
         bind.buffer_length = fieldInfo->columnLength + 1;
       }
-      bind.buffer_type = MYSQL_TYPE_STRING;
       break;
     }
       
     case MYSQL_TYPE_DATE: {
+      buffer.resize(11);  // YYYY-MM-DD + null terminator
       bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(11);  // YYYY-MM-DD + null terminator
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for DATE buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = 11;
       break;
     }
+      
     case MYSQL_TYPE_DATETIME:
     case MYSQL_TYPE_TIMESTAMP: {
+      buffer.resize(27);  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
       bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(27);  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for DATETIME buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = 27;
       break;
     }
+      
     case MYSQL_TYPE_TIME: {
+      buffer.resize(17);  // -838:59:59.000000 + null terminator
       bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(17);  // -838:59:59.000000 + null terminator
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for TIME buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = 17;
       break;
     }
+      
     case MYSQL_TYPE_YEAR: {
+      buffer.resize(sizeof(int16_t));
       bind.buffer_type = MYSQL_TYPE_SHORT;
-      bind.buffer = malloc(sizeof(int16_t));
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for YEAR buffer");
-      }
+      bind.buffer = buffer.data();
       bind.is_unsigned = fieldInfo->isUnsigned;
       bind.buffer_length = sizeof(int16_t);
       break;
     }
+      
     case MYSQL_TYPE_ENUM:
     case MYSQL_TYPE_SET:
     case MYSQL_TYPE_JSON: {
+      buffer.resize(fieldInfo->columnLength + 1);  // Add 1 for null terminator
       bind.buffer_type = MYSQL_TYPE_STRING;
-      bind.buffer = malloc(fieldInfo->columnLength + 1);  // Add 1 for null terminator
-      if(!bind.buffer) {
-        free(bind.is_null);
-        throw std::runtime_error("Failed to allocate memory for ENUM/SET buffer");
-      }
+      bind.buffer = buffer.data();
       bind.buffer_length = fieldInfo->columnLength + 1;
       break;
     }
       
     default:
-      free(bind.is_null);
+      delete bind.is_null;
       throw std::runtime_error("Buffer type is not supported");
-      
   }
+  
+  // Allocate memory for the bind buffer and copy data from our temporary buffer
+  bind.buffer = malloc(bind.buffer_length);
+  if (!bind.buffer) {
+    delete bind.is_null;
+    throw std::runtime_error("Failed to allocate memory for buffer");
+  }
+  std::memcpy(bind.buffer, buffer.data(), bind.buffer_length);
 }
 
 ResultMapper::ResultMapper() {
@@ -771,9 +750,17 @@ oatpp::Void ResultMapper::readOneRowAsObject(ResultMapper* _this, ResultData* db
         if (property) {
           if (property->type == oatpp::data::mapping::type::__class::Boolean::getType()) {
             if (bind.buffer_type == MYSQL_TYPE_TINY) {
-              signed char value = *static_cast<signed char*>(bind.buffer);
-              OATPP_LOGD("ResultMapper", "Mapping single column value %d to Boolean property %s", (int)value, it->first.c_str());
-              property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Boolean(value != 0));
+              if (*bind.is_null) {
+                OATPP_LOGD("ResultMapper", "Setting null boolean value for property %s", fieldName->c_str());
+                property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
+              } else {
+                signed char value = *static_cast<signed char*>(bind.buffer);
+                OATPP_LOGD("ResultMapper", "Setting boolean value %d for property %s", (int)value, fieldName->c_str());
+                property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Boolean(value != 0));
+              }
+            } else {
+              mapping::Deserializer::InData inData(&bind, dbData->typeResolver);
+              property->set(static_cast<oatpp::BaseObject*>(object.get()), _this->m_deserializer.deserialize(inData, property->type));
             }
           } else if (property->type->classId.id == oatpp::data::mapping::type::__class::Int32::CLASS_ID.id) {
             int value = 0;
@@ -805,7 +792,7 @@ oatpp::Void ResultMapper::readOneRowAsObject(ResultMapper* _this, ResultData* db
             }
 
             if (handled) {
-              OATPP_LOGD("ResultMapper", "Mapping single column value %d to Int32 property %s", value, it->first.c_str());
+              OATPP_LOGD("ResultMapper", "Mapping single column value %d to Int32 property %s", value, fieldName->c_str());
               property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::Int32(value));
             }
           } else if (property->type == oatpp::data::mapping::type::__class::Int64::getType() ||

@@ -249,24 +249,16 @@ oatpp::Void Deserializer::deserializeBoolean(const Deserializer* _this, const In
   (void) _this;
   (void) type;
 
-  if(data.isNull || data.bind->is_null_value) {
+  if(data.isNull) {
     OATPP_LOGD("Deserializer", "Deserializing null boolean value");
     return oatpp::Boolean();
   }
 
   switch(data.oid) {
     case MYSQL_TYPE_TINY: {
-      bool value;
-      if (data.bind->is_unsigned) {
-        auto rawValue = *static_cast<unsigned char*>(data.bind->buffer);
-        value = (rawValue != 0);
-        OATPP_LOGD("Deserializer", "Deserializing unsigned boolean value: raw=%u, result=%d", rawValue, value);
-      } else {
-        auto rawValue = *static_cast<signed char*>(data.bind->buffer);
-        value = (rawValue != 0);
-        OATPP_LOGD("Deserializer", "Deserializing signed boolean value: raw=%d, result=%d", rawValue, value);
-      }
-      return oatpp::Boolean(value);
+      signed char value = *static_cast<signed char*>(data.bind->buffer);
+      OATPP_LOGD("Deserializer", "Deserializing boolean value: %d", (int)value);
+      return oatpp::Boolean(value != 0);
     }
     default:
       OATPP_LOGD("Deserializer", "Unsupported buffer type: %d", data.oid);

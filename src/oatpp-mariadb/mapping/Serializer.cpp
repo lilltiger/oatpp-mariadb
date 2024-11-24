@@ -251,18 +251,17 @@ void Serializer::serializeBoolean(const Serializer* _this, MYSQL_STMT* stmt, v_u
   
   if(polymorph) {
     auto value = polymorph.cast<oatpp::Boolean>();
-    if(value != nullptr) {
-      bool boolValue = value.getValue(false);
-      *static_cast<signed char*>(bind.buffer) = boolValue ? 1 : 0;
-      bind.is_null_value = 0;
+    if(value.getValueType() != nullptr) {  // Check if value is not null
+      *static_cast<signed char*>(bind.buffer) = value.getValue(false) ? 1 : 0;
+      *bind.is_null = 0;
       OATPP_LOGD("Serializer", "Serializing boolean value: %d", (int)*static_cast<signed char*>(bind.buffer));
     } else {
-      bind.is_null_value = 1;
+      *bind.is_null = 1;
       *static_cast<signed char*>(bind.buffer) = 0;
       OATPP_LOGD("Serializer", "Serializing null boolean value (value is null)");
     }
   } else {
-    bind.is_null_value = 1;
+    *bind.is_null = 1;
     *static_cast<signed char*>(bind.buffer) = 0;
     OATPP_LOGD("Serializer", "Serializing null boolean value (polymorph is null)");
   }

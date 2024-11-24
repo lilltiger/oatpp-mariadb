@@ -35,8 +35,8 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::YearTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::EnumTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);

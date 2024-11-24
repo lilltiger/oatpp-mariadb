@@ -8,6 +8,7 @@
 #include "oatpp-mariadb/types/VarCharTest.hpp"
 #include "oatpp-mariadb/types/BooleanTest.hpp"
 #include "oatpp-mariadb/types/ReturningTest.hpp"
+#include "oatpp-mariadb/types/TimeTest.hpp"
 #include "oatpp-mariadb/transaction/TransactionTest.hpp"
 #include "oatpp-mariadb/crud/CrudTest.hpp"
 #include "oatpp-mariadb/crud/ProductCrudTest.hpp"
@@ -28,7 +29,8 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::DateTimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::VarCharTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::BooleanTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::ReturningTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);

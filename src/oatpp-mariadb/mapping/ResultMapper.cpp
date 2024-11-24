@@ -146,6 +146,10 @@ void ResultMapper::ResultData::init() {
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = 27;  // YYYY-MM-DD HH:MM:SS.mmmmmm + null terminator
             break;
+          case MYSQL_TYPE_TIME:
+            bind.buffer_type = MYSQL_TYPE_STRING;
+            bufferSize = 17;  // -838:59:59.000000 + null terminator
+            break;
           default:
             bind.buffer_type = MYSQL_TYPE_STRING;
             bufferSize = fields[i].length + 1;
@@ -381,6 +385,12 @@ void ResultMapper::ResultData::bindResultsForCache() {
         bindResults[i].buffer = bindBuffers[i].data();
         bindResults[i].buffer_length = 27;
         break;
+      case MYSQL_TYPE_TIME:
+        bindBuffers[i].resize(17);  // -838:59:59.000000 + null terminator
+        bindResults[i].buffer_type = MYSQL_TYPE_STRING;
+        bindResults[i].buffer = bindBuffers[i].data();
+        bindResults[i].buffer_length = 17;
+        break;
       default:
         throw std::runtime_error("Buffer type is not supported");
     }
@@ -512,6 +522,16 @@ void ResultMapper::initBind(MYSQL_BIND& bind, const std::shared_ptr<FieldInfo>& 
         throw std::runtime_error("Failed to allocate memory for DATETIME buffer");
       }
       bind.buffer_length = 27;
+      break;
+    }
+    case MYSQL_TYPE_TIME: {
+      bind.buffer_type = MYSQL_TYPE_STRING;
+      bind.buffer = malloc(17);  // -838:59:59.000000 + null terminator
+      if(!bind.buffer) {
+        free(bind.is_null);
+        throw std::runtime_error("Failed to allocate memory for TIME buffer");
+      }
+      bind.buffer_length = 17;
       break;
     }
       

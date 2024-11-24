@@ -473,6 +473,30 @@ oatpp-mariadb/types/ReturningTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/ReturningTest.cpp.s
 .PHONY : oatpp-mariadb/types/ReturningTest.cpp.s
 
+oatpp-mariadb/types/TimeTest.o: oatpp-mariadb/types/TimeTest.cpp.o
+.PHONY : oatpp-mariadb/types/TimeTest.o
+
+# target to build an object file
+oatpp-mariadb/types/TimeTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/TimeTest.cpp.o
+.PHONY : oatpp-mariadb/types/TimeTest.cpp.o
+
+oatpp-mariadb/types/TimeTest.i: oatpp-mariadb/types/TimeTest.cpp.i
+.PHONY : oatpp-mariadb/types/TimeTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/types/TimeTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/TimeTest.cpp.i
+.PHONY : oatpp-mariadb/types/TimeTest.cpp.i
+
+oatpp-mariadb/types/TimeTest.s: oatpp-mariadb/types/TimeTest.cpp.s
+.PHONY : oatpp-mariadb/types/TimeTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/types/TimeTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-debug && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/TimeTest.cpp.s
+.PHONY : oatpp-mariadb/types/TimeTest.cpp.s
+
 oatpp-mariadb/types/UInt8Test.o: oatpp-mariadb/types/UInt8Test.cpp.o
 .PHONY : oatpp-mariadb/types/UInt8Test.o
 
@@ -571,6 +595,9 @@ help:
 	@echo "... oatpp-mariadb/types/ReturningTest.o"
 	@echo "... oatpp-mariadb/types/ReturningTest.i"
 	@echo "... oatpp-mariadb/types/ReturningTest.s"
+	@echo "... oatpp-mariadb/types/TimeTest.o"
+	@echo "... oatpp-mariadb/types/TimeTest.i"
+	@echo "... oatpp-mariadb/types/TimeTest.s"
 	@echo "... oatpp-mariadb/types/UInt8Test.o"
 	@echo "... oatpp-mariadb/types/UInt8Test.i"
 	@echo "... oatpp-mariadb/types/UInt8Test.s"

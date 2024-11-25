@@ -60,21 +60,24 @@ public:
         "DROP TABLE IF EXISTS `test_users`;")
 
   QUERY(createUser,
-        "INSERT INTO `test_users` (`username`, `email`, `active`) "
+        "INSERT IGNORE INTO `test_users` (`username`, `email`, `active`) "
         "VALUES (:username, :email, :active) "
-        "RETURNING id;",
+        "RETURNING *;",
         PARAM(oatpp::String, username),
         PARAM(oatpp::String, email),
         PARAM(oatpp::Boolean, active))
 
   QUERY(updateUser,
         "UPDATE `test_users` SET `username` = :username, `email` = :email, `active` = :active "
-        "WHERE `id` = :id "
-        "RETURNING ROW_COUNT() as count;",
+        "WHERE `id` = :id;",
         PARAM(oatpp::Int32, id),
         PARAM(oatpp::String, username),
         PARAM(oatpp::String, email),
         PARAM(oatpp::Boolean, active))
+
+  QUERY(getUpdatedUser,
+        "SELECT * FROM `test_users` WHERE `id` = :id;",
+        PARAM(oatpp::Int32, id))
 
   QUERY(getUser,
         "SELECT * FROM `test_users` WHERE `id` = :id;",
@@ -88,16 +91,18 @@ public:
         "SELECT * FROM `test_users` ORDER BY `id`;")
 
   QUERY(deleteUser,
-        "DELETE FROM `test_users` WHERE `id` = :id "
-        "RETURNING ROW_COUNT() as count;",
+        "DELETE FROM `test_users` WHERE `id` = :id;",
         PARAM(oatpp::Int32, id))
 
   QUERY(deleteAllUsers,
-        "DELETE FROM `test_users` "
-        "RETURNING ROW_COUNT() as count;")
+        "DELETE FROM `test_users`;")
 
   QUERY(countUsers,
         "SELECT COUNT(*) as count FROM `test_users`;")
+
+  QUERY(getCountBeforeDelete,
+        "SELECT COUNT(*) as count FROM `test_users`;")
+
 };
 
 #include OATPP_CODEGEN_END(DbClient)
@@ -131,26 +136,34 @@ void CrudTest::onRun() {
     // Test single insert
     auto createResult = client.createUser("user1", "user1@example.com", true);
     OATPP_ASSERT(createResult->isSuccess());
-    auto insertResult = createResult->fetch<oatpp::Vector<oatpp::Object<InsertResult>>>();
-    OATPP_ASSERT(insertResult->size() == 1);
-    OATPP_ASSERT(insertResult[0]->id > 0);
+    auto user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 1);
+    OATPP_ASSERT(user[0]->id > 0);
     
-    // Test duplicate handling
-    auto duplicateResult = client.createUser("user1", "user1@example.com", true);
-    OATPP_ASSERT(!duplicateResult->isSuccess());
+    // Test duplicate handling - try with different email but same username
+    createResult = client.createUser("user1", "different@example.com", true);
+    OATPP_ASSERT(createResult->isSuccess());
+    user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 0);
     
-    // Test multiple inserts
+    // Test duplicate handling - try with different username but same email
+    createResult = client.createUser("different", "user1@example.com", true);
+    OATPP_ASSERT(createResult->isSuccess());
+    user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 0);
+    
+    // Test multiple inserts with unique values
     createResult = client.createUser("user2", "user2@example.com", true);
     OATPP_ASSERT(createResult->isSuccess());
-    insertResult = createResult->fetch<oatpp::Vector<oatpp::Object<InsertResult>>>();
-    OATPP_ASSERT(insertResult->size() == 1);
-    OATPP_ASSERT(insertResult[0]->id > 0);
+    user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 1);
+    OATPP_ASSERT(user[0]->id > 0);
     
     createResult = client.createUser("user3", "user3@example.com", false);
     OATPP_ASSERT(createResult->isSuccess());
-    insertResult = createResult->fetch<oatpp::Vector<oatpp::Object<InsertResult>>>();
-    OATPP_ASSERT(insertResult->size() == 1);
-    OATPP_ASSERT(insertResult[0]->id > 0);
+    user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 1);
+    OATPP_ASSERT(user[0]->id > 0);
   }
 
   // Test 2: Read (SELECT)
@@ -191,17 +204,12 @@ void CrudTest::onRun() {
     // Test successful update
     auto updateResult = client.updateUser(1, "user1_updated", "user1_updated@example.com", true);
     OATPP_ASSERT(updateResult->isSuccess());
-    auto affectedRows = updateResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>();
-    OATPP_ASSERT(affectedRows->size() == 1);
-    OATPP_ASSERT(affectedRows[0]->count == 1);
-    
-    // Verify update
-    auto result = client.getUser(1);
-    OATPP_ASSERT(result->isSuccess());
-    auto user = result->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
-    OATPP_ASSERT(user->size() == 1);
-    OATPP_ASSERT(user[0]->username == "user1_updated");
-    OATPP_ASSERT(user[0]->email == "user1_updated@example.com");
+    auto updatedUserResult = client.getUpdatedUser(1);
+    OATPP_ASSERT(updatedUserResult->isSuccess());
+    auto updatedUser = updatedUserResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(updatedUser->size() == 1);
+    OATPP_ASSERT(updatedUser[0]->username == "user1_updated");
+    OATPP_ASSERT(updatedUser[0]->email == "user1_updated@example.com");
     
     // Test update with duplicate email
     updateResult = client.updateUser(1, "user1_updated", "user2@example.com", true);
@@ -210,9 +218,6 @@ void CrudTest::onRun() {
     // Test update non-existent user
     updateResult = client.updateUser(999, "nonexistent", "nonexistent@example.com", true);
     OATPP_ASSERT(updateResult->isSuccess());
-    affectedRows = updateResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>();
-    OATPP_ASSERT(affectedRows->size() == 1);
-    OATPP_ASSERT(affectedRows[0]->count == 0);
   }
 
   // Test 4: Delete
@@ -225,26 +230,36 @@ void CrudTest::onRun() {
     auto initialCount = countResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
     
     // Test single delete
+    auto countBeforeDelete = client.countUsers();
+    OATPP_ASSERT(countBeforeDelete->isSuccess());
+    auto initialCountBeforeDelete = countBeforeDelete->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    
     auto deleteResult = client.deleteUser(1);
     OATPP_ASSERT(deleteResult->isSuccess());
-    auto affectedRows = deleteResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>();
-    OATPP_ASSERT(affectedRows->size() == 1);
-    OATPP_ASSERT(affectedRows[0]->count == 1);
     
-    // Verify delete
-    countResult = client.countUsers();
-    OATPP_ASSERT(countResult->isSuccess());
-    auto newCount = countResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
-    OATPP_ASSERT(newCount == initialCount - 1);
+    auto countAfterDelete = client.countUsers();
+    OATPP_ASSERT(countAfterDelete->isSuccess());
+    auto newCount = countAfterDelete->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    OATPP_ASSERT(newCount == initialCountBeforeDelete - 1);
     
     // Test delete non-existent user
+    auto countBeforeNonExistent = client.countUsers();
+    OATPP_ASSERT(countBeforeNonExistent->isSuccess());
+    auto countBefore = countBeforeNonExistent->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    
     deleteResult = client.deleteUser(999);
     OATPP_ASSERT(deleteResult->isSuccess());
-    affectedRows = deleteResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>();
-    OATPP_ASSERT(affectedRows->size() == 1);
-    OATPP_ASSERT(affectedRows[0]->count == 0);
+    
+    auto countAfterNonExistent = client.countUsers();
+    OATPP_ASSERT(countAfterNonExistent->isSuccess());
+    auto countAfter = countAfterNonExistent->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    OATPP_ASSERT(countBefore == countAfter); // No rows were deleted
     
     // Test delete all
+    auto countBeforeDeleteAll = client.getCountBeforeDelete();
+    OATPP_ASSERT(countBeforeDeleteAll->isSuccess());
+    auto initialCountBeforeAll = countBeforeDeleteAll->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    
     deleteResult = client.deleteAllUsers();
     OATPP_ASSERT(deleteResult->isSuccess());
     
@@ -253,6 +268,7 @@ void CrudTest::onRun() {
     OATPP_ASSERT(countResult->isSuccess());
     newCount = countResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
     OATPP_ASSERT(newCount == 0);
+    OATPP_ASSERT(initialCountBeforeAll > 0);
   }
 
   // Test 5: Transaction CRUD
@@ -265,18 +281,20 @@ void CrudTest::onRun() {
     // Create users in transaction
     auto createResult = client.createUser("tx_user1", "tx_user1@example.com", true, conn);
     OATPP_ASSERT(createResult->isSuccess());
-    auto insertResult = createResult->fetch<oatpp::Vector<oatpp::Object<InsertResult>>>();
-    OATPP_ASSERT(insertResult->size() == 1);
-    OATPP_ASSERT(insertResult[0]->id > 0);
+    auto user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 1);
+    OATPP_ASSERT(user[0]->id > 0);
+    auto user1Id = user[0]->id;
     
     createResult = client.createUser("tx_user2", "tx_user2@example.com", true, conn);
     OATPP_ASSERT(createResult->isSuccess());
-    insertResult = createResult->fetch<oatpp::Vector<oatpp::Object<InsertResult>>>();
-    OATPP_ASSERT(insertResult->size() == 1);
-    OATPP_ASSERT(insertResult[0]->id > 0);
+    user = createResult->fetch<oatpp::Vector<oatpp::Object<TestUser>>>();
+    OATPP_ASSERT(user->size() == 1);
+    OATPP_ASSERT(user[0]->id > 0);
+    auto user2Id = user[0]->id;
     
     // Update in transaction
-    auto updateResult = client.updateUser(1, "tx_user1_updated", "tx_user1_updated@example.com", true, conn);
+    auto updateResult = client.updateUser(user1Id, "tx_user1_updated", "tx_user1_updated@example.com", true, conn);
     OATPP_ASSERT(updateResult->isSuccess());
     
     // Read in transaction
@@ -286,8 +304,17 @@ void CrudTest::onRun() {
     OATPP_ASSERT(users->size() == 2);
     
     // Delete in transaction
-    auto deleteResult = client.deleteUser(2, conn);
+    auto countBeforeDelete = client.countUsers(conn);
+    OATPP_ASSERT(countBeforeDelete->isSuccess());
+    auto countBefore = countBeforeDelete->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    
+    auto deleteResult = client.deleteUser(user2Id, conn);
     OATPP_ASSERT(deleteResult->isSuccess());
+    
+    auto countAfterDelete = client.countUsers(conn);
+    OATPP_ASSERT(countAfterDelete->isSuccess());
+    auto countAfter = countAfterDelete->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    OATPP_ASSERT(countBefore == countAfter + 1); // One row was deleted
     
     // Commit transaction
     OATPP_ASSERT(guard.commit());

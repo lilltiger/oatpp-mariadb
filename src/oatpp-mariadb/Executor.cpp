@@ -123,10 +123,8 @@ void Executor::bindParams(MYSQL_STMT* stmt,
     }
   }
 
-  if (mysql_stmt_bind_param(stmt, m_serializer->getBindParams().data())) {
-    throw std::runtime_error("[oatpp::mariadb::Executor::bindParams()]: Error. "
-      "Can't bind parameters. Error: " + std::string(mysql_stmt_error(stmt)));
-  }
+  // Bind all parameters at once after serialization is complete
+  m_serializer->bindParameters(stmt);
 }
 
 std::shared_ptr<orm::QueryResult> Executor::execute(const StringTemplate& queryTemplate,

@@ -28,11 +28,16 @@ public:
 
   std::vector<MYSQL_BIND>& getBindParams() const;
 
+  /**
+   * Bind all parameters to the MySQL statement.
+   * This should be called after all parameters have been serialized.
+   * @param stmt - MySQL statement to bind parameters to
+   */
+  void bindParameters(MYSQL_STMT* stmt) const;
+
 private:
 
   void setBindParam(MYSQL_BIND& bind, v_uint32 paramIndex) const;
-
-private:
 
   static void serializeString(const Serializer* _this, MYSQL_STMT* stmt, v_uint32 paramIndex, const oatpp::Void& polymorph);
 

@@ -3,6 +3,10 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/ql_template/ParserTest.cpp
         oatpp-mariadb/types/NumericTest.hpp
         oatpp-mariadb/types/NumericTest.cpp
+        oatpp-mariadb/types/Int32Test.hpp
+        oatpp-mariadb/types/Int32Test.cpp
+        oatpp-mariadb/types/StringTest.cpp
+        oatpp-mariadb/types/StringTest.hpp
         oatpp-mariadb/types/Int64Test.hpp
         oatpp-mariadb/types/Int64Test.cpp
         oatpp-mariadb/types/Float64Test.hpp
@@ -37,6 +41,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/crud/CrudTest.cpp
         oatpp-mariadb/crud/ProductCrudTest.hpp
         oatpp-mariadb/crud/ProductCrudTest.cpp
+        oatpp-mariadb/crud/EnhancedCrudTest.hpp
+        oatpp-mariadb/crud/EnhancedCrudTest.cpp
         oatpp-mariadb/tests.cpp
 )
 

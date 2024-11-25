@@ -20,6 +20,12 @@ class ProductDto : public oatpp::DTO {
   DTO_FIELD(Float32, price, "price");
   DTO_FIELD(Int32, stock, "stock");
   DTO_FIELD(Boolean, active, "active");
+  DTO_FIELD(String, created_at, "created_at");
+};
+
+class CountResult : public oatpp::DTO {
+  DTO_INIT(CountResult, DTO);
+  DTO_FIELD(Int32, count, "count");
 };
 
 #include OATPP_CODEGEN_END(DTO)
@@ -50,7 +56,7 @@ public:
   QUERY(createProduct,
         "INSERT INTO `test_products` (`name`, `price`, `stock`, `active`) "
         "VALUES (:product.name, :product.price, :product.stock, :product.active) "
-        "RETURNING id;",
+        "RETURNING *;",
         PARAM(oatpp::Object<ProductDto>, product))
 
   QUERY(updateProduct,
@@ -59,8 +65,7 @@ public:
         "`price` = :product.price, "
         "`stock` = :product.stock, "
         "`active` = :product.active "
-        "WHERE `id` = :id "
-        "RETURNING ROW_COUNT() as count;",
+        "WHERE `id` = :id;",
         PARAM(oatpp::Int32, id),
         PARAM(oatpp::Object<ProductDto>, product))
 
@@ -72,9 +77,11 @@ public:
         "SELECT * FROM `test_products` ORDER BY `id`;")
 
   QUERY(deleteProduct,
-        "DELETE FROM `test_products` WHERE `id` = :id "
-        "RETURNING ROW_COUNT() as count;",
+        "DELETE FROM `test_products` WHERE `id` = :id;",
         PARAM(oatpp::Int32, id))
+
+  QUERY(countProducts,
+        "SELECT COUNT(*) as count FROM `test_products`;")
 
   QUERY(deleteAllProducts,
         "DELETE FROM `test_products`;")
@@ -117,9 +124,10 @@ void ProductCrudTest::onRun() {
     auto result = client.createProduct(product);
     OATPP_ASSERT(result->isSuccess());
     
-    auto insertId = result->fetch<oatpp::Vector<oatpp::Object<ProductDto>>>()[0]->id;
-    OATPP_ASSERT(insertId > 0);
-    OATPP_LOGD(TAG, "Created product with id=%d", *insertId);
+    auto products = result->fetch<oatpp::Vector<oatpp::Object<ProductDto>>>();
+    OATPP_ASSERT(products->size() == 1);
+    OATPP_ASSERT(products[0]->id > 0);
+    OATPP_LOGD(TAG, "Created product with id=%d", *products[0]->id);
   }
 
   // Test 2: Read
@@ -151,9 +159,6 @@ void ProductCrudTest::onRun() {
 
     auto result = client.updateProduct(1, product);
     OATPP_ASSERT(result->isSuccess());
-    
-    auto updateCount = result->fetch<oatpp::Vector<oatpp::Object<ProductDto>>>()[0];
-    OATPP_ASSERT(updateCount->id == 1);
 
     // Verify update
     result = client.getProductById(1);
@@ -172,16 +177,23 @@ void ProductCrudTest::onRun() {
   {
     OATPP_LOGD(TAG, "Test 4: Delete operation");
     
+    // Get count before delete
+    auto countResult = client.countProducts();
+    OATPP_ASSERT(countResult->isSuccess());
+    auto countBefore = countResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    
     auto result = client.deleteProduct(1);
     OATPP_ASSERT(result->isSuccess());
     
-    auto deleteCount = result->fetch<oatpp::Vector<oatpp::Object<ProductDto>>>()[0];
-    OATPP_ASSERT(deleteCount->id == 1);
+    // Verify count after delete
+    countResult = client.countProducts();
+    OATPP_ASSERT(countResult->isSuccess());
+    auto countAfter = countResult->fetch<oatpp::Vector<oatpp::Object<CountResult>>>()[0]->count;
+    OATPP_ASSERT(countBefore == countAfter + 1);
 
-    // Verify delete
+    // Verify product is gone
     result = client.getProductById(1);
     OATPP_ASSERT(result->isSuccess());
-    
     auto products = result->fetch<oatpp::Vector<oatpp::Object<ProductDto>>>();
     OATPP_ASSERT(products->size() == 0);
   }

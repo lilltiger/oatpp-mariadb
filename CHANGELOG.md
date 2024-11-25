@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added improved string handling in TransactionGuard error messages
 - Added comprehensive test summary generation in run.sh with detailed statistics
 - Added detailed error categorization in test summary (runtime, test, and buffer errors)
+- Added metadata JSON field support in ProductCrudTest
+- Added search and filter operations in ProductCrudTest
+- Added transaction support with proper isolation levels in ProductCrudTest
+- Added ObjectMapper with JSON helper setup for improved serialization
+- Added unique index on name field in product table
+- Added new test cases for DateTime operations with timezone handling
+- Added comprehensive Binary data type tests with BLOB handling
+- Added enhanced JSON type validation in JsonTest
+- Added Year type support with valid range checks
+- Added Set type operations with multiple value handling
+- Added enhanced String operations testing with different character sets
+- Added Int32 specific test cases for 32-bit integer operations
 
 ### Changed
 - Updated EnvLoader to support multiple .env file locations
@@ -33,6 +45,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reverted explicit cleanup code in Int64Test and VarCharTest to resolve build errors
 - Updated VarChar test cases with proper string length validation (VARCHAR(10), VARCHAR(255), TEXT(3000))
 - Fixed dataset access pattern in VarChar tests
+- Refactored ProductCrudTest to follow EnhancedCrudTest pattern
+- Updated product table schema with updated_at timestamp
+- Improved type casting in SQL queries for better type safety
+- Enhanced test structure with combined transactional tests
+- Modified UPDATE and DELETE queries to remove unsupported RETURNING clauses
+- Enhanced Float64Test with precise decimal comparisons
+- Updated DateTest with proper timezone handling
+- Improved UInt8Test with boundary value testing
+- Enhanced EnumTest with custom enum type validations
+- Updated TimeTest with microsecond precision handling
+- Improved ParserTest with complex query parsing scenarios
 
 ### Fixed
 - Fixed JSON output formatting in NumericTest
@@ -45,10 +68,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Int64 and UInt64 serialization to properly handle buffer types and null values
 - Improved memory management in Int64/UInt64 serialization methods
 - Added proper handling of maximum and minimum values for 64-bit integers
-- Fixed test summary generation in run.sh to handle broken pipes and newlines correctly
-- Fixed Boolean serialization to properly handle false values by using proper null checking
-- Fixed memory management in Boolean serialization methods
-- Added comprehensive logging for Boolean value handling
+- Fixed RETURNING clause usage to only use with INSERT statements in MariaDB
+- Fixed DateTime precision issues in timestamp comparisons
+- Fixed Binary data handling for large BLOB types
+- Fixed character set handling in String operations
+- Fixed Set type validation for multiple values
+- Fixed Year type range validation
+- Fixed JSON parsing for nested objects and arrays
 
 ## [1.1.0] - 2024-XX-XX
 ### Fixed

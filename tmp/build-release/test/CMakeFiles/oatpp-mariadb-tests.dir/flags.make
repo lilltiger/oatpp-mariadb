@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/tiger/CascadeProjects/oatpp-mariadb/test -I/usr/local/include/oatpp-1.3.0 -I/usr/local/include/oatpp-1.3.0/oatpp -I/home/tiger/CascadeProjects/oatpp-mariadb/src
 
-CXX_FLAGS = -O3 -DNDEBUG -std=c++11
+CXX_FLAGS = -O3 -DNDEBUG -std=c++17
 

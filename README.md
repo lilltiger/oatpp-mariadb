@@ -7,11 +7,19 @@ MariaDB is a community-developed, commercially supported fork of the MySQL relat
 ## Overview
 
 The library provides:
-- Connection pool management
-- Database connection configuration
-- SQL template parsing
-- Object-Relational Mapping (ORM)
-- Support for various data types including numeric types, dates, and strings
+- Connection pool management with deadlock protection
+- Database connection configuration via options or environment
+- SQL template parsing and validation
+- Object-Relational Mapping (ORM) with comprehensive type support
+- Schema migration with version tracking
+- Transaction management with automatic retries
+- Enhanced CRUD operations with metadata support
+- Comprehensive data type support:
+  - Numeric: Int32, Int64, UInt8, Float64
+  - String: VarChar, Text, Binary (BLOB)
+  - Temporal: Date, DateTime, Time, Year
+  - Complex: JSON, Enum, Set
+  - Generic: AnyType for flexible type handling
 
 ## Dependencies
 
@@ -57,8 +65,9 @@ MARIADB_PASSWORD=password
 MARIADB_DATABASE=test
 ```
 
-## Usage Example
+## Usage Examples
 
+### Basic Query Execution
 ```cpp
 #include "oatpp-mariadb/orm.hpp"
 
@@ -72,13 +81,78 @@ auto client = MyClient(std::make_shared<oatpp::mariadb::Executor>(connectionProv
 auto result = client.selectAllRows();
 ```
 
+### Schema Migration
+```cpp
+#include OATPP_CODEGEN_BEGIN(DTO)
+
+/* Define version tracking DTO */
+class SchemaVersionDTO : public oatpp::DTO {
+  DTO_INIT(SchemaVersionDTO, DTO)
+  DTO_FIELD(oatpp::Int64, version);           // Schema version
+  DTO_FIELD(String, name);                    // Migration name
+  DTO_FIELD(String, script);                  // Migration script
+  DTO_FIELD(String, applied_at);              // Application timestamp
+};
+
+#include OATPP_CODEGEN_END(DTO)
+
+/* Create migration table */
+QUERY(createSchemaVersionTable,
+      "CREATE TABLE IF NOT EXISTS `schema_version` ("
+      "  `version` BIGINT NOT NULL,"
+      "  `name` VARCHAR(255) NOT NULL,"
+      "  `script` TEXT NOT NULL,"
+      "  `applied_at` DATETIME DEFAULT CURRENT_TIMESTAMP,"
+      "  PRIMARY KEY (`version`)"
+      ")")
+```
+
+### Transaction Management
+```cpp
+/* Use TransactionGuard for automatic retry on deadlocks */
+{
+  auto guard = client.transactionGuard();
+  try {
+    // Your transaction operations here
+    guard.commit();
+  } catch (...) {
+    guard.rollback();
+  }
+}
+```
+
+### Enhanced CRUD Operations
+```cpp
+/* Define a product DTO with metadata */
+class ProductDTO : public oatpp::DTO {
+  DTO_INIT(ProductDTO, DTO)
+  DTO_FIELD(String, name);
+  DTO_FIELD(Float64, price);
+  DTO_FIELD(Object<JsonDTO>, metadata);    // JSON metadata support
+};
+
+/* Create with metadata */
+QUERY(createProduct,
+      "INSERT INTO products (name, price, metadata) "
+      "VALUES (:product.name, :product.price, :product.metadata)")
+
+/* Search with filters */
+QUERY(findProducts,
+      "SELECT * FROM products "
+      "WHERE name LIKE :namePattern "
+      "AND metadata->>'$.category' = :category")
+```
+
 ## Testing
 
 The library includes comprehensive tests for:
-- Database connectivity
-- SQL template parsing
-- Data type handling
+- Data type handling (numeric, string, temporal, complex types)
+- Transaction management and deadlock protection
+- Schema migration and version tracking
+- Enhanced CRUD operations with metadata
 - Connection pool management
+- SQL template parsing
+- JSON operations
 
 To run the tests:
 

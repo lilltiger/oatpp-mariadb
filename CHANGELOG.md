@@ -5,30 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.2] - 2024-11-26
 
 ### Added
-- Added automatic table creation in NumericTest to improve test reliability
-- Added enhanced JSON serialization configuration for better output formatting
-- Added debug logging in EnvLoader for better troubleshooting
+#### Data Type Tests
+- Added Int32 specific test cases for 32-bit integer operations
+- Added Int64Test for 64-bit integer operations and edge cases
+- Added UInt8Test for unsigned 8-bit integer handling
+- Added Float64Test for double precision floating point operations
+- Added NumericTest with automatic table creation to improve test reliability
+- Added BooleanTest for boolean data type operations and conversions
+- Added VarCharTest for variable-length character string operations
+- Added Binary data type tests with BLOB handling
+- Added AnyType test cases for generic type handling
+- Added String operations testing with different character sets
+
+#### Date and Time Tests
+- Added DateTest for date format handling and conversions
+- Added DateTimeTest for timestamp and timezone operations
+- Added TimeTest for time data type operations and precision
+- Added Year type support with valid range checks
+
+#### Complex Type Tests
+- Added JsonTest with enhanced JSON type validation
+- Added EnumTest for custom enum type validations
+- Added Set type operations with multiple value handling
+
+#### CRUD and Transaction Tests
+- Added base CrudTest implementation for standard CRUD operations
+- Added ProductCrudTest with advanced CRUD operations and metadata handling
+- Added EnhancedCrudTest with improved CRUD patterns and validations
+- Added dedicated TransactionTest for transaction lifecycle and isolation
+- Added ReturningTest for testing RETURNING clause functionality
 - Added TransactionGuard class for deadlock protection and automatic retries
-- Added configurable MAX_RETRIES in environment settings
 - Added support for nested transactions with savepoints
-- Added improved string handling in TransactionGuard error messages
+
+#### Schema and Parser Tests
+- Added SchemaVersionTest for database schema version management
+- Added SQL template ParserTest for query template parsing and validation
+- Added schema migration implementation with version tracking and validation
+
+#### Infrastructure Improvements
+- Added configurable MAX_RETRIES in environment settings
+- Added ObjectMapper with JSON helper setup for improved serialization
+- Added debug logging in EnvLoader for better troubleshooting
 - Added comprehensive test summary generation in run.sh with detailed statistics
 - Added detailed error categorization in test summary (runtime, test, and buffer errors)
+- Added schema migration support with script validation and size limits
+
+#### Database Features
+- Added unique index on name field in product table
 - Added metadata JSON field support in ProductCrudTest
 - Added search and filter operations in ProductCrudTest
 - Added transaction support with proper isolation levels in ProductCrudTest
-- Added ObjectMapper with JSON helper setup for improved serialization
-- Added unique index on name field in product table
-- Added new test cases for DateTime operations with timezone handling
-- Added comprehensive Binary data type tests with BLOB handling
-- Added enhanced JSON type validation in JsonTest
-- Added Year type support with valid range checks
-- Added Set type operations with multiple value handling
-- Added enhanced String operations testing with different character sets
-- Added Int32 specific test cases for 32-bit integer operations
 
 ### Changed
 - Updated EnvLoader to support multiple .env file locations
@@ -76,7 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Year type range validation
 - Fixed JSON parsing for nested objects and arrays
 
-## [1.1.0] - 2024-XX-XX
+## [1.3.1] - 2024-11-23
 ### Fixed
 - Fixed transaction state tracking in QueryResult
 - Improved statement cleanup with proper error handling
@@ -94,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added debug logging for environment variable loading
   - Improved error handling for file operations
 
-## [1.0.0] - 2024-11-22
+## [1.3.0] - 2024-11-22
 ### Added
 - Improved error detection in test execution script
 - Added specific error patterns for critical issues

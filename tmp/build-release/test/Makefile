@@ -257,6 +257,30 @@ oatpp-mariadb/crud/ProductCrudTest.cpp.s:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.s
 .PHONY : oatpp-mariadb/crud/ProductCrudTest.cpp.s
 
+oatpp-mariadb/migration/SchemaVersionTest.o: oatpp-mariadb/migration/SchemaVersionTest.cpp.o
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.o
+
+# target to build an object file
+oatpp-mariadb/migration/SchemaVersionTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/migration/SchemaVersionTest.cpp.o
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.cpp.o
+
+oatpp-mariadb/migration/SchemaVersionTest.i: oatpp-mariadb/migration/SchemaVersionTest.cpp.i
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/migration/SchemaVersionTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/migration/SchemaVersionTest.cpp.i
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.cpp.i
+
+oatpp-mariadb/migration/SchemaVersionTest.s: oatpp-mariadb/migration/SchemaVersionTest.cpp.s
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/migration/SchemaVersionTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/migration/SchemaVersionTest.cpp.s
+.PHONY : oatpp-mariadb/migration/SchemaVersionTest.cpp.s
+
 oatpp-mariadb/ql_template/ParserTest.o: oatpp-mariadb/ql_template/ParserTest.cpp.o
 .PHONY : oatpp-mariadb/ql_template/ParserTest.o
 
@@ -760,6 +784,9 @@ help:
 	@echo "... oatpp-mariadb/crud/ProductCrudTest.o"
 	@echo "... oatpp-mariadb/crud/ProductCrudTest.i"
 	@echo "... oatpp-mariadb/crud/ProductCrudTest.s"
+	@echo "... oatpp-mariadb/migration/SchemaVersionTest.o"
+	@echo "... oatpp-mariadb/migration/SchemaVersionTest.i"
+	@echo "... oatpp-mariadb/migration/SchemaVersionTest.s"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.o"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.i"
 	@echo "... oatpp-mariadb/ql_template/ParserTest.s"

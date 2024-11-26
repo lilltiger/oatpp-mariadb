@@ -6,5 +6,5 @@ CXX_DEFINES = -Doatpp_mariadb_EXPORTS
 
 CXX_INCLUDES = -I/home/tiger/CascadeProjects/oatpp-mariadb/src -I/usr/local/include/oatpp-1.3.0 -I/usr/local/include/oatpp-1.3.0/oatpp
 
-CXX_FLAGS = -g -std=c++11 -fPIC
+CXX_FLAGS = -g -std=c++17 -fPIC
 

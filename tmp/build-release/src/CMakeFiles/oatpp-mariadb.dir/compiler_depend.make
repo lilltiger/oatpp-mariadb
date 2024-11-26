@@ -885,6 +885,7 @@ src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/Executor.cpp.o: /home/tiger/Casca
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/provider/Invalidator.hpp \
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/provider/Pool.hpp \
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/provider/Provider.hpp \
+  /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/utils/ConversionUtils.hpp \
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/utils/String.hpp \
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/orm/Connection.hpp \
   /usr/local/include/oatpp-1.3.0/oatpp/oatpp/orm/Executor.hpp \
@@ -2610,6 +2611,8 @@ src/liboatpp-mariadb.so: /usr/lib64/libc.so \
 /home/tiger/CascadeProjects/oatpp-mariadb/src/oatpp-mariadb/QueryResult.cpp:
 
 /usr/local/include/oatpp-1.3.0/oatpp/oatpp/orm/QueryResult.hpp:
+
+/usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/utils/ConversionUtils.hpp:
 
 /usr/local/include/oatpp-1.3.0/oatpp/oatpp/core/parser/Caret.hpp:
 

@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/EnhancedCrudTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/migration/SchemaVersionTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/migration/SchemaVersionTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/tests.cpp.o"

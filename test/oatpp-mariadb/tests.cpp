@@ -16,6 +16,8 @@
 #include "oatpp-mariadb/types/BinaryTest.hpp"
 #include "oatpp-mariadb/types/Int32Test.hpp"
 #include "oatpp-mariadb/types/StringTest.hpp"
+#include "oatpp-mariadb/types/AnyTypeTest.hpp"
+#include "oatpp-mariadb/migration/SchemaVersionTest.hpp"
 
 #include "oatpp-mariadb/transaction/TransactionTest.hpp"
 #include "oatpp-mariadb/crud/CrudTest.hpp"
@@ -55,10 +57,10 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::EnumTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::transaction::TransactionTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::CrudTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::crud::ProductCrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::EnhancedCrudTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::Int32Test);
-  //OATPP_RUN_TEST(oatpp::test::mariadb::types::TimeTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::AnyTypeTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::migration::SchemaVersionTest);
 }
 
 }

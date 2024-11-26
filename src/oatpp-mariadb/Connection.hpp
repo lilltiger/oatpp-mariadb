@@ -50,7 +50,11 @@ struct ConnectionAcquisitionProxy : public provider::AcquisitionProxy<Connection
   {}
 
   MYSQL* getHandle() override {
-    return _handle.object->getHandle();
+    return this->_handle.object->getHandle();
+  }
+
+  void setHandle(MYSQL* handle) override {
+    this->_handle.object->setHandle(handle);
   }
 };
 

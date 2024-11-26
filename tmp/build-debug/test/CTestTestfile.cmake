@@ -5,4 +5,4 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 add_test(oatpp-mariadb-tests "oatpp-mariadb-tests")
-set_tests_properties(oatpp-mariadb-tests PROPERTIES  _BACKTRACE_TRIPLES "/home/tiger/CascadeProjects/oatpp-mariadb/test/CMakeLists.txt;75;add_test;/home/tiger/CascadeProjects/oatpp-mariadb/test/CMakeLists.txt;0;")
+set_tests_properties(oatpp-mariadb-tests PROPERTIES  _BACKTRACE_TRIPLES "/home/tiger/CascadeProjects/oatpp-mariadb/test/CMakeLists.txt;77;add_test;/home/tiger/CascadeProjects/oatpp-mariadb/test/CMakeLists.txt;0;")

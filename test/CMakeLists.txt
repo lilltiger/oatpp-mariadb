@@ -35,6 +35,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/JsonTest.cpp
         oatpp-mariadb/types/BinaryTest.hpp
         oatpp-mariadb/types/BinaryTest.cpp
+        oatpp-mariadb/migration/SchemaVersionTest.cpp
+        oatpp-mariadb/migration/SchemaVersionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
         oatpp-mariadb/crud/CrudTest.hpp
@@ -47,7 +49,7 @@ add_executable(oatpp-mariadb-tests
 )
 
 set_target_properties(oatpp-mariadb-tests PROPERTIES
-        CXX_STANDARD 11
+        CXX_STANDARD 17
         CXX_EXTENSIONS OFF
         CXX_STANDARD_REQUIRED ON
 )

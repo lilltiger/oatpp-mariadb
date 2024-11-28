@@ -14,6 +14,7 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/Connection.hpp
         oatpp-mariadb/ConnectionProvider.cpp
         oatpp-mariadb/ConnectionProvider.hpp
+        oatpp-mariadb/ConnectionPool.hpp
         oatpp-mariadb/Executor.cpp
         oatpp-mariadb/Executor.hpp
         oatpp-mariadb/QueryResult.cpp

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_C_COMPILER "clang")
@@ -111,4 +111,17 @@ add_subdirectory("src")
 if(OATPP_MARIADB_BUILD_TESTS)
     enable_testing()
     add_subdirectory("test")
+endif()
+
+if(OATPP_INSTALL)
+    ###################################################################################################
+    ## install targets
+    include(cmake/module-install.cmake)
+
+    # Configure and install pkg-config file
+    set(PKG_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/${OATPP_THIS_MODULE_NAME}.pc")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${OATPP_THIS_MODULE_NAME}.pc.in" "${PKG_CONFIG_FILE}" @ONLY)
+    install(FILES "${PKG_CONFIG_FILE}"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+            COMPONENT "pkg-config")
 endif()

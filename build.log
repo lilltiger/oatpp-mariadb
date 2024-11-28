@@ -1,18 +1,17 @@
-=== Build Started at tis 26 nov 2024 03:36:44 CET ===
+=== Build Started at tor 28 nov 2024 03:51:47 CET ===
 Build Configuration:
 - Build Type: Release
-- Clean Build: 0
+- Clean Build: 1
 Using build directory: tmp/build-release
+Cleaning build directory...
 Configuring Release build...
 Running cmake...
-CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
-  Compatibility with CMake < 3.10 will be removed from a future version of
-  CMake.
-
-  Update the VERSION argument <min> value or use a ...<max> suffix to tell
-  CMake that the project does not need compatibility with older versions.
-
-
+-- The CXX compiler identification is Clang 18.1.8
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 Finding oatpp in location=INSTALLED
 OATPP_INCLUDE=/usr/local/include
 OATPP_TEST_INCLUDE=/usr/local/include
@@ -24,6 +23,7 @@ OATPP_TEST_INCLUDE=/usr/local/include
 ############################################################################
 
 target_link_oatpp(oatpp-mariadb) to installed oatpp lib
+target_link_oatpp(oatpp-mariadb-tests) to installed oatpp lib
 
 ############################################################################
 ## oatpp-module-install.cmake
@@ -36,30 +36,35 @@ OATPP_THIS_MODULE_DIRECTORIES=oatpp-mariadb
 
 ############################################################################
 
-target_link_oatpp(oatpp-mariadb-tests) to installed oatpp lib
--- Configuring done (0.0s)
+-- Configuring done (0.3s)
 -- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    OATPP_INCLUDE_DIRS
+
+
 -- Build files have been written to: /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release
 Building project...
-[  5%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/ResultMapper.cpp.o
-[  5%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ql_template/Parser.cpp.o
-[ 11%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ConnectionProvider.cpp.o
-[ 11%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ql_template/TemplateValueProvider.cpp.o
-[ 14%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/Serializer.cpp.o
-[ 17%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/Connection.cpp.o
-[ 20%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/Executor.cpp.o
-[ 22%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/Deserializer.cpp.o
+[  8%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/ResultMapper.cpp.o
+[  8%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ql_template/TemplateValueProvider.cpp.o
+[ 11%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/Executor.cpp.o
+[ 14%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ql_template/Parser.cpp.o
+[  8%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/Deserializer.cpp.o
+[ 17%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/mapping/Serializer.cpp.o
+[ 20%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/Connection.cpp.o
+[ 22%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/ConnectionProvider.cpp.o
 [ 25%] Building CXX object src/CMakeFiles/oatpp-mariadb.dir/oatpp-mariadb/QueryResult.cpp.o
 [ 28%] Linking CXX shared library liboatpp-mariadb.so
 [ 28%] Built target oatpp-mariadb
-[ 37%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o
-[ 37%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/StringTest.cpp.o
-[ 37%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o
-[ 40%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int32Test.cpp.o
+[ 42%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/StringTest.cpp.o
+[ 42%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int32Test.cpp.o
 [ 42%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Int64Test.cpp.o
-[ 45%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o
-[ 48%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o
-[ 51%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o
+[ 42%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/ql_template/ParserTest.cpp.o
+[ 42%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/NumericTest.cpp.o
+[ 45%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTest.cpp.o
+[ 48%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/Float64Test.cpp.o
+[ 51%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/UInt8Test.cpp.o
 [ 54%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/DateTimeTest.cpp.o
 [ 57%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/VarCharTest.cpp.o
 [ 60%] Building CXX object test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/types/BooleanTest.cpp.o

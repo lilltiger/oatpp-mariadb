@@ -49,5 +49,5 @@ target_link_libraries(${OATPP_THIS_MODULE_NAME} PRIVATE mariadb)
 ## install targets
 
 if(OATPP_INSTALL)
-    include("../cmake/module-install.cmake")
+    # Installation is handled in the root CMakeLists.txt
 endif()

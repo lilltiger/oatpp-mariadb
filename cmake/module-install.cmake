@@ -57,13 +57,17 @@ endforeach()
 
 #######################################################################################
 
-install(TARGETS ${OATPP_THIS_MODULE_TARGETS}
-        EXPORT "${OATPP_MODULE_NAME}Targets"
-        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/oatpp-${OATPP_MODULE_VERSION}"
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/oatpp-${OATPP_MODULE_VERSION}"
-        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/oatpp-${OATPP_MODULE_VERSION}"
-        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/oatpp-${OATPP_MODULE_VERSION}/${OATPP_MODULE_NAME}"
-)
+# Only install targets if they haven't been installed yet
+get_target_property(_target_type ${OATPP_THIS_MODULE_TARGETS} TYPE)
+if(NOT _target_type STREQUAL "INTERFACE_LIBRARY")
+    install(TARGETS ${OATPP_THIS_MODULE_TARGETS}
+            EXPORT "${OATPP_MODULE_NAME}Targets"
+            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/oatpp-${OATPP_MODULE_VERSION}"
+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/oatpp-${OATPP_MODULE_VERSION}"
+            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/oatpp-${OATPP_MODULE_VERSION}"
+            INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/oatpp-${OATPP_MODULE_VERSION}/${OATPP_MODULE_NAME}"
+    )
+endif()
 
 install(DIRECTORY ${OATPP_DIRS_TO_INSTALL}
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/oatpp-${OATPP_MODULE_VERSION}/${OATPP_MODULE_NAME}"
@@ -75,6 +79,11 @@ install(EXPORT "${OATPP_MODULE_NAME}Targets"
         NAMESPACE oatpp::
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${OATPP_MODULE_NAME}-${OATPP_MODULE_VERSION}"
 )
+
+# Append cmake_policy(POP) to the generated targets file
+file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${CMAKE_INSTALL_LIBDIR}/cmake/${OATPP_MODULE_NAME}-${OATPP_MODULE_VERSION}/${OATPP_MODULE_NAME}Targets.cmake"
+"\n# Restore policy settings
+cmake_policy(POP)\n")
 
 include(CMakePackageConfigHelpers)
 

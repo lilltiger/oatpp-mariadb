@@ -42,6 +42,67 @@ if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so"
+         RPATH "")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0" TYPE SHARED_LIBRARY FILES "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/src/liboatpp-mariadb.so")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so"
+         OLD_RPATH "/usr/local/lib:"
+         NEW_RPATH "")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/oatpp-1.3.0/liboatpp-mariadb.so")
+    endif()
+  endif()
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/oatpp-1.3.0/oatpp-mariadb" TYPE DIRECTORY FILES "/home/tiger/CascadeProjects/oatpp-mariadb/cmake/../src/oatpp-mariadb" FILES_MATCHING REGEX "/[^/]*\\.hpp$")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0/oatpp-mariadbTargets.cmake")
+    file(DIFFERENT _cmake_export_file_changed FILES
+         "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0/oatpp-mariadbTargets.cmake"
+         "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles/Export/03c1b0f181a8ec840d98ddde1c11c0d2/oatpp-mariadbTargets.cmake")
+    if(_cmake_export_file_changed)
+      file(GLOB _cmake_old_config_files "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0/oatpp-mariadbTargets-*.cmake")
+      if(_cmake_old_config_files)
+        string(REPLACE ";" ", " _cmake_old_config_files_text "${_cmake_old_config_files}")
+        message(STATUS "Old export file \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0/oatpp-mariadbTargets.cmake\" will be replaced.  Removing files [${_cmake_old_config_files_text}].")
+        unset(_cmake_old_config_files_text)
+        file(REMOVE ${_cmake_old_config_files})
+      endif()
+      unset(_cmake_old_config_files)
+    endif()
+    unset(_cmake_export_file_changed)
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0" TYPE FILE FILES "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles/Export/03c1b0f181a8ec840d98ddde1c11c0d2/oatpp-mariadbTargets.cmake")
+  if(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0" TYPE FILE FILES "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/CMakeFiles/Export/03c1b0f181a8ec840d98ddde1c11c0d2/oatpp-mariadbTargets-release.cmake")
+  endif()
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/oatpp-mariadb-1.3.0" TYPE FILE FILES
+    "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/oatpp-mariadbConfig.cmake"
+    "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/oatpp-mariadbConfigVersion.cmake"
+    )
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "pkg-config" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/oatpp-mariadb.pc")
+endif()
+
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release/src/cmake_install.cmake")

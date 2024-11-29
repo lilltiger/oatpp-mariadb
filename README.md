@@ -25,6 +25,33 @@ The library provides:
   - Result caching for improved performance
   - Automatic memory management and cleanup
 
+## Type System
+
+### Explicit Type Mapping
+The library provides explicit SQL type mapping macros for improved type safety:
+
+```cpp
+// Using explicit type mappings
+QUERY(createUser,
+    "INSERT INTO users (name, balance, age, is_active) VALUES (:name, :balance, :age, :is_active);",
+    PARAM_VARCHAR(name, 255),        // Explicit VARCHAR with length
+    PARAM_DECIMAL(balance, 10, 2),   // Explicit DECIMAL with precision and scale
+    PARAM_INT(age),                  // Maps to INT
+    PARAM_BOOL(is_active))           // Maps to BOOLEAN
+```
+
+### Supported Type Mappings
+- `PARAM_VARCHAR(name, length)` - VARCHAR with length specification
+- `PARAM_DECIMAL(name, precision, scale)` - DECIMAL with precision and scale
+- `PARAM_INT(name)` - Integer type
+- `PARAM_BIGINT(name)` - 64-bit integer type
+- `PARAM_BOOL(name)` - Boolean type
+- `PARAM_TEXT(name)` - TEXT type
+- `PARAM_DATETIME(name)` - DATETIME type
+- `PARAM_DATE(name)` - DATE type
+- `PARAM_TIME(name)` - TIME type
+- `PARAM_BLOB(name)` - Binary data type
+
 ## Dependencies
 
 - [oatpp](https://github.com/oatpp/oatpp) - Version 1.3.0 or higher

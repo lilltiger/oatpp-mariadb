@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.2] - 2024-11-26
 
 ### Added
+#### Type System Improvements
+- Added explicit SQL type mapping macros for improved type safety
+- Added support for VARCHAR length specifications
+- Added DECIMAL precision and scale parameters
+- Added specialized type mappings for all major SQL types
+- Added type-safe parameter declarations for queries
+
 #### Data Type Tests
 - Added Int32 specific test cases for 32-bit integer operations
 - Added Int64Test for 64-bit integer operations and edge cases
@@ -52,9 +59,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added comprehensive test summary generation in run.sh with detailed statistics
 - Added detailed error categorization in test summary (runtime, test, and buffer errors)
 - Added schema migration support with script validation and size limits
-- Added hasBeenFetched tracking to QueryResult for improved fetch state management
-- Implemented result caching in QueryResult for optimized data access
-- Added automatic cleanup of query results to prevent memory leaks
 
 #### Database Features
 - Added unique index on name field in product table

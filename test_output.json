@@ -1,0 +1,3 @@
+
+{"timestamp":"2024-11-29 22:03:48","level":"INFO","event":"TEST_START","message":"Test execution started in regular mode"}
+{"timestamp":"2024-11-29 22:03:48","level":"INFO","event":"TEST_START","message":"Starting test in regular mode (5s no-output timeout)"}

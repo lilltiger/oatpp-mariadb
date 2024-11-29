@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: oatpp-mariadb
+Description: oatpp MariaDB/MySQL database integration module
+Version: 1.3.0
+Requires: oatpp-1.3.0
+Libs: -L${libdir} -loatpp-mariadb
+Cflags: -I${includedir}/oatpp-1.3.0/oatpp-mariadb

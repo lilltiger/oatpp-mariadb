@@ -71,7 +71,7 @@ if ! pkg-config --exists oatpp; then
 fi
 
 # Set build directory
-BUILD_DIR="tmp/build-${BUILD_TYPE,,}"  # Convert BUILD_TYPE to lowercase
+BUILD_DIR="$SCRIPT_DIR/build"
 
 log "Using build directory: $BUILD_DIR"
 
@@ -94,10 +94,11 @@ cmake -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
       -DOATPP_MODULES_LOCATION=INSTALLED \
       -DCMAKE_PREFIX_PATH=/usr/local \
       -DOATPP_INCLUDE_DIRS=$(pkg-config --variable=includedir oatpp)/oatpp-1.3.0/oatpp \
-      ../.. 2>&1 | tee -a "$LOG_FILE" || { print_error "CMake configuration failed"; exit 1; }
+      -B "$BUILD_DIR" \
+      -S "$SCRIPT_DIR" 2>&1 | tee -a "$LOG_FILE" || { print_error "CMake configuration failed"; exit 1; }
 
 log "Building project..."
 # Run make and capture output
-make -j $(nproc) 2>&1 | tee -a "$LOG_FILE" || { print_error "Build failed"; exit 1; }
+cmake --build "$BUILD_DIR" -j $(nproc) 2>&1 | tee -a "$LOG_FILE" || { print_error "Build failed"; exit 1; }
 
 log "${BUILD_TYPE} build completed successfully!"

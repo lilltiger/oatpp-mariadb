@@ -1,0 +1,419 @@
+# Suggested Improvements for oatpp-mariadb
+
+## Type System Improvements
+
+### 1. Explicit Type Mapping
+```cpp
+// Current implicit mapping
+QUERY(createUser,
+    "INSERT INTO users ...",
+    PARAM(oatpp::String, name))
+
+// Proposed explicit mapping
+QUERY(createUser,
+    "INSERT INTO users ...",
+    PARAM_VARCHAR(name, 255),        // Explicit SQL type and length
+    PARAM_DECIMAL(amount, 10, 2))    // Precision and scale for decimals
+```
+
+### 2. Custom Type Support
+```cpp
+// Custom type definition with mapping
+struct CustomerId {
+    int64_t value;
+};
+
+// Type mapping registration
+OATPP_MARIADB_REGISTER_TYPE(CustomerId, MYSQL_TYPE_LONGLONG) {
+    static void bind(MYSQL_BIND& bind, const CustomerId& id) {
+        bind.buffer_type = MYSQL_TYPE_LONGLONG;
+        bind.buffer = &id.value;
+    }
+};
+```
+
+### 3. Nullable Types
+```cpp
+// Explicit nullable handling
+QUERY(updateUser,
+    "UPDATE users ...",
+    PARAM(Nullable<oatpp::String>, name),  // Explicitly nullable
+    PARAM(Required<oatpp::Int32>, id))     // Explicitly required
+```
+
+### 4. Array/Collection Types
+```cpp
+// Array type support
+QUERY(addTags,
+    "INSERT INTO user_tags ...",
+    PARAM(Array<oatpp::String>, tags))  // Handle array parameters
+
+// JSON array support
+QUERY(addMetadata,
+    "UPDATE users ...",
+    PARAM(JsonArray, metadata))  // Automatic JSON serialization
+```
+
+### 5. Enum Support
+```cpp
+ENUM(UserRole, v_int32,
+    VALUE(ADMIN, 1),
+    VALUE(USER, 2),
+    VALUE(GUEST, 3)
+);
+
+QUERY(updateRole,
+    "UPDATE users ...",
+    PARAM(UserRole, role))  // Type-safe enum handling
+```
+
+### 6. Binary Data Types
+```cpp
+QUERY(saveFile,
+    "INSERT INTO files ...",
+    PARAM(Binary, data),        // Raw binary data
+    PARAM(BinaryRef, dataRef))  // Reference to binary data
+```
+
+### 7. Date/Time Types
+```cpp
+QUERY(createEvent,
+    "INSERT INTO events ...",
+    PARAM(Timestamp, startTime),     // Native timestamp
+    PARAM(Date, eventDate),          // Date only
+    PARAM(Time, eventTime),          // Time only
+    PARAM(DateTime, scheduledFor))    // Full date and time
+```
+
+### 8. Composite Types
+```cpp
+struct Address {
+    oatpp::String street;
+    oatpp::String city;
+    oatpp::String country;
+};
+
+QUERY(updateAddress,
+    "UPDATE users ...",
+    PARAM(Composite<Address>, address))  // Automatically map composite type
+```
+
+### 9. Type Constraints
+```cpp
+QUERY(createUser,
+    "INSERT INTO users ...",
+    PARAM(String<1, 255>, name),          // Length constraints
+    PARAM(Integer<0, 100>, age),          // Range constraints
+    PARAM(Email, email),                  // Format constraints
+    PARAM(Pattern<"[A-Z]+">, code))       // Pattern constraints
+```
+
+### 10. Type Conversion
+```cpp
+QUERY(getData,
+    "SELECT * FROM data",
+    CONVERT(result_column, TargetType),    // Explicit conversion
+    TRANSFORM(value, TransformFunction))    // Custom transformation
+```
+
+### 11. Result Type Safety
+```cpp
+auto result = QUERY_RETURNING(UserDto,     // Specify expected return type
+    "SELECT * FROM users WHERE id = ?",
+    PARAM(oatpp::Int32, id));
+
+// Multiple return types
+auto result = QUERY_RETURNING(std::tuple<UserDto, ProfileDto>,
+    "SELECT u.*, p.* FROM users u JOIN profiles p ...");
+```
+
+## General System Improvements
+
+### 1. Connection Management
+- Better handling of "Server has gone away" errors
+- Automatic reconnection strategies
+- Connection pooling improvements
+- Better timeout handling
+
+### 2. Transaction Handling
+- More intuitive transaction API
+- Automatic rollback on scope exit (RAII-style)
+- Better nested transaction support
+- Transaction isolation level control
+
+### 3. Prepared Statement Handling
+- Statement caching
+- Better handle cleanup
+- Memory management
+- Statement pooling
+
+### 4. Result Set Handling
+- Streaming large result sets
+- Better memory management
+- Forward-only cursor support
+- Batch processing capabilities
+
+### 5. Error Handling
+- Specific exception types
+- Better deadlock detection
+- Retry policies
+- Detailed error context
+
+### 6. Query Building
+- Type-safe query builder
+- Better escaping and sanitization
+- Complex joins support
+- Subquery support
+
+### 7. Security
+- Better password handling
+- SSL/TLS configuration
+- Connection encryption
+- SQL injection prevention
+
+### 8. Performance
+- Statement caching
+- Result set buffering control
+- Memory usage optimization
+- Connection pooling strategies
+
+### 9. Documentation
+- Type mapping documentation
+- Best practices
+- Performance guidelines
+- Troubleshooting guides
+
+## Testing Infrastructure
+
+### 1. Mock Database Support
+```cpp
+// Easy database mocking
+class MockUserDb : public UserDb {
+    OATPP_MOCK_DATABASE(MockUserDb, UserDb) {
+        MOCK_QUERY(getAllUsers);
+        MOCK_QUERY(getUserById);
+    }
+};
+
+// Usage in tests
+TEST("Should get user") {
+    auto db = MockUserDb::createShared();
+    db->expectQuery("getUserById")
+      .withParam("id", 1)
+      .willReturn(createTestUser(1));
+}
+```
+
+### 2. Test Fixtures
+```cpp
+// Reusable test fixtures
+class MariaDbTest : public oatpp::test::DatabaseTest {
+protected:
+    void setUp() override {
+        // Automatic test database setup
+        createTestSchema();
+        loadTestData();
+    }
+    
+    void tearDown() override {
+        // Automatic cleanup
+        clearTestData();
+        dropTestSchema();
+    }
+};
+```
+
+### 3. Integration Testing Support
+```cpp
+// Database integration test helpers
+TEST_DATABASE("Should handle concurrent transactions") {
+    auto tx1 = db->beginTransaction();
+    auto tx2 = db->beginTransaction();
+    
+    // Test concurrent operations
+    ASSERT_DEADLOCK_DETECTED(tx1->update(), tx2->update());
+}
+```
+
+## Migration and Schema Management
+
+### 1. Schema Versioning
+```cpp
+// Version-controlled schema changes
+SCHEMA_VERSION(1) {
+    CREATE_TABLE(users,
+        COLUMN(id, INTEGER, PRIMARY_KEY),
+        COLUMN(name, VARCHAR(255))
+    );
+}
+
+SCHEMA_VERSION(2) {
+    ALTER_TABLE(users,
+        ADD_COLUMN(email, VARCHAR(255), UNIQUE)
+    );
+}
+```
+
+### 2. Data Migration
+```cpp
+// Data migration support
+MIGRATION(1, 2) {
+    // Migrate data between schema versions
+    FOR_EACH_ROW(users) {
+        UPDATE_COLUMN(email, generateEmail(ROW(name)));
+    }
+}
+```
+
+### 3. Schema Validation
+```cpp
+// Runtime schema validation
+VALIDATE_SCHEMA(UserDto) {
+    VALIDATE_COLUMN(name, VARCHAR(255));
+    VALIDATE_COLUMN(email, VARCHAR(255), UNIQUE);
+    VALIDATE_INDEX(email_idx, email);
+}
+```
+
+## Monitoring and Diagnostics
+
+### 1. Query Performance Monitoring
+```cpp
+// Query performance tracking
+class QueryMonitor : public oatpp::mariadb::Monitor {
+    void onQueryExecuted(const QueryInfo& info) override {
+        if (info.duration > slowQueryThreshold) {
+            OATPP_LOGW("Slow query detected: %s", info.query.c_str());
+        }
+    }
+};
+```
+
+### 2. Connection Pool Metrics
+```cpp
+// Connection pool monitoring
+struct PoolMetrics {
+    size_t active_connections;
+    size_t idle_connections;
+    size_t wait_count;
+    Duration avg_wait_time;
+};
+
+auto metrics = connectionPool->getMetrics();
+```
+
+### 3. Query Analysis
+```cpp
+// Query analysis tools
+ANALYZE_QUERY(query) {
+    EXPLAIN_PLAN();
+    SHOW_INDEXES();
+    ESTIMATE_ROWS();
+}
+```
+
+## Developer Experience
+
+### 1. IDE Integration
+```cpp
+// IDE hints and autocompletion
+QUERY(getUserById,
+    IDE_HINT("Returns user by ID"),
+    IDE_PARAM(id, "User's unique identifier"),
+    IDE_RETURNS("Single user or null"),
+    "SELECT * FROM users WHERE id = :id")
+```
+
+### 2. Query Debugging
+```cpp
+// Enhanced query debugging
+DEBUG_QUERY(query) {
+    SHOW_BIND_PARAMS();
+    SHOW_ACTUAL_QUERY();
+    SHOW_EXECUTION_PLAN();
+}
+```
+
+### 3. Development Tools
+```cpp
+// Development utilities
+class DbDevTools {
+    void showTableSchema(const std::string& table);
+    void compareSchemas(const std::string& source, const std::string& target);
+    void generateMigration(const std::string& from, const std::string& to);
+    void validateConstraints();
+};
+```
+
+## Deployment and Operations
+
+### 1. Configuration Management
+```cpp
+// Enhanced configuration
+struct DbConfig {
+    ConnectionPool pool;
+    Retry retry;
+    Security security;
+    Performance performance;
+    Monitoring monitoring;
+};
+```
+
+### 2. Health Checks
+```cpp
+// Database health monitoring
+class DbHealthCheck {
+    bool isHealthy();
+    bool isResponding();
+    Duration getLatency();
+    std::vector<std::string> getWarnings();
+};
+```
+
+### 3. Operational Tools
+```cpp
+// Operational utilities
+class DbOps {
+    void backup();
+    void restore(const std::string& backup);
+    void optimize();
+    void analyze();
+    void validateIntegrity();
+};
+```
+
+## Implementation Considerations
+
+### 1. Backward Compatibility
+- Version migration paths
+- Deprecation policies
+- Compatibility layers
+- Migration guides
+
+### 2. Performance Impact
+- Benchmark suite
+- Performance regression tests
+- Resource usage monitoring
+- Optimization guidelines
+
+### 3. Security Considerations
+- Security audit tools
+- Vulnerability scanning
+- Compliance checking
+- Security best practices
+
+### 4. Documentation
+- API reference
+- Implementation guides
+- Migration guides
+- Troubleshooting guides
+- Best practices
+- Example applications
+
+The goal of these additional sections is to provide:
+- Better testing support
+- Easier schema management
+- Better monitoring capabilities
+- Improved developer experience
+- Better operational support
+- Clear implementation guidance 

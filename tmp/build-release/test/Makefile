@@ -185,6 +185,30 @@ oatpp-mariadb-tests/fast:
 	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/build
 .PHONY : oatpp-mariadb-tests/fast
 
+oatpp-mariadb/QueryResultTest.o: oatpp-mariadb/QueryResultTest.cpp.o
+.PHONY : oatpp-mariadb/QueryResultTest.o
+
+# target to build an object file
+oatpp-mariadb/QueryResultTest.cpp.o:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.o
+.PHONY : oatpp-mariadb/QueryResultTest.cpp.o
+
+oatpp-mariadb/QueryResultTest.i: oatpp-mariadb/QueryResultTest.cpp.i
+.PHONY : oatpp-mariadb/QueryResultTest.i
+
+# target to preprocess a source file
+oatpp-mariadb/QueryResultTest.cpp.i:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.i
+.PHONY : oatpp-mariadb/QueryResultTest.cpp.i
+
+oatpp-mariadb/QueryResultTest.s: oatpp-mariadb/QueryResultTest.cpp.s
+.PHONY : oatpp-mariadb/QueryResultTest.s
+
+# target to generate assembly for a file
+oatpp-mariadb/QueryResultTest.cpp.s:
+	cd /home/tiger/CascadeProjects/oatpp-mariadb/tmp/build-release && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/oatpp-mariadb-tests.dir/build.make test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.s
+.PHONY : oatpp-mariadb/QueryResultTest.cpp.s
+
 oatpp-mariadb/crud/CrudTest.o: oatpp-mariadb/crud/CrudTest.cpp.o
 .PHONY : oatpp-mariadb/crud/CrudTest.o
 
@@ -775,6 +799,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... oatpp-mariadb-tests"
+	@echo "... oatpp-mariadb/QueryResultTest.o"
+	@echo "... oatpp-mariadb/QueryResultTest.i"
+	@echo "... oatpp-mariadb/QueryResultTest.s"
 	@echo "... oatpp-mariadb/crud/CrudTest.o"
 	@echo "... oatpp-mariadb/crud/CrudTest.i"
 	@echo "... oatpp-mariadb/crud/CrudTest.s"

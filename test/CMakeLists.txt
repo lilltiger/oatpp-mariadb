@@ -1,51 +1,29 @@
 add_executable(oatpp-mariadb-tests
-        oatpp-mariadb/ql_template/ParserTest.hpp
+        oatpp-mariadb/tests.cpp
+        oatpp-mariadb/QueryResultTest.cpp
         oatpp-mariadb/ql_template/ParserTest.cpp
-        oatpp-mariadb/types/NumericTest.hpp
         oatpp-mariadb/types/NumericTest.cpp
-        oatpp-mariadb/types/Int32Test.hpp
         oatpp-mariadb/types/Int32Test.cpp
         oatpp-mariadb/types/StringTest.cpp
-        oatpp-mariadb/types/StringTest.hpp
-        oatpp-mariadb/types/Int64Test.hpp
         oatpp-mariadb/types/Int64Test.cpp
-        oatpp-mariadb/types/Float64Test.hpp
         oatpp-mariadb/types/Float64Test.cpp
-        oatpp-mariadb/types/UInt8Test.hpp
         oatpp-mariadb/types/UInt8Test.cpp
-        oatpp-mariadb/types/DateTest.hpp
         oatpp-mariadb/types/DateTest.cpp
-        oatpp-mariadb/types/DateTimeTest.hpp
         oatpp-mariadb/types/DateTimeTest.cpp
-        oatpp-mariadb/types/VarCharTest.hpp
         oatpp-mariadb/types/VarCharTest.cpp
-        oatpp-mariadb/types/BooleanTest.hpp
         oatpp-mariadb/types/BooleanTest.cpp
-        oatpp-mariadb/types/ReturningTest.hpp
         oatpp-mariadb/types/ReturningTest.cpp
-        oatpp-mariadb/types/TimeTest.hpp
         oatpp-mariadb/types/TimeTest.cpp
-        oatpp-mariadb/types/YearTest.hpp
         oatpp-mariadb/types/YearTest.cpp
-        oatpp-mariadb/types/EnumTest.hpp
         oatpp-mariadb/types/EnumTest.cpp
-        oatpp-mariadb/types/SetTest.hpp
         oatpp-mariadb/types/SetTest.cpp
-        oatpp-mariadb/types/JsonTest.hpp
         oatpp-mariadb/types/JsonTest.cpp
-        oatpp-mariadb/types/BinaryTest.hpp
         oatpp-mariadb/types/BinaryTest.cpp
         oatpp-mariadb/migration/SchemaVersionTest.cpp
-        oatpp-mariadb/migration/SchemaVersionTest.hpp
-        oatpp-mariadb/transaction/TransactionTest.hpp
         oatpp-mariadb/transaction/TransactionTest.cpp
-        oatpp-mariadb/crud/CrudTest.hpp
         oatpp-mariadb/crud/CrudTest.cpp
-        oatpp-mariadb/crud/ProductCrudTest.hpp
         oatpp-mariadb/crud/ProductCrudTest.cpp
-        oatpp-mariadb/crud/EnhancedCrudTest.hpp
         oatpp-mariadb/crud/EnhancedCrudTest.cpp
-        oatpp-mariadb/tests.cpp
 )
 
 set_target_properties(oatpp-mariadb-tests PROPERTIES
@@ -71,7 +49,5 @@ target_link_oatpp(oatpp-mariadb-tests)
 target_link_libraries(oatpp-mariadb-tests
         PRIVATE ${OATPP_THIS_MODULE_NAME}
 )
-
-## TODO link dependencies here (if some)
 
 add_test(oatpp-mariadb-tests oatpp-mariadb-tests)

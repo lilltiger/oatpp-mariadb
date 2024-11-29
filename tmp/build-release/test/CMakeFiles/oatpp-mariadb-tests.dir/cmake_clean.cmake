@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/oatpp-mariadb-tests.dir/link.d"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.o"
+  "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o.d"
   "CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/EnhancedCrudTest.cpp.o"

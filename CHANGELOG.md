@@ -52,6 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added comprehensive test summary generation in run.sh with detailed statistics
 - Added detailed error categorization in test summary (runtime, test, and buffer errors)
 - Added schema migration support with script validation and size limits
+- Added hasBeenFetched tracking to QueryResult for improved fetch state management
+- Implemented result caching in QueryResult for optimized data access
+- Added automatic cleanup of query results to prevent memory leaks
 
 #### Database Features
 - Added unique index on name field in product table

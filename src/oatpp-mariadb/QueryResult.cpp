@@ -12,6 +12,9 @@ QueryResult::QueryResult(MYSQL_STMT* stmt,
   , m_resultData(stmt, typeResolver)
   , m_inTransaction(false)
   , m_lastInsertId(-1)
+  , m_hasBeenFetched(false)
+  , m_cachingEnabled(false)
+  , m_cachedResult(nullptr)
 {
   OATPP_LOGD("QueryResult", "Executing statement...");
   
@@ -123,8 +126,40 @@ bool QueryResult::hasMoreToFetch() const {
   return m_resultData.hasMore;
 }
 
+bool QueryResult::hasBeenFetched() const {
+  return m_hasBeenFetched;
+}
+
+void QueryResult::enableResultCaching(bool enable) {
+  m_cachingEnabled = enable;
+  if (!enable) {
+    m_cachedResult = nullptr;
+  }
+}
+
+bool QueryResult::isResultCachingEnabled() const {
+  return m_cachingEnabled;
+}
+
 oatpp::Void QueryResult::fetch(const oatpp::Type* const type, v_int64 count) {
-  return m_resultMapper->readRows(&m_resultData, type, count);
+  if (m_hasBeenFetched) {
+    OATPP_LOGW("QueryResult", "Warning: Attempting to fetch results multiple times.");
+    if (m_cachingEnabled && m_cachedResult) {
+      OATPP_LOGD("QueryResult", "Returning cached results");
+      return m_cachedResult;
+    }
+    return nullptr;
+  }
+  
+  m_hasBeenFetched = true;
+  auto result = m_resultMapper->readRows(&m_resultData, type, count);
+  
+  if (m_cachingEnabled) {
+    OATPP_LOGD("QueryResult", "Caching query results");
+    m_cachedResult = result;
+  }
+  
+  return result;
 }
 
 v_int64 QueryResult::getLastInsertId() const {

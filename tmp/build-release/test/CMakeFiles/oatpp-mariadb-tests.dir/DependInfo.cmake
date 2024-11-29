@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/QueryResultTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/QueryResultTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/CrudTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/CrudTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/EnhancedCrudTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/EnhancedCrudTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/EnhancedCrudTest.cpp.o.d"
   "/home/tiger/CascadeProjects/oatpp-mariadb/test/oatpp-mariadb/crud/ProductCrudTest.cpp" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o" "gcc" "test/CMakeFiles/oatpp-mariadb-tests.dir/oatpp-mariadb/crud/ProductCrudTest.cpp.o.d"

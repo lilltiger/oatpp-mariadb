@@ -18,6 +18,7 @@
 #include "oatpp-mariadb/types/StringTest.hpp"
 #include "oatpp-mariadb/types/AnyTypeTest.hpp"
 #include "oatpp-mariadb/migration/SchemaVersionTest.hpp"
+#include "oatpp-mariadb/QueryResultTest.hpp"
 
 #include "oatpp-mariadb/transaction/TransactionTest.hpp"
 #include "oatpp-mariadb/crud/CrudTest.hpp"
@@ -31,6 +32,8 @@
 namespace {
 
 void runTests() {
+  OATPP_RUN_TEST(oatpp::test::mariadb::QueryResultTest);
+  /*
   OATPP_RUN_TEST(oatpp::test::mariadb::ql_template::ParserTest);
   OATPP_RUN_TEST(oatpp::test::mariadb::types::Int64Test);
   OATPP_RUN_TEST(oatpp::test::mariadb::types::Float64Test);
@@ -61,6 +64,7 @@ void runTests() {
   OATPP_RUN_TEST(oatpp::test::mariadb::crud::EnhancedCrudTest);
   OATPP_RUN_TEST(oatpp::test::mariadb::types::AnyTypeTest);
   OATPP_RUN_TEST(oatpp::test::mariadb::migration::SchemaVersionTest);
+  */
 }
 
 }

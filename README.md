@@ -20,6 +20,10 @@ The library provides:
   - Temporal: Date, DateTime, Time, Year
   - Complex: JSON, Enum, Set
   - Generic: AnyType for flexible type handling
+- Optimized query result handling:
+  - State tracking for fetch operations
+  - Result caching for improved performance
+  - Automatic memory management and cleanup
 
 ## Dependencies
 

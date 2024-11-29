@@ -25,6 +25,9 @@ private:
   oatpp::String m_errorMessage;
   bool m_inTransaction;
   v_int64 m_lastInsertId;
+  bool m_hasBeenFetched;
+  bool m_cachingEnabled;
+  oatpp::Void m_cachedResult;
 
   /**
    * Clean up statement resources safely
@@ -74,6 +77,25 @@ public:
    * @param id The insert ID from RETURNING
    */
   void setLastInsertId(v_int64 id);
+
+  /**
+   * Check if the result set has already been fetched
+   * @return true if the result has been fetched at least once
+   */
+  bool hasBeenFetched() const;
+
+  /**
+   * Enable result caching for multiple fetches
+   * When enabled, the first fetch will cache the results for subsequent fetches
+   * @param enable true to enable caching, false to disable
+   */
+  void enableResultCaching(bool enable);
+
+  /**
+   * Check if result caching is enabled
+   * @return true if caching is enabled
+   */
+  bool isResultCachingEnabled() const;
 
 };
 

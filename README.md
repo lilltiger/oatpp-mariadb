@@ -52,6 +52,95 @@ QUERY(createUser,
 - `PARAM_TIME(name)` - TIME type
 - `PARAM_BLOB(name)` - Binary data type
 
+### Type Wrappers
+
+The library provides type wrapper classes for enhanced data validation and normalization:
+
+#### Email Type Wrapper
+```cpp
+/* Define an email field with validation */
+DTO_FIELD(Email, email);  // Validates email format and normalizes to lowercase
+
+/* Using the Email wrapper */
+Email email("Test@Example.COM");
+OATPP_ASSERT(email.normalize() == "test@example.com");  // Normalizes to lowercase
+
+/* Validation with context */
+ValidationContext context;
+context.isStrict = true;           // Enable strict validation
+context.allowNull = false;         // Disallow null values
+context.normalizeValues = true;    // Auto-normalize during validation
+
+OATPP_ASSERT(email.validate(context));  // Validates format and normalizes
+```
+
+#### Phone Number Type Wrapper
+```cpp
+/* Define a phone field with validation */
+DTO_FIELD(PhoneNumber, phone);  // Validates international format
+
+/* Using the PhoneNumber wrapper */
+PhoneNumber phone(" +1-555-123-4567 ");
+OATPP_ASSERT(phone.normalize() == "+1-555-123-4567");  // Removes whitespace
+
+/* Database operations with type wrappers */
+auto row = TypeWrapperRow::createShared();
+Email email("Test@Example.com");
+PhoneNumber phone("+1-555-123-4567");
+
+row->email = email.toDbValue();     // Stores normalized value
+row->phone = phone.toDbValue();     // Stores normalized value
+
+client.insertRow(row);
+```
+
+#### Features
+- **Validation**: Built-in format validation using regular expressions
+- **Normalization**: Automatic value normalization (e.g., lowercase emails)
+- **Database Integration**: Seamless integration with database operations
+- **Flexible Validation**: Context-based validation with configurable rules
+- **Error Handling**: Descriptive validation error messages
+- **Type Safety**: Compile-time type checking and validation
+- **Length Constraints**: Automatic length validation for database compatibility
+
+#### Custom Type Wrappers
+You can create custom type wrappers by inheriting from `MariaDBTypeWrapper`:
+
+```cpp
+class CustomType : public MariaDBTypeWrapper<CustomType, oatpp::String> {
+public:
+    explicit CustomType(const oatpp::String& value) 
+        : MariaDBTypeWrapper<CustomType, oatpp::String>(value) {}
+    
+    bool validate() const override {
+        // Your validation logic
+    }
+    
+    oatpp::String normalize() const override {
+        // Your normalization logic
+    }
+    
+    oatpp::String getTypeName() const override {
+        return oatpp::String("CustomType");
+    }
+};
+```
+
+#### Database Schema Integration
+Type wrappers automatically generate appropriate database constraints:
+
+```cpp
+/* Email field with validation constraint */
+email VARCHAR(255) NOT NULL CHECK (
+    email REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+)
+
+/* Phone field with format constraint */
+phone VARCHAR(20) NOT NULL CHECK (
+    phone REGEXP '^\+[0-9]{1,3}-[0-9]{3}-[0-9]{3}-[0-9]{4}$'
+)
+```
+
 ## Dependencies
 
 - [oatpp](https://github.com/oatpp/oatpp) - Version 1.3.0 or higher

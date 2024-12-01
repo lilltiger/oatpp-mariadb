@@ -170,6 +170,7 @@ analyze_log_file() {
     local completed_tests=()
     local failed_tests=()
     local not_completed_tests=()
+    local test_errors=() # Array to store test errors
     
     echo "Test Summary:"
     echo "============"
@@ -185,6 +186,11 @@ analyze_log_file() {
         # Remove ANSI color codes for matching
         clean_line=$(echo "$line" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')
         
+        # Debug output for error lines
+        if [[ $clean_line == *"E |"* ]]; then
+            echo "DEBUG: Found potential error line: $clean_line" >&2
+        fi
+        
         # Look for test start lines
         if [[ $clean_line =~ I[[:space:]]\|.*TEST\[(.*?)\]:[[:space:]]*START ]]; then
             # New test started
@@ -194,6 +200,18 @@ analyze_log_file() {
         elif [[ -n "$current_file" && -f "$current_file" ]]; then
             # Append to current test file
             echo "$line" >> "$current_file"
+            
+            # Check for errors in the line
+            if [[ $clean_line =~ E[[:space:]]\|.*TEST\[(.*?)\]:(.*) ]]; then
+                test_name="${BASH_REMATCH[1]}"
+                error_msg="${BASH_REMATCH[2]}"
+                # Clean up the error message
+                error_msg=$(echo "$error_msg" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                # Clean up test name (remove any trailing characters)
+                test_name=$(echo "$test_name" | sed 's/].*$//')
+                test_errors+=("$test_name:$error_msg")
+                echo "DEBUG: Found error - Test: $test_name, Message: $error_msg" >&2
+            fi
         fi
     done < "$log_file"
     
@@ -219,19 +237,46 @@ analyze_log_file() {
     # Print results
     echo "Completed Tests:"
     if [ ${#completed_tests[@]} -gt 0 ]; then
-        printf '  ✓ %s\n' "${completed_tests[@]}"
+        for test in "${completed_tests[@]}"; do
+            printf '  ✓ %s\n' "$test"
+            # Print any errors for this test
+            for error in "${test_errors[@]}"; do
+                IFS=':' read -r error_test error_msg <<< "$error"
+                if [[ "$error_test" == "$test" ]]; then
+                    printf '    ⚠ %s\n' "$error_msg"
+                fi
+            done
+        done
     fi
     echo
     
     if [ ${#failed_tests[@]} -gt 0 ]; then
         echo "❌ Failed Tests:"
-        printf '  ✗ %s\n' "${failed_tests[@]}"
+        for test in "${failed_tests[@]}"; do
+            printf '  ✗ %s\n' "$test"
+            # Print any errors for this test
+            for error in "${test_errors[@]}"; do
+                IFS=':' read -r error_test error_msg <<< "$error"
+                if [[ "$error_test" == "$test" ]]; then
+                    printf '    ⚠ %s\n' "$error_msg"
+                fi
+            done
+        done
         echo
     fi
     
     if [ ${#not_completed_tests[@]} -gt 0 ]; then
         echo "Tests Not Completed:"
-        printf '  ? %s\n' "${not_completed_tests[@]}"
+        for test in "${not_completed_tests[@]}"; do
+            printf '  ? %s\n' "$test"
+            # Print any errors for this test
+            for error in "${test_errors[@]}"; do
+                IFS=':' read -r error_test error_msg <<< "$error"
+                if [[ "$error_test" == "$test" ]]; then
+                    printf '    ⚠ %s\n' "$error_msg"
+                fi
+            done
+        done
     fi
     
     # Cleanup

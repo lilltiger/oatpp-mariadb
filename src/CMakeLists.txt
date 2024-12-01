@@ -21,6 +21,9 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/QueryResult.hpp
         oatpp-mariadb/TransactionGuard.hpp
         oatpp-mariadb/orm.hpp
+        oatpp-mariadb/types/TypeWrapper.hpp
+        oatpp-mariadb/types/CommonTypes.hpp
+        oatpp-mariadb/types/SqlGenerator.hpp
 )
 
 add_library(${OATPP_THIS_MODULE_NAME} SHARED ${OATPP_THIS_MODULE_SOURCES})
@@ -43,12 +46,18 @@ target_include_directories(${OATPP_THIS_MODULE_NAME}
         PUBLIC /usr/local/include/oatpp-1.3.0/oatpp
 )
 
-## TODO link dependencies here (if some)
-target_link_libraries(${OATPP_THIS_MODULE_NAME} PRIVATE mariadb)
+## Link dependencies
+target_link_libraries(${OATPP_THIS_MODULE_NAME} 
+    PRIVATE mariadb
+)
 
 #######################################################################################################
 ## install targets
 
 if(OATPP_INSTALL)
-    # Installation is handled in the root CMakeLists.txt
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/oatpp-mariadb
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            COMPONENT headers
+            FILES_MATCHING PATTERN "*.hpp"
+    )
 endif()

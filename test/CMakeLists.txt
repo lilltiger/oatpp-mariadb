@@ -25,6 +25,8 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/crud/CrudTest.cpp
         oatpp-mariadb/crud/ProductCrudTest.cpp
         oatpp-mariadb/crud/EnhancedCrudTest.cpp
+        oatpp-mariadb/types/CustomTypeTest.cpp
+        oatpp-mariadb/types/TypeWrapperTest.cpp
 )
 
 set_target_properties(oatpp-mariadb-tests PROPERTIES
@@ -50,4 +52,4 @@ target_link_libraries(oatpp-mariadb-tests
         PRIVATE ${OATPP_THIS_MODULE_NAME}
 )
 
-#add_test(oatpp-mariadb-tests oatpp-mariadb-tests)
+add_test(NAME oatpp-mariadb-tests COMMAND oatpp-mariadb-tests)

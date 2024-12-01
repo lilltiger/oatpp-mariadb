@@ -146,6 +146,9 @@ void SetTest::onRun() {
       // Print results
       oatpp::parser::json::mapping::ObjectMapper om;
       om.getSerializer()->getConfig()->useBeautifier = true;
+      om.getSerializer()->getConfig()->includeNullFields = true;
+
+      // Remove custom serializer - using default NULL handling
       auto str = om.writeToString(dataset);
       OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
 

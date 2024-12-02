@@ -1,0 +1,3 @@
+We're defining TestClient in both MariaDBTypeWrapperTest.hpp and StatusTest.hpp.
+
+2. Type mismatch in database operation: 

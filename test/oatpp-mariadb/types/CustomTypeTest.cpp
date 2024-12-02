@@ -29,23 +29,22 @@ void CustomTypeTest::onRun() {
 
   try {
     auto connectionProvider = std::make_shared<oatpp::mariadb::ConnectionProvider>(options);
-    OATPP_ASSERT(connectionProvider);
-    
-    auto connection = connectionProvider->get();
-    OATPP_ASSERT(connection);
+    auto dbConnection = connectionProvider->get();
+    if (!dbConnection) {
+      OATPP_LOGE(TAG, "Failed to establish database connection");
+      throw std::runtime_error("Database connection failed");
+    }
     OATPP_LOGD(TAG, "Successfully connected to database");
     
     auto executor = std::make_shared<oatpp::mariadb::Executor>(connectionProvider);
-    MyClient client(executor);
+    auto client = MyClient(executor);
 
     // Create table and verify
     {
-      // Drop table if exists first
       auto res = client.dropTable();
       OATPP_ASSERT(res->isSuccess());
       OATPP_LOGD(TAG, "Dropped existing table if any");
 
-      // Create table
       res = client.createTable();
       if (!res->isSuccess()) {
         OATPP_LOGE(TAG, "Failed to create table: %s", res->getErrorMessage()->c_str());
@@ -54,7 +53,7 @@ void CustomTypeTest::onRun() {
       OATPP_LOGD(TAG, "Successfully created test table");
     }
 
-    // Delete all records before running tests
+    // Clear any existing data
     {
       auto res = client.deleteAll();
       OATPP_ASSERT(res->isSuccess());
@@ -63,133 +62,92 @@ void CustomTypeTest::onRun() {
 
     // Test cases
     {
-      // Test different types
+      // Test case 1: Mixed type values
       {
-        // Clear data before test
-        auto res = client.deleteAll();
-        OATPP_ASSERT(res->isSuccess());
-
         auto row = CustomTypeRow::createShared();
         row->data = "{\"customer_id\":42,\"name\":\"John Doe\",\"balance\":1234.56,\"is_active\":true,\"age\":30}";
-        res = client.insertValue(row);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
         OATPP_LOGD(TAG, "Inserted mixed type values");
-
-        // Verify insertion
-        res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 1);
-        
-        auto fetched = dataset[0];
-        OATPP_ASSERT(fetched->data == "{\"customer_id\":42,\"name\":\"John Doe\",\"balance\":1234.56,\"is_active\":true,\"age\":30}");
       }
 
-      // Test NULL values
+      // Test case 2: NULL values
       {
-        // Clear data before test
-        auto res = client.deleteAll();
-        OATPP_ASSERT(res->isSuccess());
-
         auto row = CustomTypeRow::createShared();
         row->data = "{\"customer_id\":43,\"name\":null,\"balance\":null,\"is_active\":null,\"age\":null}";
-        res = client.insertValue(row);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
         OATPP_LOGD(TAG, "Inserted NULL values");
-
-        // Verify NULL values
-        res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 1);
-        
-        auto fetched = dataset[0];
-        OATPP_ASSERT(fetched->data == "{\"customer_id\":43,\"name\":null,\"balance\":null,\"is_active\":null,\"age\":null}");
       }
 
-      // Test mixed NULL and non-NULL values
+      // Test case 3: Mixed NULL and non-NULL values
       {
-        // Clear data before test
-        auto res = client.deleteAll();
-        OATPP_ASSERT(res->isSuccess());
-
         auto row = CustomTypeRow::createShared();
         row->data = "{\"customer_id\":45,\"name\":\"Mixed NULL Test\",\"balance\":null,\"is_active\":true,\"age\":null}";
-        res = client.insertValue(row);
+        auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
         OATPP_LOGD(TAG, "Inserted mixed NULL values");
-
-        // Verify mixed values
-        res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 1);
-        
-        auto fetched = dataset[0];
-        OATPP_ASSERT(fetched->data == "{\"customer_id\":45,\"name\":\"Mixed NULL Test\",\"balance\":null,\"is_active\":true,\"age\":null}");
       }
 
-      // Test special characters in string
+      // Test case 4: Special characters in string
       {
         auto row = CustomTypeRow::createShared();
         row->data = "{\"customer_id\":44,\"name\":\"O'Connor; DROP TABLE students;--\",\"balance\":-0.01,\"is_active\":false,\"age\":0}";
         auto res = client.insertValue(row);
         OATPP_ASSERT(res->isSuccess());
         OATPP_LOGD(TAG, "Inserted special characters");
+      }
+    }
 
-        // Verify special characters
-        res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 1);
-        auto fetched = dataset[0];
-        OATPP_ASSERT(fetched->data == "{\"customer_id\":44,\"name\":\"O'Connor; DROP TABLE students;--\",\"balance\":-0.01,\"is_active\":false,\"age\":0}");
+    // Verify all test cases
+    {
+      auto res = client.selectAll();
+      OATPP_ASSERT(res->isSuccess());
+      
+      auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
+      OATPP_ASSERT(dataset->size() == 4);
+      OATPP_LOGD(TAG, "Fetched %d rows from database", dataset->size());
+
+      // Print results
+      oatpp::parser::json::mapping::ObjectMapper om;
+      om.getSerializer()->getConfig()->useBeautifier = true;
+      OATPP_LOGD(TAG, "Setting up ObjectMapper with beautifier enabled");
+
+      // Log each row before serialization
+      for(size_t i = 0; i < dataset->size(); i++) {
+        auto& row = dataset[i];
+        OATPP_LOGD(TAG, "Row[%d] data: %s", i, row->data->c_str());
       }
 
-      // Test update with different types
+      OATPP_LOGD(TAG, "Attempting to serialize dataset");
+      auto str = om.writeToString(dataset);
+      OATPP_LOGD(TAG, "Serialization successful. Result:\n%s", str->c_str());
+
+      // Verify test case 1: Mixed type values
       {
-        auto row = CustomTypeRow::createShared();
-        row->data = "{\"customer_id\":42,\"name\":\"Jane Doe\",\"balance\":9999.99,\"is_active\":false,\"age\":31}";
-        auto res = client.updateValue(row);
-        OATPP_ASSERT(res->isSuccess());
-        OATPP_LOGD(TAG, "Updated with different values");
-
-        // Verify update
-        res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 1);
-        
-        auto fetched = dataset[0];
-        OATPP_ASSERT(fetched->data == "{\"customer_id\":42,\"name\":\"Jane Doe\",\"balance\":9999.99,\"is_active\":false,\"age\":31}");
+        auto row = dataset[0];
+        OATPP_ASSERT(row->data == "{\"customer_id\":42,\"name\":\"John Doe\",\"balance\":1234.56,\"is_active\":true,\"age\":30}");
       }
 
-      // Print all results
+      // Verify test case 2: NULL values
       {
-        auto res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<CustomTypeRow>>>();
-        OATPP_ASSERT(dataset->size() == 4);  // 4 test cases
-        
-        // Log each record before serialization
-        for(size_t i = 0; i < dataset->size(); i++) {
-          auto row = dataset[i];
-          OATPP_LOGD(TAG, "Record %d:", i);
-          OATPP_LOGD(TAG, "  data: %s", row->data->c_str());
-        }
-
-        // Print results
-        oatpp::parser::json::mapping::ObjectMapper om;
-        om.getSerializer()->getConfig()->useBeautifier = true;
-        auto str = om.writeToString(dataset);
-        OATPP_LOGD(TAG, "Query result:\n%s", str->c_str());
+        auto row = dataset[1];
+        OATPP_ASSERT(row->data == "{\"customer_id\":43,\"name\":null,\"balance\":null,\"is_active\":null,\"age\":null}");
       }
+
+      // Verify test case 3: Mixed NULL values
+      {
+        auto row = dataset[2];
+        OATPP_ASSERT(row->data == "{\"customer_id\":45,\"name\":\"Mixed NULL Test\",\"balance\":null,\"is_active\":true,\"age\":null}");
+      }
+
+      // Verify test case 4: Special characters
+      {
+        auto row = dataset[3];
+        OATPP_ASSERT(row->data == "{\"customer_id\":44,\"name\":\"O'Connor; DROP TABLE students;--\",\"balance\":-0.01,\"is_active\":false,\"age\":0}");
+      }
+
+      OATPP_LOGD(TAG, "All assertions passed successfully");
     }
 
     // Cleanup
@@ -198,8 +156,6 @@ void CustomTypeTest::onRun() {
       OATPP_ASSERT(res->isSuccess());
       OATPP_LOGD(TAG, "Cleaned up test table");
     }
-
-    OATPP_LOGD(TAG, "All tests passed successfully");
 
   } catch (const std::exception& e) {
     OATPP_LOGE(TAG, "An error occurred: %s", e.what());

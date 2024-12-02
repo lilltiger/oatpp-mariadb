@@ -1,4 +1,4 @@
 
-{"timestamp":"2024-12-02 03:16:14","level":"INFO","event":"TEST_START","message":"Test execution started in debug mode"}
-{"timestamp":"2024-12-02 03:16:14","level":"INFO","event":"DEBUG_START","message":"Starting test with gdb (no timeout monitoring)"}
-{"timestamp":"2024-12-02 03:16:14","level":"INFO","event":"TEST_END","message":"Test execution completed"}
+{"timestamp":"2024-12-02 04:42:50","level":"INFO","event":"TEST_START","message":"Test execution started in debug mode"}
+{"timestamp":"2024-12-02 04:42:50","level":"INFO","event":"DEBUG_START","message":"Starting test with gdb (no timeout monitoring)"}
+{"timestamp":"2024-12-02 04:42:50","level":"INFO","event":"TEST_END","message":"Test execution completed"}

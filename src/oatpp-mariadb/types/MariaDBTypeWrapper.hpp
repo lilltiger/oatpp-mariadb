@@ -40,7 +40,10 @@ public:
     }
     
     virtual bool validateLength() const {
-        return !value || value->length() <= getMaxLength();
+        if constexpr(std::is_same_v<UnderlyingType, oatpp::String>) {
+            return !value || value->length() <= getMaxLength();
+        }
+        return true; // Non-string types don't need length validation
     }
     
     // Type information

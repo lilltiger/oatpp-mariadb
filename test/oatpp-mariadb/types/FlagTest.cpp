@@ -55,97 +55,127 @@ public:
 
 }
 
-void FlagTest::onRun() {
-    OATPP_LOGD(TAG, "Running Flag Type Tests...");
-
-    auto env = utils::EnvLoader();
+void FlagTest::testFlag8() {
+    using Flag8 = oatpp::mariadb::types::Flag<8>;
     
-    auto options = oatpp::mariadb::ConnectionOptions();
-    options.host = env.get("MARIADB_HOST", "127.0.0.1");
-    options.port = env.getInt("MARIADB_PORT", 3306);
-    options.username = env.get("MARIADB_USER", "root");
-    options.password = env.get("MARIADB_PASSWORD", "root");
-    options.database = env.get("MARIADB_DATABASE", "test");
+    Flag8::registerFlag("READ", 1);
+    Flag8::registerFlag("WRITE", 2);
+    Flag8::registerFlag("EXECUTE", 4);
+    
+    Flag8 flags;
+    OATPP_ASSERT(!flags.hasFlag("READ"));
+    
+    flags.setFlag("READ");
+    OATPP_ASSERT(flags.hasFlag("READ"));
+    OATPP_ASSERT(!flags.hasFlag("WRITE"));
+    
+    flags.setFlag("WRITE");
+    OATPP_ASSERT(flags.hasFlag("READ"));
+    OATPP_ASSERT(flags.hasFlag("WRITE"));
+    
+    flags.clearFlag("READ");
+    OATPP_ASSERT(!flags.hasFlag("READ"));
+    OATPP_ASSERT(flags.hasFlag("WRITE"));
+    
+    flags.toggleFlag("EXECUTE");
+    OATPP_ASSERT(flags.hasFlag("EXECUTE"));
+    
+    auto str = flags.toString();
+    OATPP_ASSERT(str == "WRITE|EXECUTE");
+    
+    auto parsed = Flag8::fromString(str);
+    OATPP_ASSERT(parsed.hasFlag("WRITE"));
+    OATPP_ASSERT(parsed.hasFlag("EXECUTE"));
+    OATPP_ASSERT(!parsed.hasFlag("READ"));
+}
 
-    auto connectionProvider = std::make_shared<oatpp::mariadb::ConnectionProvider>(options);
-    auto executor = std::make_shared<oatpp::mariadb::Executor>(connectionProvider);
-    auto client = TestClient(executor);
+void FlagTest::testFlag16() {
+    using Flag16 = oatpp::mariadb::types::Flag<16>;
+    
+    Flag16::registerFlag("USER", 1);
+    Flag16::registerFlag("GROUP", 2);
+    Flag16::registerFlag("OTHER", 4);
+    Flag16::registerFlag("SPECIAL", 256);
+    
+    Flag16 flags;
+    flags.setFlag("USER");
+    flags.setFlag("SPECIAL");
+    
+    OATPP_ASSERT(flags.hasFlag("USER"));
+    OATPP_ASSERT(!flags.hasFlag("GROUP"));
+    OATPP_ASSERT(flags.hasFlag("SPECIAL"));
+    
+    auto str = flags.toString();
+    OATPP_ASSERT(str == "USER|SPECIAL");
+}
 
-    // Setup: create fresh table
-    client.dropTable();
-    client.createTable();
+void FlagTest::testFlag32() {
+    using Flag32 = oatpp::mariadb::types::Flag<32>;
+    
+    Flag32::registerFlag("LOW", 1);
+    Flag32::registerFlag("MEDIUM", 0x10000);
+    Flag32::registerFlag("HIGH", 0x1000000);
+    
+    Flag32 flags;
+    flags.setFlag("LOW");
+    flags.setFlag("HIGH");
+    
+    OATPP_ASSERT(flags.hasFlag("LOW"));
+    OATPP_ASSERT(!flags.hasFlag("MEDIUM"));
+    OATPP_ASSERT(flags.hasFlag("HIGH"));
+    
+    auto str = flags.toString();
+    OATPP_ASSERT(str == "LOW|HIGH");
+}
 
-    // Register flag values
-    oatpp::mariadb::types::Flag::registerFlag("READ", 1);
-    oatpp::mariadb::types::Flag::registerFlag("WRITE", 2);
-    oatpp::mariadb::types::Flag::registerFlag("EXECUTE", 4);
-    oatpp::mariadb::types::Flag::registerFlag("ADMIN", 8);
+void FlagTest::testFlag64() {
+    using Flag64 = oatpp::mariadb::types::Flag<64>;
+    
+    Flag64::registerFlag("BIT0", 1ULL);
+    Flag64::registerFlag("BIT32", 1ULL << 32);
+    Flag64::registerFlag("BIT63", 1ULL << 63);
+    
+    Flag64 flags;
+    flags.setFlag("BIT0");
+    flags.setFlag("BIT63");
+    
+    OATPP_ASSERT(flags.hasFlag("BIT0"));
+    OATPP_ASSERT(!flags.hasFlag("BIT32"));
+    OATPP_ASSERT(flags.hasFlag("BIT63"));
+    
+    auto str = flags.toString();
+    OATPP_ASSERT(str == "BIT0|BIT63");
+}
 
-    // Test basic flag operations
-    {
-        OATPP_LOGD(TAG, "Testing basic flag operations...");
-        
-        auto row = FlagRow::createShared();
-        row->permissions = oatpp::UInt64((v_uint64)3); // READ | WRITE
-
-        auto res = client.insertRow(row);
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto insertedRow = res->fetch<oatpp::Object<FlagRow>>();
-        OATPP_ASSERT(insertedRow);
-        auto flagValue = insertedRow->permissions;
-        OATPP_ASSERT((flagValue & 1) == 1); // Has READ
-        OATPP_ASSERT((flagValue & 2) == 2); // Has WRITE
-        OATPP_ASSERT((flagValue & 4) == 0); // No EXECUTE
-        OATPP_ASSERT((flagValue & 8) == 0); // No ADMIN
+void FlagTest::testInvalidValues() {
+    using Flag8 = oatpp::mariadb::types::Flag<8>;
+    
+    bool exceptionCaught = false;
+    try {
+        Flag8::registerFlag("INVALID", 256); // Too large for 8 bits
+    } catch (const std::runtime_error& e) {
+        exceptionCaught = true;
+        OATPP_ASSERT(std::string(e.what()).find("exceeds maximum") != std::string::npos);
     }
-
-    // Test all flags
-    {
-        OATPP_LOGD(TAG, "Testing all flags...");
-        
-        auto row = FlagRow::createShared();
-        row->permissions = oatpp::UInt64((v_uint64)15); // READ | WRITE | EXECUTE | ADMIN
-
-        auto res = client.insertRow(row);
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto insertedRow = res->fetch<oatpp::Object<FlagRow>>();
-        OATPP_ASSERT(insertedRow);
-        auto flagValue = insertedRow->permissions;
-        OATPP_ASSERT((flagValue & 1) == 1); // Has READ
-        OATPP_ASSERT((flagValue & 2) == 2); // Has WRITE
-        OATPP_ASSERT((flagValue & 4) == 4); // Has EXECUTE
-        OATPP_ASSERT((flagValue & 8) == 8); // Has ADMIN
+    OATPP_ASSERT(exceptionCaught);
+    
+    Flag8 flags;
+    exceptionCaught = false;
+    try {
+        flags.setFlag(0xFF + 1); // Too large for 8 bits
+    } catch (const std::runtime_error& e) {
+        exceptionCaught = true;
+        OATPP_ASSERT(std::string(e.what()).find("exceeds maximum") != std::string::npos);
     }
+    OATPP_ASSERT(exceptionCaught);
+}
 
-    // Test zero flags
-    {
-        OATPP_LOGD(TAG, "Testing zero flags...");
-        
-        auto row = FlagRow::createShared();
-        row->permissions = oatpp::UInt64((v_uint64)0);
-
-        auto res = client.insertRow(row);
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto insertedRow = res->fetch<oatpp::Object<FlagRow>>();
-        OATPP_ASSERT(insertedRow);
-        auto flagValue = insertedRow->permissions;
-        OATPP_ASSERT(flagValue == 0);
-    }
-
-    // Verify all test cases
-    {
-        auto res = client.selectAll();
-        OATPP_ASSERT(res->isSuccess());
-        
-        auto dataset = res->fetch<oatpp::Vector<oatpp::Object<FlagRow>>>();
-        OATPP_ASSERT(dataset->size() == 3);
-        OATPP_LOGD(TAG, "Successfully verified all %d test cases", dataset->size());
-    }
-
-    OATPP_LOGD(TAG, "Flag Type Tests finished successfully!");
+void FlagTest::onRun() {
+    testFlag8();
+    testFlag16();
+    testFlag32();
+    testFlag64();
+    testInvalidValues();
 }
 
 }}}}

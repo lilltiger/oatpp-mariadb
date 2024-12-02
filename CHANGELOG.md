@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved Status static members to separate source file
 - Improved test structure consistency across type tests
 - Standardized test patterns for better maintainability
+- Improved type system with better validation and error handling
 
 ### Fixed
 - Fixed multiple definition errors for Status type static members
@@ -30,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatic validation and type conversion
   - Proper database integration with ORM
   - Full test suite following project patterns
+- Status type for state machine pattern with transition validation
+- Flag type for bit fields with configurable sizes (1-64 bits) using MariaDB's native BIT type
+- Support for named flags with string-based access
+- Automatic validation of flag values based on bit size
 
 ## [1.3.2] - 2024-11-26
 

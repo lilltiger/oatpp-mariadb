@@ -94,36 +94,6 @@ row->phone = phone.toDbValue();     // Stores normalized value
 client.insertRow(row);
 ```
 
-#### Flag Type Wrapper
-```cpp
-/* Register flag values */
-Flag::registerFlag("READ", 1);
-Flag::registerFlag("WRITE", 2);
-Flag::registerFlag("EXECUTE", 4);
-Flag::registerFlag("ADMIN", 8);
-
-/* Using Flag type in DTO */
-DTO_FIELD(Flag, permissions);  // Stores as BIGINT UNSIGNED
-
-/* Basic flag operations */
-Flag flags;
-flags.setFlag<std::string>("READ");      // Set by name
-flags.setFlag<v_uint64>(2);              // Set by value
-flags.hasFlag<std::string>("WRITE");     // Check by name
-flags.hasFlag<v_uint64>(4);              // Check by value
-flags.clearFlag<std::string>("READ");    // Clear by name
-flags.toggleFlag<std::string>("ADMIN");  // Toggle by name
-
-/* String conversion */
-auto str = flags.toString();             // "WRITE|EXECUTE"
-auto flags2 = Flag::fromString(str);     // Parse from string
-
-/* Database operations */
-auto row = FlagRow::createShared();
-row->permissions = flags.toDbValue();    // Store in database
-client.insertRow(row);
-```
-
 #### Features
 - **Validation**: Built-in format validation using regular expressions
 - **Normalization**: Automatic value normalization (e.g., lowercase emails)
@@ -132,13 +102,6 @@ client.insertRow(row);
 - **Error Handling**: Descriptive validation error messages
 - **Type Safety**: Compile-time type checking and validation
 - **Length Constraints**: Automatic length validation for database compatibility
-- **Bit Field Operations**: Efficient bit manipulation for flag values
-- **Named Flags**: String-based flag operations with automatic lookup
-- **Multiple Combinations**: Support for multiple flags in single value
-- **String Serialization**: Convert to/from human-readable format
-- **Database Integration**: Stores as BIGINT UNSIGNED for efficiency
-- **Type Safety**: Compile-time type checking for flag operations
-- **Validation**: Automatic validation of flag values and operations
 
 #### Custom Type Wrappers
 You can create custom type wrappers by inheriting from `MariaDBTypeWrapper`:
@@ -194,6 +157,42 @@ if (status.isError()) {
 Status::OK();              // Success status
 Status::ERROR("message");  // Error status with message
 ```
+
+### Flag Type
+The `Flag` type provides a type-safe way to handle bit fields in MariaDB using the native BIT type. It supports configurable sizes from 1 to 64 bits and provides named flag operations.
+
+```cpp
+// Define a permission flag with 8 bits
+using Permission = oatpp::mariadb::types::Flag<8>;
+
+// Register named flags
+Permission::registerFlag("READ", 1);
+Permission::registerFlag("WRITE", 2);
+Permission::registerFlag("EXECUTE", 4);
+
+// Create and manipulate flags
+Permission flags;
+flags.setFlag("READ");
+flags.setFlag("WRITE");
+flags.clearFlag("READ");
+flags.toggleFlag("EXECUTE");
+
+// Check flag states
+bool canWrite = flags.hasFlag("WRITE");
+bool canExecute = flags.hasFlag("EXECUTE");
+
+// Convert to/from string representation
+auto str = flags.toString(); // Returns "WRITE|EXECUTE"
+auto parsed = Permission::fromString(str);
+
+// Use in DTO
+class UserDTO : public oatpp::DTO {
+    DTO_INIT(UserDTO, DTO);
+    DTO_FIELD(Permission, permissions);
+};
+```
+
+The Flag type automatically validates values based on the specified bit size and provides clear error messages when values exceed the maximum allowed value.
 
 ## Dependencies
 

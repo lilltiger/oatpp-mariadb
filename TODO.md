@@ -32,17 +32,18 @@ Our custom types extend oatpp's type system while adding:
 ## Types to Implement
 
 ### Status and State Types
-- [ ] Status
+- [x] Status
   - Predefined status values
   - State transition validation
   - Custom status definitions
   - Integration with database ENUM
 
-- [ ] Flag
+- [x] Flag
   - Bit field support
   - Multiple flag combinations
   - Named flags
-  - Integration with database SET or BIT
+  - Integration with database BIT(N)
+  - Configurable bit sizes (1-64)
 
 - [ ] Progress
   - Percentage validation (0-100)

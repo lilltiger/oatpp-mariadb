@@ -21,7 +21,8 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/QueryResult.hpp
         oatpp-mariadb/TransactionGuard.hpp
         oatpp-mariadb/orm.hpp
-        oatpp-mariadb/types/TypeWrapper.hpp
+        oatpp-mariadb/types/MariaDBTypeWrapper.hpp
+        oatpp-mariadb/types/MariaDBTypeWrapper.cpp
         oatpp-mariadb/types/CommonTypes.hpp
         oatpp-mariadb/types/SqlGenerator.hpp
 )

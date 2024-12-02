@@ -93,8 +93,9 @@ Creating new tests that duplicate existing functionality
 ### oatpp::String to C-string
 When working with `oatpp::String`, use `->c_str()` directly to get the C-string representation. 
 Common mistakes include:
-- Using `std_str()` which doesn't exist
+- Using `std_str()` which doesn't exist (this is a common confusion with std::string's str() method)
 - Using `std::string()` unnecessarily before `c_str()`
+- Trying to use string methods that belong to std::string on oatpp::String
 
 Example:
 cpp
@@ -105,6 +106,14 @@ const char* cstr = str->c_str();
 // WRONG:
 const char* wrong1 = str->std_str();  // Error: no member named 'std_str'
 const char* wrong2 = str->std::string().c_str();  // Unnecessary conversion
+
+// If you need std::string operations, convert explicitly:
+std::string stdStr(str->c_str());  // Now you can use std::string methods
+
+### Common Conversion Patterns
+1. oatpp::String to const char*: `str->c_str()`
+2. oatpp::String to std::string: `std::string(str->c_str())`
+3. std::string to oatpp::String: `oatpp::String(stdStr.c_str())`
 
 ## Test Issues
 

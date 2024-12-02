@@ -26,7 +26,7 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/crud/ProductCrudTest.cpp
         oatpp-mariadb/crud/EnhancedCrudTest.cpp
         oatpp-mariadb/types/CustomTypeTest.cpp
-        oatpp-mariadb/types/TypeWrapperTest.cpp
+        oatpp-mariadb/types/MariaDBTypeWrapperTest.cpp
 )
 
 set_target_properties(oatpp-mariadb-tests PROPERTIES

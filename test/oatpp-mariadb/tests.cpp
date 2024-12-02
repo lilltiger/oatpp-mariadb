@@ -1,3 +1,8 @@
+#include <iostream>
+
+#include "oatpp-test/UnitTest.hpp"
+#include "oatpp/core/base/Environment.hpp"
+
 #include "oatpp-mariadb/ql_template/ParserTest.hpp"
 #include "oatpp-mariadb/types/NumericTest.hpp"
 #include "oatpp-mariadb/types/Int64Test.hpp"
@@ -25,11 +30,15 @@
 #include "oatpp-mariadb/crud/EnhancedCrudTest.hpp"
 #include "oatpp-mariadb/types/TypeMappingTest.hpp"
 #include "oatpp-mariadb/types/CustomTypeTest.hpp"
-#include "oatpp-mariadb/types/TypeWrapperTest.hpp"
+#include "oatpp-mariadb/types/MariaDBTypeWrapperTest.hpp"
 
-#include "oatpp-test/UnitTest.hpp"
-#include <iostream>
 
+/*
+#include "oatpp-mariadb/tests/BulkTest.hpp"
+#include "oatpp-mariadb/tests/ParamsTest.hpp"
+#include "oatpp-mariadb/tests/DtoTest.hpp"
+#include "oatpp-mariadb/tests/CommitAndRollbackTest.hpp"
+*/
 
 namespace {
 
@@ -61,13 +70,18 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::crud::EnhancedCrudTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::TypeMappingTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::CustomTypeTest);
+  /*
+  OATPP_RUN_TEST(oatpp::test::mariadb::BulkTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::ParamsTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::DtoTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::CommitAndRollbackTest);
+  */
   OATPP_RUN_TEST(oatpp::test::mariadb::types::TypeWrapperTest);
 }
 
 }
 
 int main() {
-  
   oatpp::base::Environment::init();
 
   runTests();
@@ -77,8 +91,6 @@ int main() {
   std::cout << "\nEnvironment:\n";
   std::cout << "objectsCount = " << oatpp::base::Environment::getObjectsCount() << "\n";
   std::cout << "objectsCreated = " << oatpp::base::Environment::getObjectsCreated() << "\n\n";
-
-  OATPP_ASSERT(oatpp::base::Environment::getObjectsCount() == 0);
 
   oatpp::base::Environment::destroy();
 

@@ -1,7 +1,7 @@
 #ifndef oatpp_mariadb_types_SqlGenerator_hpp
 #define oatpp_mariadb_types_SqlGenerator_hpp
 
-#include "TypeWrapper.hpp"
+#include "MariaDBTypeWrapper.hpp"
 #include <sstream>
 
 namespace oatpp { namespace mariadb { namespace types {
@@ -18,9 +18,9 @@ public:
      * @return Complete SQL column definition
      */
     template<typename T, typename U>
-    static oatpp::String generateColumnDef(const oatpp::String& fieldName, const TypeWrapper<T, U>& wrapper) {
+    static oatpp::String generateColumnDef(const oatpp::String& fieldName, const MariaDBTypeWrapper<T, U>& wrapper) {
         std::stringstream ss;
-        ss << fieldName->c_str() << " " << wrapper.getSqlType()->c_str();
+        ss << fieldName->c_str() << " " << wrapper.getDbType()->c_str();
         
         if (!wrapper.isNullable()) {
             ss << " NOT NULL";
@@ -29,11 +29,6 @@ public:
         auto constraints = wrapper.getDbConstraints();
         if (constraints && !constraints->empty()) {
             ss << " " << constraints->c_str();
-        }
-        
-        auto additional = wrapper.getAdditionalConstraints();
-        if (additional && !additional->empty()) {
-            ss << " " << additional->c_str();
         }
         
         return ss.str();
@@ -72,7 +67,7 @@ public:
      * @return Parameter placeholder
      */
     template<typename T, typename U>
-    static oatpp::String generateParamPlaceholder(const TypeWrapper<T, U>& wrapper) {
+    static oatpp::String generateParamPlaceholder(const MariaDBTypeWrapper<T, U>& wrapper) {
         return "?";
     }
 };

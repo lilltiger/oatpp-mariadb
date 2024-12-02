@@ -94,6 +94,36 @@ row->phone = phone.toDbValue();     // Stores normalized value
 client.insertRow(row);
 ```
 
+#### Flag Type Wrapper
+```cpp
+/* Register flag values */
+Flag::registerFlag("READ", 1);
+Flag::registerFlag("WRITE", 2);
+Flag::registerFlag("EXECUTE", 4);
+Flag::registerFlag("ADMIN", 8);
+
+/* Using Flag type in DTO */
+DTO_FIELD(Flag, permissions);  // Stores as BIGINT UNSIGNED
+
+/* Basic flag operations */
+Flag flags;
+flags.setFlag<std::string>("READ");      // Set by name
+flags.setFlag<v_uint64>(2);              // Set by value
+flags.hasFlag<std::string>("WRITE");     // Check by name
+flags.hasFlag<v_uint64>(4);              // Check by value
+flags.clearFlag<std::string>("READ");    // Clear by name
+flags.toggleFlag<std::string>("ADMIN");  // Toggle by name
+
+/* String conversion */
+auto str = flags.toString();             // "WRITE|EXECUTE"
+auto flags2 = Flag::fromString(str);     // Parse from string
+
+/* Database operations */
+auto row = FlagRow::createShared();
+row->permissions = flags.toDbValue();    // Store in database
+client.insertRow(row);
+```
+
 #### Features
 - **Validation**: Built-in format validation using regular expressions
 - **Normalization**: Automatic value normalization (e.g., lowercase emails)
@@ -102,6 +132,13 @@ client.insertRow(row);
 - **Error Handling**: Descriptive validation error messages
 - **Type Safety**: Compile-time type checking and validation
 - **Length Constraints**: Automatic length validation for database compatibility
+- **Bit Field Operations**: Efficient bit manipulation for flag values
+- **Named Flags**: String-based flag operations with automatic lookup
+- **Multiple Combinations**: Support for multiple flags in single value
+- **String Serialization**: Convert to/from human-readable format
+- **Database Integration**: Stores as BIGINT UNSIGNED for efficiency
+- **Type Safety**: Compile-time type checking for flag operations
+- **Validation**: Automatic validation of flag values and operations
 
 #### Custom Type Wrappers
 You can create custom type wrappers by inheriting from `MariaDBTypeWrapper`:
@@ -139,6 +176,23 @@ email VARCHAR(255) NOT NULL CHECK (
 phone VARCHAR(20) NOT NULL CHECK (
     phone REGEXP '^\+[0-9]{1,3}-[0-9]{3}-[0-9]{3}-[0-9]{4}$'
 )
+```
+
+### Status Type
+The library provides a Status type for handling operation results and error states:
+
+```cpp
+/* Using Status type */
+Status status = operation.execute();
+if (status.isError()) {
+    // Handle error case
+    auto errorCode = status.code;
+    auto message = status.message;
+}
+
+/* Predefined status values */
+Status::OK();              // Success status
+Status::ERROR("message");  // Error status with message
 ```
 
 ## Dependencies
@@ -297,3 +351,24 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes and version history.
+
+### Test Structure
+All type tests follow a consistent pattern:
+
+```cpp
+class TypeTest : public oatpp::test::UnitTest {
+private:
+    /* Test configuration and setup */
+    void onRun() override {
+        /* Database connection setup */
+        
+        /* Test cases */
+        testValueMapping();
+        testSerialization();
+        testDeserialization();
+        testEdgeCases();
+        
+        /* Cleanup */
+    }
+};
+```

@@ -27,6 +27,8 @@ set(OATPP_THIS_MODULE_SOURCES
         oatpp-mariadb/types/SqlGenerator.hpp
         oatpp-mariadb/types/Status.hpp
         oatpp-mariadb/types/Status.cpp
+        oatpp-mariadb/types/Flag.hpp
+        oatpp-mariadb/types/Flag.cpp
 )
 
 add_library(${OATPP_THIS_MODULE_NAME} SHARED ${OATPP_THIS_MODULE_SOURCES})

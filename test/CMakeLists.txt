@@ -28,6 +28,7 @@ add_executable(oatpp-mariadb-tests
         oatpp-mariadb/types/CustomTypeTest.cpp
         oatpp-mariadb/types/MariaDBTypeWrapperTest.cpp
         oatpp-mariadb/types/StatusTest.cpp
+        oatpp-mariadb/types/FlagTest.cpp
 )
 
 set_target_properties(oatpp-mariadb-tests PROPERTIES

@@ -35,6 +35,7 @@
 #include "oatpp-mariadb/types/CustomTypeTest.hpp"
 #include "oatpp-mariadb/types/MariaDBTypeWrapperTest.hpp"
 #include "oatpp-mariadb/types/StatusTest.hpp"
+#include "oatpp-mariadb/types/FlagTest.hpp"
 
 /*
 #include "oatpp-mariadb/tests/BulkTest.hpp"
@@ -75,7 +76,8 @@ void runTests() {
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::TypeMappingTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::CustomTypeTest);
   //OATPP_RUN_TEST(oatpp::test::mariadb::types::TypeWrapperTest);
-  OATPP_RUN_TEST(oatpp::test::mariadb::types::StatusTest);
+  //OATPP_RUN_TEST(oatpp::test::mariadb::types::StatusTest);
+  OATPP_RUN_TEST(oatpp::test::mariadb::types::FlagTest);
   /*
   OATPP_RUN_TEST(oatpp::test::mariadb::BulkTest);
   OATPP_RUN_TEST(oatpp::test::mariadb::ParamsTest);

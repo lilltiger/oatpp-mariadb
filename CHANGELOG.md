@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Restructured Status type implementation to fix multiple definition issues
+- Moved Status static members to separate source file
+- Improved test structure consistency across type tests
+- Standardized test patterns for better maintainability
+
+### Fixed
+- Fixed multiple definition errors for Status type static members
+- Removed invalid reference to non-existent AnyTypeTest.cpp
+- Aligned StatusTest structure with other type tests
+
+### Added
+- Flag type implementation
+  - Support for bit field operations
+  - Named flag registration and lookup
+  - Multiple flag combinations
+  - String serialization and deserialization
+  - Integration with database BIGINT UNSIGNED type
+  - Comprehensive test coverage
+  - Support for named flags with string-based operations
+  - Automatic validation and type conversion
+  - Proper database integration with ORM
+  - Full test suite following project patterns
+
 ## [1.3.2] - 2024-11-26
 
 ### Added

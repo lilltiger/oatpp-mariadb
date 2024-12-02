@@ -175,3 +175,23 @@ std::string stdStr(str->c_str());  // Now you can use std::string methods
 15. Write comprehensive unit tests
 16. Include edge cases
 17. Test with various data types
+
+## Common Framework Patterns
+
+### Avoid Assumptions from Other Frameworks
+When implementing new features or types, be careful not to carry over patterns from other frameworks without checking oatpp-mariadb conventions:
+
+1. Common examples of incorrect assumptions:
+   - Using `getSqlType()` instead of `getDbType()` (from Hibernate/TypeORM)
+   - Using `toSql()` instead of proper oatpp serialization
+   - Using framework-specific type names
+
+2. Always check:
+   - Base class interfaces (like MariaDBTypeWrapper)
+   - Existing implementations for similar types
+   - How the feature is used in the codebase
+
+3. Follow oatpp-mariadb patterns:
+   - Use `getDbType()` for SQL type mapping
+   - Use oatpp type system (oatpp::String, oatpp::Int64, etc.)
+   - Follow existing naming conventions

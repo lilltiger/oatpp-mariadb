@@ -1,3 +1,12 @@
+When implementing a new type, follow these instructions:
+1. Extend the appropriate oatpp base type.
+2. Implement the MariaDBTypeWrapper interface.
+3. Provide database-specific mappings.
+4. Include comprehensive tests.
+5. Do an comprehensive implementaion
+6. Take care, look at documentaion and other tests and files to implement it properly
+7. Take your time, no rush, no pressure, you're doing great!
+
 # TODO: Common Types Implementation
 
 ## Currently Implemented Types

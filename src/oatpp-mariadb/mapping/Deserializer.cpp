@@ -79,6 +79,11 @@ v_int64 Deserializer::deInt(const InData& data) {
   v_int64 value;
 
   switch(data.oid) {
+    case MYSQL_TYPE_BIT: {
+      value = *(uint64_t*) data.bind->buffer;
+      std::memset(data.bind->buffer, 0, sizeof(uint64_t));
+      return value;
+    }
     case MYSQL_TYPE_TINY: {
       value = *(int8_t*) data.bind->buffer;
       std::memset(data.bind->buffer, 0, sizeof(int8_t));
@@ -255,6 +260,11 @@ oatpp::Void Deserializer::deserializeBoolean(const Deserializer* _this, const In
   }
 
   switch(data.oid) {
+    case MYSQL_TYPE_BIT: {
+      uint64_t value = *static_cast<uint64_t*>(data.bind->buffer);
+      OATPP_LOGD("Deserializer", "Deserializing BIT value: %llu", value);
+      return oatpp::Boolean(value != 0);
+    }
     case MYSQL_TYPE_TINY: {
       signed char value = *static_cast<signed char*>(data.bind->buffer);
       OATPP_LOGD("Deserializer", "Deserializing boolean value: %d", (int)value);
@@ -308,6 +318,12 @@ oatpp::Void Deserializer::deserializeAny(const Deserializer* _this, const InData
       break;
     case MYSQL_TYPE_STRING:
       valueType = oatpp::String::Class::getType();
+      break;
+    case MYSQL_TYPE_BIT:
+      if (type == oatpp::UInt64::Class::getType()) {
+        return oatpp::UInt64(*static_cast<v_uint64*>(inData.bind->buffer));
+      }
+      valueType = oatpp::UInt64::Class::getType();
       break;
     default:
       throw std::runtime_error("[oatpp::mariadb::mapping::Deserializer::deserializeAny()]: Error. Unknown OID.");

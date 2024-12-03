@@ -332,6 +332,14 @@ void ResultMapper::ResultData::bindResultsForCache() {
     bind.length = &bindLengths[i];
     
     switch(fieldInfo->type) {
+      case MYSQL_TYPE_BIT:
+        bindBuffers[i].resize(sizeof(v_uint64));
+        bind.buffer_type = MYSQL_TYPE_BIT;
+        bind.buffer = bindBuffers[i].data();
+        bind.is_unsigned = true;
+        bind.buffer_length = sizeof(v_uint64);
+        break;
+
       case MYSQL_TYPE_TINY:
         bindBuffers[i].resize(sizeof(signed char));
         bind.buffer_type = MYSQL_TYPE_TINY;
@@ -797,13 +805,13 @@ oatpp::Void ResultMapper::readOneRowAsObject(ResultMapper* _this, ResultData* db
             }
           } else if (property->type == oatpp::data::mapping::type::__class::Int64::getType() ||
                      property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
-            if (bind.buffer_type == MYSQL_TYPE_LONGLONG) {
+            if (bind.buffer_type == MYSQL_TYPE_LONGLONG || bind.buffer_type == MYSQL_TYPE_BIT) {
               if (*bind.is_null) {
                 OATPP_LOGD("ResultMapper", "Setting null int64 value for property %s", fieldName->c_str());
                 property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
-              } else if (bind.is_unsigned) {
+              } else if (bind.is_unsigned || bind.buffer_type == MYSQL_TYPE_BIT) {
                 uint64_t value = *static_cast<uint64_t*>(bind.buffer);
-                OATPP_LOGD("ResultMapper", "Setting unsigned int64 value %llu for property %s", value, fieldName->c_str());
+                OATPP_LOGD("ResultMapper", "Setting unsigned int64/bit value %llu for property %s", value, fieldName->c_str());
                 if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
                   property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(value));
                 } else {
@@ -884,13 +892,13 @@ oatpp::Void ResultMapper::readOneRowAsObject(ResultMapper* _this, ResultData* db
             }
           } else if (property->type == oatpp::data::mapping::type::__class::Int64::getType() ||
                      property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
-            if (bind.buffer_type == MYSQL_TYPE_LONGLONG) {
+            if (bind.buffer_type == MYSQL_TYPE_LONGLONG || bind.buffer_type == MYSQL_TYPE_BIT) {
               if (*bind.is_null) {
                 OATPP_LOGD("ResultMapper", "Setting null int64 value for property %s", fieldName->c_str());
                 property->set(static_cast<oatpp::BaseObject*>(object.get()), nullptr);
-              } else if (bind.is_unsigned) {
+              } else if (bind.is_unsigned || bind.buffer_type == MYSQL_TYPE_BIT) {
                 uint64_t value = *static_cast<uint64_t*>(bind.buffer);
-                OATPP_LOGD("ResultMapper", "Setting unsigned int64 value %llu for property %s", value, fieldName->c_str());
+                OATPP_LOGD("ResultMapper", "Setting unsigned int64/bit value %llu for property %s", value, fieldName->c_str());
                 if (property->type == oatpp::data::mapping::type::__class::UInt64::getType()) {
                   property->set(static_cast<oatpp::BaseObject*>(object.get()), oatpp::UInt64(value));
                 } else {

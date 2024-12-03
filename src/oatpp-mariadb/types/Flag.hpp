@@ -1,273 +1,155 @@
 #ifndef oatpp_mariadb_types_Flag_hpp
 #define oatpp_mariadb_types_Flag_hpp
 
-#include "MariaDBTypeWrapper.hpp"
+#include "oatpp/core/Types.hpp"
+#include "oatpp/core/macro/codegen.hpp"
+#include "oatpp-mariadb/mapping/Serializer.hpp"
 #include <unordered_map>
-#include <vector>
 #include <string>
-#include <sstream>
-#include <algorithm>
+#include <mysql/mysql.h>
 
 namespace oatpp { namespace mariadb { namespace types {
 
-/**
- * Flag type for MariaDB.
- * Represents a bitfield stored as BIT(N).
- * @tparam N Number of bits (1-64). Default is 64.
- */
-template<size_t N = 64>
-class Flag : public MariaDBTypeWrapper<Flag<N>, oatpp::UInt64> {
+template<v_uint32 N>
+class Flag;
+
+#include OATPP_CODEGEN_BEGIN(DTO)
+
+template<v_uint32 N>
+class Flag : public oatpp::UInt64 {
+  DTO_INIT(Flag, UInt64)
+
 private:
-    static_assert(N > 0 && N <= 64, "Flag bit size must be between 1 and 64");
-    static std::unordered_map<std::string, v_uint64> namedFlags;
-    static std::unordered_map<v_uint64, std::string> flagNames;
-    static constexpr v_uint64 MAX_VALUE = (N == 64) ? ~0ULL : ((1ULL << N) - 1);
-    
+  static std::unordered_map<std::string, v_uint64> s_flagValues;
+  static std::unordered_map<std::string, std::vector<std::string>> s_flagInheritance;
+
 public:
-    /**
-     * Constructor.
-     * @param value - UInt64 value.
-     */
-    explicit Flag(const oatpp::UInt64& value = oatpp::UInt64((v_uint64)0)) 
-        : MariaDBTypeWrapper<Flag<N>, oatpp::UInt64>(value) {}
-    
-    /**
-     * Constructor from flag name.
-     * @param flagName - Name of the flag.
-     */
-    explicit Flag(const std::string& flagName) 
-        : MariaDBTypeWrapper<Flag<N>, oatpp::UInt64>(oatpp::UInt64((v_uint64)getFlagValue(flagName))) {}
-    
-    /**
-     * Register a named flag.
-     * @param name - Name of the flag.
-     * @param value - Value of the flag.
-     */
-    static void registerFlag(const std::string& name, v_uint64 value) {
-        if (value > MAX_VALUE) {
-            throw std::runtime_error("Flag value exceeds maximum for " + std::to_string(N) + " bits");
+  typedef Flag<N> __Flag;
+  static const oatpp::data::mapping::type::ClassId CLASS_ID;
+
+  Flag() : UInt64((v_uint64)0) {}
+  Flag(v_uint64 val) : UInt64(val) {}
+  Flag(const std::shared_ptr<typename UInt64::ObjectType>& ptr, const oatpp::data::mapping::type::Type* const valueType)
+    : UInt64(ptr, valueType) {}
+
+  void setFlag(const std::string& name) {
+    auto it = s_flagValues.find(name);
+    if (it != s_flagValues.end()) {
+      *this = Flag<N>(this->getValue((v_uint64)0) | it->second);
+    }
+  }
+
+  void setFlagWithInheritance(const std::string& name) {
+    setFlag(name);
+    auto it = s_flagInheritance.find(name);
+    if (it != s_flagInheritance.end()) {
+      for (const auto& child : it->second) {
+        setFlag(child);
+      }
+    }
+  }
+
+  bool hasFlag(const std::string& name) const {
+    auto it = s_flagValues.find(name);
+    if (it != s_flagValues.end()) {
+      return (this->getValue((v_uint64)0) & it->second) == it->second;
+    }
+    return false;
+  }
+
+  void clearFlag(const std::string& name) {
+    auto it = s_flagValues.find(name);
+    if (it != s_flagValues.end()) {
+      *this = Flag<N>(this->getValue((v_uint64)0) & ~it->second);
+    }
+  }
+
+  void clearAllFlags() {
+    *this = Flag<N>((v_uint64)0);
+  }
+
+  static void registerFlag(const std::string& name, v_uint64 val) {
+    s_flagValues[name] = val;
+  }
+
+  static void registerFlagInheritance(const std::string& parent, const std::string& child) {
+    s_flagInheritance[parent].push_back(child);
+  }
+
+  static std::shared_ptr<Flag<N>> createShared() {
+    return std::make_shared<Flag<N>>();
+  }
+
+  static std::shared_ptr<Flag<N>> createShared(v_uint64 val) {
+    return std::make_shared<Flag<N>>(val);
+  }
+
+  // Get the SQL type for this flag
+  oatpp::String getDbType() const {
+    return oatpp::String(std::string("BIT(") + std::to_string(N) + ")");
+  }
+
+  // Add serialization support
+  static void setupSerializer(oatpp::mariadb::mapping::Serializer& serializer) {
+    serializer.setSerializerMethod(Flag<N>::CLASS_ID,
+      [](const oatpp::mariadb::mapping::Serializer* _this,
+         MYSQL_STMT* stmt,
+         v_uint32 paramIndex,
+         const oatpp::Void& polymorph) -> void {
+        if(paramIndex >= _this->getBindParams().size()) {
+          _this->getBindParams().resize(paramIndex + 1);
         }
-        namedFlags[name] = value;
-        flagNames[value] = name;
-    }
-    
-    /**
-     * Get flag name for a value.
-     * @param value - Flag value.
-     * @return Name of the flag.
-     */
-    static std::string getFlagName(v_uint64 value) {
-        auto it = flagNames.find(value);
-        return it != flagNames.end() ? it->second : "";
-    }
-    
-    /**
-     * Get flag value for a name.
-     * @param name - Name of the flag.
-     * @return Value of the flag.
-     */
-    static v_uint64 getFlagValue(const std::string& name) {
-        auto it = namedFlags.find(name);
-        return it != namedFlags.end() ? it->second : (v_uint64)0;
-    }
-    
-    /**
-     * Check if a flag is set.
-     * @param flag - Flag to check.
-     * @return true if flag is set.
-     */
-    bool hasFlag(const v_uint64& flag) const {
-        if (flag > MAX_VALUE) {
-            throw std::runtime_error("Flag value exceeds maximum for " + std::to_string(N) + " bits");
-        }
-        return (this->value.getValue(0) & flag) == flag;
-    }
-    
-    bool hasFlag(const std::string& flag) const {
-        return hasFlag(getFlagValue(flag));
-    }
-    
-    /**
-     * Set a flag.
-     * @param flag - Flag to set.
-     */
-    void setFlag(const v_uint64& flag) {
-        if (flag > MAX_VALUE) {
-            throw std::runtime_error("Flag value exceeds maximum for " + std::to_string(N) + " bits");
-        }
-        if (this->value) {
-            this->value = oatpp::UInt64(this->value.getValue(0) | flag);
-        } else {
-            this->value = oatpp::UInt64(flag);
-        }
-    }
-    
-    void setFlag(const std::string& flag) {
-        setFlag(getFlagValue(flag));
-    }
-    
-    /**
-     * Clear a flag.
-     * @param flag - Flag to clear.
-     */
-    void clearFlag(const v_uint64& flag) {
-        if (flag > MAX_VALUE) {
-            throw std::runtime_error("Flag value exceeds maximum for " + std::to_string(N) + " bits");
-        }
-        if (this->value) {
-            this->value = oatpp::UInt64(this->value.getValue(0) & ~flag);
-        }
-    }
-    
-    void clearFlag(const std::string& flag) {
-        clearFlag(getFlagValue(flag));
-    }
-    
-    /**
-     * Toggle a flag.
-     * @param flag - Flag to toggle.
-     */
-    void toggleFlag(const v_uint64& flag) {
-        if (flag > MAX_VALUE) {
-            throw std::runtime_error("Flag value exceeds maximum for " + std::to_string(N) + " bits");
-        }
-        if (this->value) {
-            this->value = oatpp::UInt64(this->value.getValue(0) ^ flag);
-        } else {
-            this->value = oatpp::UInt64(flag);
-        }
-    }
-    
-    void toggleFlag(const std::string& flag) {
-        toggleFlag(getFlagValue(flag));
-    }
-    
-    /**
-     * Get list of set flag names.
-     * @return Vector of flag names.
-     */
-    std::vector<std::string> getSetFlags() const {
-        std::vector<std::string> result;
-        if (!this->value) return result;
         
-        v_uint64 val = this->value.getValue(0);
-        std::vector<std::pair<v_uint64, std::string>> sortedFlags;
+        auto& bind = _this->getBindParams()[paramIndex];
+        std::memset(&bind, 0, sizeof(MYSQL_BIND));
         
-        for (const auto& pair : namedFlags) {
-            if ((val & pair.second) == pair.second) {
-                sortedFlags.push_back({pair.second, pair.first});
+        if(polymorph) {
+          auto value = static_cast<Flag<N>*>(polymorph.get());
+          if(value) {
+            bind.buffer_type = MYSQL_TYPE_BIT;
+            bind.buffer = malloc(8);  // Always use 8 bytes for BIT(64)
+            if(!bind.buffer) {
+              throw std::runtime_error("Failed to allocate memory for Flag value");
             }
-        }
-        
-        std::sort(sortedFlags.begin(), sortedFlags.end());
-        
-        result.reserve(sortedFlags.size());
-        for (const auto& pair : sortedFlags) {
-            result.push_back(pair.second);
-        }
-        
-        return result;
-    }
-    
-    /**
-     * Convert flags to string representation.
-     * @return String representation of flags.
-     */
-    std::string toString() const {
-        auto flags = getSetFlags();
-        if (flags.empty()) {
-            return "0";
-        }
-        
-        std::ostringstream oss;
-        for (size_t i = 0; i < flags.size(); ++i) {
-            if (i > 0) {
-                oss << "|";
+            
+            // Get the value and handle endianness
+            v_uint64 val = value->getValue((v_uint64)0);
+            unsigned char* bytes = static_cast<unsigned char*>(bind.buffer);
+            
+            // MariaDB expects the bytes in little-endian order
+            for(size_t i = 0; i < 8; i++) {
+              bytes[i] = (val >> (i * 8)) & 0xFF;
             }
-            oss << flags[i];
-        }
-        return oss.str();
-    }
-    
-    /**
-     * Create Flag from string representation.
-     * @param str - String representation.
-     * @return Flag instance.
-     */
-    static Flag fromString(const std::string& str) {
-        if (str == "0") {
-            return Flag();
+            
+            bind.buffer_length = 8;
+            bind.is_null_value = 0;
+            bind.length_value = 8;
+          } else {
+            bind.buffer_type = MYSQL_TYPE_NULL;
+            bind.is_null_value = 1;
+          }
+        } else {
+          bind.buffer_type = MYSQL_TYPE_NULL;
+          bind.is_null_value = 1;
         }
         
-        v_uint64 result = 0;
-        std::istringstream iss(str);
-        std::string token;
-        
-        while (std::getline(iss, token, '|')) {
-            result |= getFlagValue(token);
-        }
-        
-        if (result > MAX_VALUE) {
-            throw std::runtime_error("Combined flag value exceeds maximum for " + std::to_string(N) + " bits");
-        }
-        
-        return Flag(oatpp::UInt64(result));
-    }
-    
-    /**
-     * Get database type.
-     * @return String representation of database type.
-     */
-    oatpp::String getDbType() const override {
-        return oatpp::String(std::string("BIT(") + std::to_string(N) + ")");
-    }
-    
-    /**
-     * Get type name.
-     * @return String representation of type name.
-     */
-    oatpp::String getTypeName() const override {
-        return oatpp::String("Flag<" + std::to_string(N) + ">");
-    }
-    
-    /**
-     * Validate the flag value.
-     * @return true if valid.
-     */
-    bool validate() const override {
-        if (!this->value) return true;
-        return this->value.getValue(0) <= MAX_VALUE;
-    }
-    
-    /**
-     * Validate the flag value with context.
-     * @param context - Validation context.
-     * @return true if valid.
-     */
-    bool validate(const ValidationContext& context) const override {
-        return validate();
-    }
-    
-    /**
-     * Get validation error message.
-     * @return Error message.
-     */
-    oatpp::String getValidationError() const override {
-        return oatpp::String("Flag value exceeds maximum for " + std::to_string(N) + " bits");
-    }
-    
-    bool validateLength() const override {
-        return true; // Flags don't need length validation
-    }
+        bind.is_null = &bind.is_null_value;
+        bind.length = &bind.length_value;
+      });
+  }
 };
 
-// Static member initialization
-template<size_t N>
-std::unordered_map<std::string, v_uint64> Flag<N>::namedFlags;
+template<v_uint32 N>
+std::unordered_map<std::string, v_uint64> Flag<N>::s_flagValues;
 
-template<size_t N>
-std::unordered_map<v_uint64, std::string> Flag<N>::flagNames;
+template<v_uint32 N>
+std::unordered_map<std::string, std::vector<std::string>> Flag<N>::s_flagInheritance;
 
-}}} // namespace oatpp::mariadb::types
+template<v_uint32 N>
+const oatpp::data::mapping::type::ClassId Flag<N>::CLASS_ID("Flag");
 
-#endif // oatpp_mariadb_types_Flag_hpp 
+#include OATPP_CODEGEN_END(DTO)
+
+}}}
+
+#endif // oatpp_mariadb_types_Flag_hpp

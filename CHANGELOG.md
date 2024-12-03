@@ -31,6 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatic validation and type conversion
   - Proper database integration with ORM
   - Full test suite following project patterns
+  - Flag inheritance system for hierarchical permissions
+  - Configurable bit sizes from 1 to 64 bits
+  - Proper endianness handling for database storage
+  - Memory management for MYSQL_BIND operations
+  - Null value handling
+  - Type-safe operations with compile-time validation
+  - Integration with oatpp's DTO system
 - Status type for state machine pattern with transition validation
 - Flag type for bit fields with configurable sizes (1-64 bits) using MariaDB's native BIT type
 - Support for named flags with string-based access

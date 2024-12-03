@@ -196,30 +196,36 @@ Status::ERROR("message");  // Error status with message
 ```
 
 ### Flag Type
-The `Flag` type provides a type-safe way to handle bit fields in MariaDB using the native BIT type. It supports configurable sizes from 1 to 64 bits and provides named flag operations.
+The `Flag` type provides a type-safe way to handle bit fields in MariaDB using the native BIT type. It supports configurable sizes from 1 to 64 bits and provides named flag operations with inheritance support.
 
 ```cpp
 // Define a permission flag with 8 bits
 using Permission = oatpp::mariadb::types::Flag<8>;
 
-// Register named flags
+// Register flags and their values
 Permission::registerFlag("READ", 1);
 Permission::registerFlag("WRITE", 2);
 Permission::registerFlag("EXECUTE", 4);
+Permission::registerFlag("ALL", 7);
+
+// Set up flag inheritance (ALL grants READ, WRITE, and EXECUTE)
+Permission::registerFlagInheritance("ALL", "READ");
+Permission::registerFlagInheritance("ALL", "WRITE");
+Permission::registerFlagInheritance("ALL", "EXECUTE");
 
 // Create and manipulate flags
 Permission flags;
-flags.setFlag("READ");
-flags.setFlag("WRITE");
-flags.clearFlag("READ");
-flags.toggleFlag("EXECUTE");
+flags.setFlag("READ");                // Set single flag
+flags.setFlagWithInheritance("ALL"); // Set flag and all inherited flags
+flags.clearFlag("READ");             // Clear specific flag
+flags.toggleFlag("EXECUTE");         // Toggle flag state
 
 // Check flag states
 bool canWrite = flags.hasFlag("WRITE");
 bool canExecute = flags.hasFlag("EXECUTE");
 
 // Convert to/from string representation
-auto str = flags.toString(); // Returns "WRITE|EXECUTE"
+auto str = flags.toString();           // Returns "WRITE|EXECUTE"
 auto parsed = Permission::fromString(str);
 
 // Use in DTO
@@ -229,7 +235,18 @@ class UserDTO : public oatpp::DTO {
 };
 ```
 
-The Flag type automatically validates values based on the specified bit size and provides clear error messages when values exceed the maximum allowed value.
+Key Features:
+- Type-safe bit field operations with compile-time validation
+- Named flag registration and lookup system
+- Hierarchical permissions through flag inheritance
+- Automatic value validation based on bit size
+- Proper database integration with endianness handling
+- Memory-safe MYSQL_BIND operations
+- Null value support
+- String serialization for human-readable format
+- Full integration with oatpp's DTO system
+
+The Flag type automatically validates values based on the specified bit size and provides clear error messages when values exceed the maximum allowed value. It seamlessly integrates with MariaDB's native BIT type for efficient storage and retrieval.
 
 ## Dependencies
 
